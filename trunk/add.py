@@ -5,7 +5,7 @@
 import arrays_cpu as cpu
 import arrays_opencl as ocl
 
-if True:
+if False:
 	print "arrays_opencl"
 	ocl.add(100)
 	ocl.add(1000)
