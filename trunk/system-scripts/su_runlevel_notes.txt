@@ -1,0 +1,5 @@
+#vi /etc/inittab
+
+###id:5:initdefault:
+
+id:3:initdefault:
