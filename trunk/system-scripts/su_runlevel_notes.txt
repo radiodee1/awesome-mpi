@@ -1,3 +1,8 @@
+#These are instructions for running the vm without an X11 server. Open the file
+#specified with the vi editor, then comment out the line that starts the runlevel-5
+#option and type in the line that starts the runlevel-3 option. Runlevel 3 is
+#without X11.
+
 #vi /etc/inittab
 
 ###id:5:initdefault:
