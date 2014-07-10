@@ -1,0 +1,23 @@
+## for server ##
+
+#chkconfig nfs on
+#service rpcbind start
+#service nfs start
+
+#vi /etc/exports
+/mirror	137.140.239.5(rw,sync,no_root_squash,no_subtree_check)
+/mirror 137.140.239.6(rw,sync,no_root_squash,no_subtree_check)
+
+#exportfs -a
+
+## for 2 clients ##
+
+#cd /
+#mkdir /mirror
+
+#vi /etc/fstab
+137.140.239.4:/mirror	/mirror	nfs	auto,noatime,nolock,bg,nfsvers=3,intr,tcp,actimeo=1800 0 0
+
+#mount -a
+
+
