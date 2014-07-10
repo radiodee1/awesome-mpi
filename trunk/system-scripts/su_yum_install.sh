@@ -10,3 +10,4 @@ yum -y update
 #./configure --prefix=/usr/local --enable-unicode=ucs4 --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib"
 #make && make altinstall
  
+yum -y install mpich2 
