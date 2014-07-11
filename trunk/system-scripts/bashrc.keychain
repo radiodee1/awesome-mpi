@@ -1,0 +1,5 @@
+if type keychain >/dev/null 2>/dev/null; then
+  keychain --nogui -q id_rsa
+  [ -f ~/.keychain/${HOSTNAME}-sh ] && . ~/.keychain/${HOSTNAME}-sh
+  [ -f ~/.keychain/${HOSTNAME}-sh-gpg ] && . ~/.keychain/${HOSTNAME}-sh-gpg
+fi
