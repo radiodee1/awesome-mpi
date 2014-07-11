@@ -1,3 +1,8 @@
-# rpm -ivh http://apt.sw.be/redhat/el5/en/x86_64/RPMS.dag/rpmforge-release-0.3.6-1.el5.rf.$(uname -i).rpm
+wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
 
 # RPMForge
+
+# rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt
+
+# rpm -i rpm<tab>
+
