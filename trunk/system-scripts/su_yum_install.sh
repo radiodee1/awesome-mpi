@@ -1,13 +1,13 @@
-yum -y update
+#yum -y update
 
-#yum install -y nfs-utils nfs-utils-lib svn 
+#yum install nfs-utils nfs-utils-lib svn 
 
-#yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel compat-gcc-34-g77 gcc gcc-c++ keyutils keyutils-libs
+yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel compat-gcc-34-g77 gcc gcc-c++ keyutils keyutils-libs
 
 # python info here??
-#yum -y install python python-devel python-lib numpy
+yum  install python python-devel python-lib numpy
  
-#yum -y install mpich2 
+yum  install mpich2 
 
 # openssh stuff here??
-#yum -y install openssh-server openssh openssh-client
+yum  install openssh-server openssh openssh-client
