@@ -7,7 +7,7 @@ yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel read
 # python info here??
 yum  install python python-devel python-lib numpy
  
-yum  install mpich2 mpich2-devel
+yum  install mpich2 mpich2-devel rsh-server
 
 # openssh stuff here??
 yum  install openssh-server openssh openssh-client
