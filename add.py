@@ -7,17 +7,17 @@ import arrays_cpu as cpu
 
 if False:
 	print "arrays_opencl"
-	#ocl.add(100)
-	#ocl.add(1000)
-	#ocl.add(10000)
-	#ocl.add(100000)
-	#ocl.add(1000000)
+	#ocl.add(50)
+	#ocl.add(500)
+	#ocl.add(5000)
+	#ocl.add(50000)
+	#ocl.add(500000)
 	
 if True:
 	print "arrays_cpu"
-	cpu.add(100)
-	cpu.add(1000)
-	cpu.add(10000)
-	cpu.add(100000)
-	cpu.add(1000000)
+	cpu.add(50)
+	cpu.add(500)
+	cpu.add(5000)
+	cpu.add(50000)
+	cpu.add(500000)
 	
