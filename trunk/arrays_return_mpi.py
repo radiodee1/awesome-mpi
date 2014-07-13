@@ -58,9 +58,9 @@ def add(size=10):
 
 if True :
 	print "arrays_return_mpi"
-	add(100)
-	add(1000)
-	add(10000)
-	add(100000)
-	add(1000000)
+	add(50)
+	add(500)
+	add(5000)
+	add(50000)
+	add(500000)
 

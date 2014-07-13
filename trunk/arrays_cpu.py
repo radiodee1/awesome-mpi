@@ -18,6 +18,6 @@ def add(size=10):
     endtime = time.clock()
     print size, endtime - starttime
  
-#add(1000)
-#add(10000)
-#add(10000000)
+#add(50)
+#add(500)
+#add(5000)
