@@ -5,14 +5,7 @@ import numpy
 import math
 import sys
 
-#com = MPI.COMM_WORLD
-#rank = com.Get_rank()
-#dim = com.Get_size()
 
-#if (dim != 100 and rank == 0) :
-#	print "size must be 10x10, or 100!!"
-#if dim != 100 :
-#	sys.exit()
 	
 main = [0] * 100 #numpy.zeros(shape=(100), dtype=numpy.int)
 visited = [0] * 100 #numpy.zeros(shape=(100), dtype=numpy.int)
@@ -38,6 +31,8 @@ for y in range (0 , 10):
 			main[ (y * 10) + x] = START
 		if endx == x and endy == y :
 			main[ (y * 10) + x] = END
+			
+visited[(starty * 10) + startx] = VISITED
 			
 #non-random walls
 for i in range (0, 7) :
