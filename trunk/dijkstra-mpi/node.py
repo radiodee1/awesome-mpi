@@ -20,7 +20,8 @@ def find() :
 	while (flag == 0) :
 	#if True:
 		mp.visited = com.allgather(mp.visited[rank] )
-		
+		mp.dist = com.allgather(mp.dist[rank] )
+		mp.prev = com.allgather(mp.prev[rank] )
 		#print "visited", mp.visited
 		#mp.visited = mp.visited
 		
@@ -31,7 +32,6 @@ def find() :
 				check(rank + 1)
 			if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0 :#and near_visited():
 				check(rank - 1)
-				#mp.dist = com.allgather(mp.dist[rank + 1])
 			if rank + 10 < dim :#and near_visited() :
 				check(rank + 10) 
 			if rank - 10 >= 0 : #and near_visited() :
@@ -79,7 +79,8 @@ def near_visited() :
 def check(test) :
 	#all distances are '1' !!
 	#test is unvisited node!!
-	if mp.visited[test] != mp.VISITED :# and rank == 0:
+	#if mp.visited[test] != mp.VISITED :
+	if True:
 		print "dist", mp.dist[test]
 		if mp.dist[test] >= mp.dist[rank] + 1 :#or mp.main[test] == mp.END:
 			print "save value", rank
