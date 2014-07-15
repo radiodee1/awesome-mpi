@@ -10,11 +10,12 @@ import sys
 main = [0] * 100 #numpy.zeros(shape=(100), dtype=numpy.int)
 visited = [0] * 100 #numpy.zeros(shape=(100), dtype=numpy.int)
 prev = [0] * 100 # numpy.zeros(shape=(100), dtype=numpy.int)
+dist = [999] * 100
 
 startx = 1
-starty = 1
-endx = 9
-endy = 9
+starty = 0
+endx = 3
+endy = 0 #9
 
 #enum
 OPEN = 1
@@ -32,7 +33,8 @@ for y in range (0 , 10):
 		if endx == x and endy == y :
 			main[ (y * 10) + x] = END
 			
-visited[(starty * 10) + startx] = VISITED
+visited[(starty * 10) + startx] = 0#VISITED
+dist[(starty * 10) + startx] = 0
 			
 #non-random walls
 for i in range (0, 7) :
