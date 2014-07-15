@@ -44,7 +44,7 @@ def find() :
 		else:
 			localflag = 0
 			
-		flag = com.allreduce(localflag, op=MPI.SUM)
+		flag = com.allreduce(localflag, op=MPI.MAX)
 		if (rank == 0) :
 			print "end flag" , flag
 			
@@ -85,10 +85,14 @@ def check(test) :
 			print "save value", rank
 			mp.dist[test] = mp.dist[rank] + 1
 			mp.prev[test] = rank
-			com.send(mp.dist[test], dest=test, tag=test)
-			mp.dist[test] = com.recv(source=rank, tag=test)			
-			com.send(mp.prev[test], dest=test, tag=test+ 100)
-			mp.prev[test] = com.recv(source=rank, tag=test+100)
+			
+			#mp.dist = com.bcast(mp.dist, root=rank)#, op=MPI.MAX)
+			#com.send(mp.dist[test], dest=test, tag=test)
+			#mp.dist[test] = com.recv(source=rank, tag=test)			
+			#com.send(mp.prev[test], dest=test, tag=test+ 100)
+			#mp.prev[test] = com.recv(source=rank, tag=test+100)
+			
+			
 	
 def get_x(rank) :
 	return rank - (10 * int(rank / 10))
