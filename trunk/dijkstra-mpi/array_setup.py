@@ -7,11 +7,11 @@ import sys
 
 
 	
-main = [0] * 100 #numpy.zeros(shape=(100), dtype=numpy.int)
-visited = [0] * 100 #numpy.zeros(shape=(100), dtype=numpy.int)
-prev = [0] * 100 # numpy.zeros(shape=(100), dtype=numpy.int)
+main = [0] * 100 
+visited = [0] * 100 
+prev = [0] * 100 
 dist = [999] * 100
-willreceive = [0] * 100
+#willreceive = [0] * 100
 
 startx = 1
 starty = 0
