@@ -21,13 +21,11 @@ def find() :
 	
 	while (flag == 0) :
 	#if True:
-		
+		#visited = com.alltoall(mp.visited)
+		#mp.visited[rank] = visited
 		mp.visited = com.allgather(mp.visited[rank] )
-		#mp.dist = com.allgather(mp.dist[rank] )
-		#mp.prev = com.allgather(mp.prev[rank] )
-		#print "visited", mp.visited
-		#mp.visited = mp.visited
-		print mp.visited
+		
+		print "reduce",mp.visited
 		
 		if mp.visited[rank] == mp.FREE and \
 				(mp.main[rank] != mp.WALL or mp.main[rank] == mp.START ) \
@@ -48,16 +46,16 @@ def find() :
 		else:
 			localflag = 0
 			
-		flag = com.reduce(localflag, op=MPI.MAX)
+		flag = com.reduce(localflag, op=MPI.SUM)
 		if (rank == 0) :
 			print "end flag" , flag
 			
-		#com.barrier()
-		dist = numpy.array(mp.dist, dtype=numpy.long)
-		#for i in range( 0, dim):
-			#dist_buf = dist #numpy.asarray(mp.dist, numpy.int)
-		mp.dist = com.Bcast([dist, MPI.INT], root=rank)
-		#mp.dist = com.bcast(mp.dist, root=rank)		
+
+		#dist = numpy.array(mp.dist, dtype=numpy.long)
+
+
+		#mp.dist = com.Bcast([dist, MPI.INT], root=rank)
+
 			
 	#print path backwards.
 	#com.barrier()
@@ -98,9 +96,10 @@ def check(test) :
 		#if rank != 0 :
 		#	dist = com.gather(mp.dist[test], root=rank)
 
-		#dist = mp.dist[test] #com.reduce(mp.dist[test], op=MPI.MIN)
-		print "rank",rank,"dist", mp.dist[test]	,'test',test	
-		if mp.dist[test] >= mp.dist[rank] + 1 :#or mp.main[test] == mp.END:
+		dist = com.reduce(mp.dist[test], op=MPI.MIN)
+		print "rank",rank,"dist", dist	,'test',test	
+		#if mp.dist[test] >= mp.dist[rank] + 1 :
+		if dist >= mp.dist[rank] + 1:
 			print "save value", rank
 			mp.dist[test] = mp.dist[rank] + 1
 			mp.prev[test] = rank
@@ -108,11 +107,6 @@ def check(test) :
 			#mp.willreceive[test] += 1;
 			
 			print "test here"
-			#mp.dist = com.bcast(mp.dist, root=rank)#, op=MPI.MAX)
-			#com.send(mp.dist[test], dest=test, tag=test)
-			#mp.dist[test] = com.recv(source=rank, tag=test)			
-			#com.send(mp.prev[test], dest=test, tag=test+ 100)
-			#mp.prev[test] = com.recv(source=rank, tag=test+100)
 			
 			
 	
