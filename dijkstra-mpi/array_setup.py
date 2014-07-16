@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
 #from mpi4py import MPI
 import numpy
@@ -11,6 +11,7 @@ main = [0] * 100 #numpy.zeros(shape=(100), dtype=numpy.int)
 visited = [0] * 100 #numpy.zeros(shape=(100), dtype=numpy.int)
 prev = [0] * 100 # numpy.zeros(shape=(100), dtype=numpy.int)
 dist = [999] * 100
+willreceive = [0] * 100
 
 startx = 1
 starty = 0
