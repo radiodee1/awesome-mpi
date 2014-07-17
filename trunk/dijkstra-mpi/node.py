@@ -28,27 +28,41 @@ def find() :
 		if mp.visited[rank] == mp.FREE and \
 				(mp.main[rank] != mp.WALL or mp.main[rank] == mp.START ): 
 			if get_y(rank) == get_y(rank + 1) and rank + 1 < dim and near_visited() :
-				set_must_check(rank + 1)
-				directions.append(rank + 1)
+				set_must_check(rank + 1, rank)
+				#directions.append(rank + 1)
 			if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0 and near_visited() :
-				set_must_check(rank - 1)
-				directions.append(rank - 1)
+				set_must_check(rank - 1, rank)
+				#directions.append(rank - 1)
 			if rank + 10 < dim and near_visited() :
-				set_must_check(rank + 10)
-				directions.append(rank + 10) 
+				set_must_check(rank + 10, rank)
+				#directions.append(rank + 10) 
 			if rank - 10 >= 0 and near_visited() :
-				set_must_check(rank - 10)
-				directions.append(rank - 10)
+				set_must_check(rank - 10, rank)
+				#directions.append(rank - 10)
 			if near_visited() and mp.visited[rank] == 0:
 				mp.visited[rank] = mp.VISITED
+				
+				'''
 				print directions
 				if len(directions) != 0:
 					mp.prev[rank] = min(directions) #test
 				directions = []
+				'''
 		
 		#fix_prev()
 		mp.prev = com.allgather(mp.prev[rank])
 		mp.dist = com.allgather(mp.dist[rank])
+
+		#mp.prev = com.allgather(mp.prev[0])
+		#mp.dist = com.allgather(mp.dist[0])
+		
+		'''
+		if len(mp.tocheck[rank]) > 0:
+			print rank,  mp.tocheck[rank], ii
+			mp.prev[rank] = mp.tocheck[rank][len(mp.tocheck[rank])-1]
+			mp.tocheck[rank] = []
+		'''	
+		
 		#com.barrier()
 		ii += 1
 		
@@ -98,10 +112,13 @@ def near_visited() :
 	return False
 		
 		
-def set_must_check(test):
+def set_must_check(test, fr):
 	#directions.append(test)
-		
-	#mp.prev[rank] = min(directions) #test
+	if rank==0 and mp.main[test] != mp.WALL:
+		if mp.dist[fr] + 1 < mp.dist[test] :
+			mp.prev[test] = fr
+			mp.dist[test] = mp.dist[fr] + 1
+			#mp.tocheck[test].append( test)
 	return 0		
 	
 def get_x(rank) :
