@@ -20,18 +20,15 @@ def find() :
 	localflag = 0
 	ii = 0
 	
-	while flag == 0 :#or ii < 5 :
+	while flag == 0 :#or ii < 10 :
 	#if True:
 		#visited = com.alltoall(mp.visited)
 		#mp.visited[rank] = visited
 		print "ii",ii
-		#visit = mp.visited[rank]
-		#print 'visit', visit
+
 		mp.visited = com.allgather(mp.visited[rank])#, root = rank )
-		#mp.visited[rank] = lists[rank]
-		#mp.visited[rank] = com.allreduce(mp.visited[rank], op=MPI.MAX)
-		#mp.visited[rank] = com.bcast(mp.visited[rank], root=rank)
-		com.barrier()
+		mp.prev = com.allgather(mp.prev[rank])
+		#com.Barrier()
 		print "reduce", mp.visited, "rank", rank
 		
 		if mp.visited[rank] == mp.FREE and \
@@ -44,10 +41,12 @@ def find() :
 				set_must_check(rank + 10) 
 			if rank - 10 >= 0 and near_visited() :
 				set_must_check(rank - 10)
-			mp.visited[rank] = mp.VISITED
+			if near_visited() and mp.visited[rank] == 0:
+				mp.visited[rank] = mp.VISITED
+				#mp.visited = com.allgather(mp.visited[rank])
 			#print 'here (didn\'t fire check)'
 			
-		com.barrier()
+		#com.barrier()
 		ii += 1
 		
 			
@@ -56,20 +55,23 @@ def find() :
 			print "end found!!" , rank
 		else:
 			localflag = 0
-			print 'not yet'
+			print 'not yet', rank
 			
-		flag = com.reduce(localflag, op=MPI.SUM)
+		flag = com.reduce(localflag, op=MPI.MAX)
 		if (rank == 0) :
 			print "end flag" , flag
-		print 'after flag reduce'
-		
+		print 'after flag reduce' 
+		#com.Barrier()
 		#dist = numpy.array(mp.dist, dtype=numpy.long)
 		#mp.dist = com.Bcast([dist, MPI.INT], root=rank)
 
 	
 	#print path backwards.
 	#com.barrier()
-	found =com.reduce( mp.prev[(mp.endy * 10) + mp.endx], op=MPI.MAX)
+	mp.prev = com.allgather(mp.prev[rank])
+	print mp.prev, rank
+	#found =com.reduce( mp.prev[(mp.endy * 10) + mp.endx], op=MPI.MAX)
+	found = mp.prev[(mp.endy * 10) + mp.endx]
 	print "start of chain", found
 	if (rank == 0) or True:
 		i = 0
@@ -106,27 +108,11 @@ def near_visited() :
 		return True
 	return False
 		
-def check(test) :
-	#all distances are '1' !!
 
-	if mp.visited[test] == 0: #True:
-		
-		print 'here 2'
-		#com.barrier()
-		dist = com.allreduce(mp.dist[test], op=MPI.MAX)
-		print "rank",rank,"dist", dist	,'test',test	
-		#if mp.dist[test] >= mp.dist[rank] + 1 :
-		if dist >= mp.dist[rank] + 1:
-			print "save value", rank
-			mp.dist[test] = mp.dist[rank] + 1
-			mp.prev[test] = rank
-			
-			#mp.willreceive[test] += 1;
-			
-			print "test here"
 		
 def set_must_check(test):	
 	mp.prev[test] = rank
+	#mp.prev = com.allgather(mp.prev[test])
 	#mp.prev[test] = com.bcast(rank, root=rank)
 	print "set prev" , rank
 	return 0		
