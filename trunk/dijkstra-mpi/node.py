@@ -26,8 +26,8 @@ def find() :
 		#mp.visited[rank] = visited
 		print "ii",ii
 
-		mp.visited = com.allgather(mp.visited[rank])#, root = rank )
-		#mp.prev = com.allgather(mp.prev[rank])
+		mp.visited = com.allgather(mp.visited[rank])
+
 		#com.Barrier()
 		print "reduce", mp.visited, "rank", rank
 		
@@ -45,7 +45,10 @@ def find() :
 				mp.visited[rank] = mp.VISITED
 				#mp.visited = com.allgather(mp.visited[rank])
 			#print 'here (didn\'t fire check)'
-		fix_prev()
+		
+		#fix_prev()
+		mp.prev = com.allgather(mp.prev[rank])#, op=MPI.MAX)
+		print mp.prev, "---"
 		#com.barrier()
 		ii += 1
 		
@@ -117,7 +120,7 @@ def fix_prev() :
 			list1.append( prev [j][i])	
 		mp.prev[i] = max(list1)
 		
-	print mp.prev, "---"
+	#print mp.prev, "---"
 	
 def set_must_check(test):	
 	mp.prev[rank] = test
