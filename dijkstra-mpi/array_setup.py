@@ -40,11 +40,11 @@ visited[(starty * 10) + startx] = VISITED
 
 			
 #non-random walls
-'''
+
 for i in range (0, 7) :
 	main[ (4 * 10) + i] = WALL
 	
 for i in range (4, 10) :
 	main[ (7 * 10) + i] = WALL
 	
-'''
+
