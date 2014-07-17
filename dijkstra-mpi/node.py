@@ -111,16 +111,7 @@ def near_visited() :
 		return True
 	return False
 		
-def fix_prev() :
-	prev = com.allgather(mp.prev)
-	#print prev, "---"
-	for i in range(dim) :
-		list1 = []
-		for j in range (dim) :
-			list1.append( prev [j][i])	
-		mp.prev[i] = max(list1)
-		
-	#print mp.prev, "---"
+
 	
 def set_must_check(test):	
 	mp.prev[rank] = test
