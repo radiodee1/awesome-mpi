@@ -57,7 +57,7 @@ def find() :
 			localflag = 0
 			print 'not yet', rank
 			
-		flag = com.reduce(localflag, op=MPI.MAX)
+		flag = com.allreduce(localflag, op=MPI.MAX)
 		if (rank == 0) :
 			print "end flag" , flag
 		print 'after flag reduce' 
