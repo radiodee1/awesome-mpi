@@ -8,10 +8,12 @@ import sys
 
 	
 main = [0] * 100 
-visited = [0] * 100 
+visited = [] #[0]  * 100 
 prev = [0] * 100 
 dist = [999] * 100
-#willreceive = [0] * 100
+
+for i in range(100) :
+	visited.append(0)
 
 startx = 1
 starty = 0
