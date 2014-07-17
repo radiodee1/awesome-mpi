@@ -27,7 +27,7 @@ def find() :
 		print "ii",ii
 
 		mp.visited = com.allgather(mp.visited[rank])#, root = rank )
-		mp.prev = com.allgather(mp.prev[rank])
+		#mp.prev = com.allgather(mp.prev[rank])
 		#com.Barrier()
 		print "reduce", mp.visited, "rank", rank
 		
@@ -45,7 +45,7 @@ def find() :
 				mp.visited[rank] = mp.VISITED
 				#mp.visited = com.allgather(mp.visited[rank])
 			#print 'here (didn\'t fire check)'
-			
+		fix_prev()
 		#com.barrier()
 		ii += 1
 		
@@ -68,8 +68,8 @@ def find() :
 	
 	#print path backwards.
 	#com.barrier()
-	mp.prev = com.allgather(mp.prev[rank])
-	print mp.prev, rank
+	#mp.prev = com.allgather(mp.prev[rank])
+	#print mp.prev, rank
 	#found =com.reduce( mp.prev[(mp.endy * 10) + mp.endx], op=MPI.MAX)
 	found = mp.prev[(mp.endy * 10) + mp.endx]
 	print "start of chain", found
@@ -108,11 +108,21 @@ def near_visited() :
 		return True
 	return False
 		
-
+def fix_prev() :
+	prev = com.allgather(mp.prev)
+	#print prev, "---"
+	for i in range(dim) :
+		list1 = []
+		for j in range (dim) :
+			list1.append( prev [j][i])	
+		mp.prev[i] = max(list1)
 		
+	print mp.prev, "---"
+	
 def set_must_check(test):	
-	mp.prev[test] = rank
-	#mp.prev = com.allgather(mp.prev[test])
+	mp.prev[rank] = test
+	#prev = com.allgather(mp.prev)
+	print mp.prev
 	#mp.prev[test] = com.bcast(rank, root=rank)
 	print "set prev" , rank
 	return 0		

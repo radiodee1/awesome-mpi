@@ -17,7 +17,7 @@ for i in range(100) :
 
 startx = 1
 starty = 0
-endx = 3
+endx = 5
 endy = 0 #9
 
 #enum
@@ -37,7 +37,7 @@ for y in range (0 , 10):
 			main[ (y * 10) + x] = END
 			
 visited[(starty * 10) + startx] = VISITED
-dist[(starty * 10) + startx] = 0
+#prev[(starty * 10) + startx] = 0
 			
 #non-random walls
 for i in range (0, 7) :
