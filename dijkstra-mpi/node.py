@@ -20,17 +20,18 @@ def find() :
 	localflag = 0
 	ii = 0
 	
-	while (flag == 0) :
+	while flag == 0 :#or ii < 5 :
 	#if True:
 		#visited = com.alltoall(mp.visited)
 		#mp.visited[rank] = visited
 		print "ii",ii
-		visit = mp.visited[rank]
-		print 'visit', visit
-		#mp.visited[rank] 
-		#lists = com.gather(visit)# mp.visited[rank] )
+		#visit = mp.visited[rank]
+		#print 'visit', visit
+		mp.visited = com.allgather(mp.visited[rank])#, root = rank )
 		#mp.visited[rank] = lists[rank]
-		mp.visited[rank] = com.allreduce(mp.visited[rank], op=MPI.MAX)
+		#mp.visited[rank] = com.allreduce(mp.visited[rank], op=MPI.MAX)
+		#mp.visited[rank] = com.bcast(mp.visited[rank], root=rank)
+		com.barrier()
 		print "reduce", mp.visited, "rank", rank
 		
 		if mp.visited[rank] == mp.FREE and \
@@ -46,7 +47,7 @@ def find() :
 			mp.visited[rank] = mp.VISITED
 			#print 'here (didn\'t fire check)'
 			
-		#com.barrier()
+		com.barrier()
 		ii += 1
 		
 			
