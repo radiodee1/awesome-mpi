@@ -12,21 +12,23 @@ import sys
 startx = 1
 starty = 0
 endx = 5
-endy = 9
+endy = 0#9
 
 #enum
 OPEN = 1
 WALL = 2
 START = 3
 END = 4
+PATH = 5
 VISITED = 1
 FREE = 0
 UNDEFINED = 999
 
 main = [0] * 100 
-visited = [] #[0]  * 100 
+visited = [] 
 prev = [0] * 100 
 dist = [UNDEFINED] * 100
+found = []
 
 for i in range(100) :
 	visited.append(0)
