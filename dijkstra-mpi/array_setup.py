@@ -37,8 +37,8 @@ for y in range (0 , 10):
 			main[ (y * 10) + x] = END
 			
 visited[(starty * 10) + startx] = VISITED
-
-			
+dist[(starty * 10) + startx] = 0
+prev[(starty * 10) + startx] = -1
 #non-random walls
 
 for i in range (0, 7) :
