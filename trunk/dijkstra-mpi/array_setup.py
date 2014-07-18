@@ -12,7 +12,7 @@ import sys
 startx = 1
 starty = 0
 endx = 5
-endy = 0#9
+endy = 9
 
 #enum
 OPEN = 1
