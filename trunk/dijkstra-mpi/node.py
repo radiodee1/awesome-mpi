@@ -18,7 +18,7 @@ def find() :
 	localflag = 0
 	ii = 0
 	directions = []
-	while flag == 0 and ii < 3:
+	while flag == 0 and ii < 100:
 	#if True:
 		if rank == 0:
 			print ii
@@ -139,20 +139,20 @@ def find() :
 	
 	#print path backwards.
 	
-		found = mp.prev[(mp.endy * 10) + mp.endx]
+	found = mp.prev[(mp.endy * 10) + mp.endx]
 
-		i = 0
-		found = mp.prev[(mp.endy * 10) + mp.endx]
-		if rank == 0 : #found == rank or True:
-			print rank,"found start", found,
-			while (found != 0) and i < 100 :
-				found = mp.prev[found]
-				i += 1
-				print "and ",found," really found ",
-			print mp.prev, 'prev'
-			print mp.dist, 'dist'
-			print mp.visited, 'visited'
-			print mp.main, 'main'
+	i = 0
+	found = mp.prev[(mp.endy * 10) + mp.endx]
+	if rank == 0 : #found == rank or True:
+		print rank,"found start", found,
+		while (found != 0) and i < 100 :
+			found = mp.prev[found]
+			i += 1
+			print "and ",found," really found ",
+		print mp.prev, 'prev'
+		print mp.dist, 'dist'
+		print mp.visited, 'visited'
+		print mp.main, 'main'
 	
 def near_visited() :
 	
