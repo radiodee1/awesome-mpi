@@ -6,8 +6,8 @@ import math
 import sys
 
 
-	
-
+starttime = 0
+endtime = 0
 
 startx = 1
 starty = 0

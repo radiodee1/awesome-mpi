@@ -15,6 +15,7 @@ dim = com.Get_size()
 def find() :
 
 	show_maze()
+	mp.starttime = MPI.Wtime()
 	
 	flag = 0
 	localflag = 0
@@ -128,9 +129,13 @@ def find() :
 			localflag = 0	
 		flag = com.allreduce(localflag, op=MPI.MAX)
 		
-		
 	follow_path()
 	show_maze()
+	if rank == 0:
+		mp.endtime = MPI.Wtime()
+		print mp.endtime - mp.starttime
+	return 
+	#end of 'find'
 	
 def near_visited() :
 	
@@ -158,9 +163,7 @@ def must_check(test):
 		if mp.dist[rank] + 1 <= mp.dist[test] :
 			mp.prev[test] = rank #fr
 			mp.dist[test] = mp.dist[rank] + 1
-			#print 'new dist',mp.dist[test],'rank', rank, "test rank", test	
-	#mp.visited[rank] = mp.VISITED
-	return 0		
+					
 	
 def get_x(rank) :
 	return rank - (10 * int(rank / 10))
