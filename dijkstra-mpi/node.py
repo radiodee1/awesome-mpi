@@ -14,14 +14,16 @@ dim = com.Get_size()
 
 def find() :
 
+	show_maze()
+	
 	flag = 0
 	localflag = 0
 	ii = 0
 	directions = []
 	while flag == 0 and ii < 100:
 	
-		if rank == 0:
-			print ii
+		#if rank == 0:
+		#	print ii
 		
 		mp.visited = com.allgather(mp.visited[rank])
 		
@@ -181,9 +183,9 @@ def follow_path() :
 			found = mp.prev[found]
 			i += 1
 		mp.found.append(found)
-		print mp.found, 'found'
+		#print mp.found, 'found'
 		i = 0
-		
+		mp.found.sort(reverse=True)
 		x = mp.found.pop()
 		while (i < dim) :
 			if (x == i):
@@ -220,4 +222,4 @@ def show_maze():
 		for x in range (0,10 + 2):
 			print '#',
 		print
-
+		print
