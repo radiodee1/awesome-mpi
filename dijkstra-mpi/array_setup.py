@@ -36,9 +36,12 @@ for y in range (0 , 10):
 		if endx == x and endy == y :
 			main[ (y * 10) + x] = END
 			
-visited[(starty * 10) + startx] = VISITED
+visited[(starty * 10) + startx] = 0#VISITED
 dist[(starty * 10) + startx] = 0
-prev[(starty * 10) + startx] = -1
+prev[(starty * 10) + startx] = 0
+
+main[(starty * 10) + startx] = START
+
 #non-random walls
 
 for i in range (0, 7) :
