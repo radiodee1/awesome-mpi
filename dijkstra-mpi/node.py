@@ -19,18 +19,15 @@ def find() :
 	ii = 0
 	directions = []
 	while flag == 0 and ii < 100:
-	#if True:
+	
 		if rank == 0:
 			print ii
 		
 		mp.visited = com.allgather(mp.visited[rank])
-		#mp.prev = com.allgather(mp.prev[rank])
-		#mp.dist = com.allgather(mp.dist[rank])
-
+		
 		
 		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
 			if mp.main[rank] == mp.START :
-				print 'start'
 				must_check(rank)
 			
 			if get_y(rank) == get_y(rank + 1) and rank + 1 < dim and near_visited() :
@@ -48,7 +45,7 @@ def find() :
 			if near_visited() :
 				mp.visited[rank] = mp.VISITED
 			
-		## send and recv of 4 dist and prev
+		## send and recv of 4 dist and prev ##
 		prev = 0
 		if get_y(rank) == get_y(rank + 1) and rank + 1 < 100 :
 			com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
@@ -82,7 +79,7 @@ def find() :
 		#directions = []
 		dist = 0 
 		
-		## send and recv of 4 dist and prev
+		## send and recv of 4 dist and prev ##
 		if get_y(rank) == get_y(rank + 1) and rank + 1 < 100 :
 			com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
 		
@@ -120,39 +117,18 @@ def find() :
 		mp.prev = com.allgather(mp.prev[rank])
 		mp.dist = com.allgather(mp.dist[rank])
 		
-	
-		#com.barrier()
 		ii += 1
 		
 			
 		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
 			localflag = 1
-			#print "end found!!" , rank
 		else:
-			localflag = 0
-			#print 'not yet', rank
-			
+			localflag = 0	
 		flag = com.allreduce(localflag, op=MPI.MAX)
-		#if (rank == 0) :
-		#	print "end flag" , flag
 		
-	
-	#print path backwards.
-	
-	found = mp.prev[(mp.endy * 10) + mp.endx]
-
-	i = 0
-	found = mp.prev[(mp.endy * 10) + mp.endx]
-	if rank == 0 : #found == rank or True:
-		print rank,"found start", found,
-		while (found != 0) and i < 100 :
-			found = mp.prev[found]
-			i += 1
-			print "and ",found," really found ",
-		print mp.prev, 'prev'
-		print mp.dist, 'dist'
-		print mp.visited, 'visited'
-		print mp.main, 'main'
+		
+	follow_path()
+	show_maze()
 	
 def near_visited() :
 	
@@ -176,11 +152,11 @@ def near_visited() :
 def must_check(test):
 	
 	if mp.visited[test] != mp.VISITED and mp.main[rank] != mp.WALL:
-		print 'before', mp.dist[rank] , mp.dist[test], rank
+		#print 'before', mp.dist[rank] , mp.dist[test], rank
 		if mp.dist[rank] + 1 <= mp.dist[test] :
 			mp.prev[test] = rank #fr
 			mp.dist[test] = mp.dist[rank] + 1
-			print 'new dist',mp.dist[test],'rank', rank, "test rank", test	
+			#print 'new dist',mp.dist[test],'rank', rank, "test rank", test	
 	#mp.visited[rank] = mp.VISITED
 	return 0		
 	
@@ -192,3 +168,56 @@ def get_y(rank) :
 	
 def get_rank(x,y) :
 	return (y * 10) + x
+	
+	
+def follow_path() :
+	found = mp.prev[(mp.endy * 10) + mp.endx]
+
+	i = 0
+	found = mp.prev[(mp.endy * 10) + mp.endx]
+	if rank == 0 : 
+		while (found != 0) and i < 100 :
+			mp.found.append(found)
+			found = mp.prev[found]
+			i += 1
+		mp.found.append(found)
+		print mp.found, 'found'
+		i = 0
+		
+		x = mp.found.pop()
+		while (i < dim) :
+			if (x == i):
+				mp.main[i] = mp.PATH
+				if len(mp.found) > 0 :
+					x = mp.found.pop()
+			i += 1
+		
+def show_maze():
+	if rank == 0:	
+		print
+		for x in range (0,10 + 2):
+			if x < 10 + 1:
+				print '#',
+			else:
+				print '#'
+
+		for y in range (0 , 10):
+			print '#',
+			for x in range (0, 10):
+				if mp.main[ (y * 10) + x] == mp.FREE :
+					print ' ',
+				if mp.main[ (y * 10) + x] == mp.START :
+					print 'S',
+				if mp.main[ (y * 10) + x] == mp.END :
+					print 'X',
+				if mp.main[ (y * 10) + x] == mp.WALL :
+					print '#',
+				if mp.main[ (y * 10) + x] == mp.PATH :
+					print 'O',
+			print '#',
+			print
+
+		for x in range (0,10 + 2):
+			print '#',
+		print
+
