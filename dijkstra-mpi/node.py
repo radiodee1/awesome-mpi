@@ -18,7 +18,7 @@ def find() :
 	localflag = 0
 	ii = 0
 	directions = []
-	while flag == 0 and ii < 1:
+	while flag == 0 and ii < 3:
 	#if True:
 		if rank == 0:
 			print ii
@@ -49,55 +49,71 @@ def find() :
 				mp.visited[rank] = mp.VISITED
 			
 		## send and recv of 4 dist and prev
+		prev = 0
 		if get_y(rank) == get_y(rank + 1) and rank + 1 < 100 :
 			com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
-		
+	
 		if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
-			mp.prev[rank] = com.recv(source=rank-1, tag=rank)
-			
+			prev = com.recv(source=rank-1, tag=rank)
+			directions.append(prev)
+		
 		if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
 			com.send(mp.prev[rank-1], dest=rank-1, tag=rank-1)
 			
 		if get_y(rank) == get_y(rank + 1) and rank + 1 < 100 :
-			mp.prev[rank] = com.recv(source=rank+1, tag=rank)
+			prev = com.recv(source=rank+1, tag=rank)
+			directions.append(prev)		
 		
 		if rank + 10 < 100 :
 			com.send(mp.prev[rank+10], dest=rank+10, tag=rank+10)
 			
 		if rank - 10 >= 0 :
-			mp.prev[rank] = com.recv(source=rank-10, tag=rank)
+			prev = com.recv(source=rank-10, tag=rank)
+			directions.append(prev)		
 		
 		if rank - 10 >= 0 :
 			com.send(mp.prev[rank-10], dest=rank-10, tag=rank-10)
 			
 		if rank + 10 < 100:
-			mp.prev[rank] = com.recv(source=rank+10, tag=rank)
-
+			prev = com.recv(source=rank+10, tag=rank)
+			directions.append(prev)
+			
+		mp.prev[rank] = max(directions)
+		#directions = []
+		dist = 0 
 		
 		## send and recv of 4 dist and prev
 		if get_y(rank) == get_y(rank + 1) and rank + 1 < 100 :
 			com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
 		
 		if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
-			mp.dist[rank] = com.recv(source=rank-1, tag=rank + dim)
+			dist = com.recv(source=rank-1, tag=rank + dim)
+			if dist != mp.UNDEFINED :
+				mp.dist[rank] = dist
 			
 		if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
 			com.send(mp.dist[rank-1], dest=rank-1, tag=rank-1 + dim)
 			
 		if get_y(rank) == get_y(rank + 1) and rank + 1 < 100 :
-			mp.dist[rank] = com.recv(source=rank+1, tag=rank + dim)
+			dist = com.recv(source=rank+1, tag=rank + dim)
+			if dist != mp.UNDEFINED :
+				mp.dist[rank] = dist
 		
 		if rank + 10 < 100 :
 			com.send(mp.dist[rank+10], dest=rank+10, tag=rank+10 + dim)
 			
 		if rank - 10 >= 0 :
-			mp.dist[rank] = com.recv(source=rank-10, tag=rank + dim)
+			dist = com.recv(source=rank-10, tag=rank + dim)
+			if dist != mp.UNDEFINED :
+				mp.dist[rank] = dist
 		
 		if rank - 10 >= 0 :
 			com.send(mp.dist[rank-10], dest=rank-10, tag=rank-10 + dim)
 			
 		if rank + 10 < 100:
-			mp.dist[rank] = com.recv(source=rank+10, tag=rank + dim)
+			dist = com.recv(source=rank+10, tag=rank + dim)
+			if dist != mp.UNDEFINED :
+				mp.dist[rank] = dist
 		
 		
 		#fix_prev()
@@ -162,10 +178,9 @@ def must_check(test):
 	if mp.visited[test] != mp.VISITED and mp.main[rank] != mp.WALL:
 		print 'before', mp.dist[rank] , mp.dist[test], rank
 		if mp.dist[rank] + 1 <= mp.dist[test] :
-
 			mp.prev[test] = rank #fr
 			mp.dist[test] = mp.dist[rank] + 1
-			print 'change', 'new dist',mp.dist[test],'rank', rank		
+			print 'new dist',mp.dist[test],'rank', rank, "test rank", test	
 	#mp.visited[rank] = mp.VISITED
 	return 0		
 	

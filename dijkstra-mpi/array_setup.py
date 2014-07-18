@@ -7,13 +7,7 @@ import sys
 
 
 	
-main = [0] * 100 
-visited = [] #[0]  * 100 
-prev = [0] * 100 
-dist = [999] * 100
 
-for i in range(100) :
-	visited.append(0)
 
 startx = 1
 starty = 0
@@ -27,6 +21,15 @@ START = 3
 END = 4
 VISITED = 1
 FREE = 0
+UNDEFINED = 999
+
+main = [0] * 100 
+visited = [] #[0]  * 100 
+prev = [0] * 100 
+dist = [UNDEFINED] * 100
+
+for i in range(100) :
+	visited.append(0)
 
 for y in range (0 , 10):
 	for x in range (0, 10):
