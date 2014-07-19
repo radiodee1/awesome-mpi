@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-
+width = 15#10
+height = 10
 
 starttime = 0
 endtime = 0
@@ -20,35 +21,35 @@ VISITED = 1
 FREE = 0
 UNDEFINED = 999
 
-main = [0] * 100 
+main = [0] * (width * height) 
 visited = [] 
-prev = [-1] * 100 
-dist = [UNDEFINED] * 100
+prev = [-1] * (width * height)
+dist = [UNDEFINED] * (width * height)
 found = []
 
-for i in range(100) :
+for i in range(width * height) :
 	visited.append(0)
 
-for y in range (0 , 10):
-	for x in range (0, 10):
-		main[ (y * 10) + x] = FREE
+for y in range (0 , height):
+	for x in range (0, width):
+		main[ (y * width) + x] = FREE
 		if startx == x and starty == y :
-			main[ (y * 10) + x] = START
+			main[ (y * width) + x] = START
 		if endx == x and endy == y :
-			main[ (y * 10) + x] = END
+			main[ (y * width) + x] = END
 			
-visited[(starty * 10) + startx] = 0
-dist[(starty * 10) + startx] = 0
-prev[(starty * 10) + startx] = 0
+visited[(starty * width) + startx] = 0
+dist[(starty * width) + startx] = 0
+prev[(starty * width) + startx] = 0
 
-main[(starty * 10) + startx] = START
+main[(starty * width) + startx] = START
 
 #non-random walls
 
 for i in range (0, 7) : #(0,7)
-	main[ (4 * 10) + i] = WALL
+	main[ (4 * width) + i] = WALL
 	
-for i in range (4, 10) :
-	main[ (7 * 10) + i] = WALL
+for i in range (4, width) :
+	main[ (7 * width) + i] = WALL
 	
 

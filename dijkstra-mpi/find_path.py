@@ -11,9 +11,9 @@ com = MPI.COMM_WORLD
 rank = com.Get_rank()
 dim = com.Get_size()
 
-if (dim != 100 and rank == 0) :
-	print ('size must be 10x10, or 100!!')
-#if dim != 100 :
+if (dim != mp.height * mp.width and rank == 0) :
+	print 'size must be', mp.height*mp.width,', (' ,mp.width, 'x',mp.height, ')!!'
+#if dim != mp.height * mp.width :
 #	sys.exit()
 	
 node.find();
