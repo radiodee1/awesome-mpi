@@ -8,7 +8,7 @@ endtime = 0
 
 startx = 1
 starty = 0
-endx = 5
+endx = 13
 endy = 9
 
 #enum
