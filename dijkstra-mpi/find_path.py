@@ -2,9 +2,9 @@
 
 from mpi4py import MPI
 import array_setup as mp
-import numpy
-import math
-import sys
+#import numpy
+#import math
+#import sys
 import node
 
 com = MPI.COMM_WORLD
