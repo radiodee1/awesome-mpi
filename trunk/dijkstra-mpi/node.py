@@ -50,7 +50,7 @@ def find() :
 			
 		## send and recv of 4 dist and prev ##
 		prev = 0
-		if get_y(rank) == get_y(rank + 1) and rank + 1 < 100 :
+		if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
 			com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
 	
 		if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
@@ -60,11 +60,11 @@ def find() :
 		if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
 			com.send(mp.prev[rank-1], dest=rank-1, tag=rank-1)
 			
-		if get_y(rank) == get_y(rank + 1) and rank + 1 < 100 :
+		if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
 			prev = com.recv(source=rank+1, tag=rank)
 			directions.append(prev)		
 		
-		if rank + 10 < 100 :
+		if rank + 10 < dim :
 			com.send(mp.prev[rank+10], dest=rank+10, tag=rank+10)
 			
 		if rank - 10 >= 0 :
@@ -74,16 +74,18 @@ def find() :
 		if rank - 10 >= 0 :
 			com.send(mp.prev[rank-10], dest=rank-10, tag=rank-10)
 			
-		if rank + 10 < 100:
+		if rank + 10 < dim:
 			prev = com.recv(source=rank+10, tag=rank)
 			directions.append(prev)
-			
-		mp.prev[rank] = max(directions)
-		#directions = []
+		
+		if mp.main[rank] != mp.START:	
+			mp.prev[rank] = max(directions)
+		else :
+			mp.prev[rank] = -1
 		dist = 0 
 		
 		## send and recv of 4 dist and prev ##
-		if get_y(rank) == get_y(rank + 1) and rank + 1 < 100 :
+		if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
 			com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
 		
 		if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
@@ -94,12 +96,12 @@ def find() :
 		if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
 			com.send(mp.dist[rank-1], dest=rank-1, tag=rank-1 + dim)
 			
-		if get_y(rank) == get_y(rank + 1) and rank + 1 < 100 :
+		if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
 			dist = com.recv(source=rank+1, tag=rank + dim)
 			if dist != mp.UNDEFINED :
 				mp.dist[rank] = dist
 		
-		if rank + 10 < 100 :
+		if rank + 10 < dim :
 			com.send(mp.dist[rank+10], dest=rank+10, tag=rank+10 + dim)
 			
 		if rank - 10 >= 0 :
@@ -110,7 +112,7 @@ def find() :
 		if rank - 10 >= 0 :
 			com.send(mp.dist[rank-10], dest=rank-10, tag=rank-10 + dim)
 			
-		if rank + 10 < 100:
+		if rank + 10 < dim:
 			dist = com.recv(source=rank+10, tag=rank + dim)
 			if dist != mp.UNDEFINED :
 				mp.dist[rank] = dist
@@ -159,9 +161,9 @@ def near_visited() :
 def must_check(test):
 	
 	if mp.visited[test] != mp.VISITED and mp.main[rank] != mp.WALL:
-		#print 'before', mp.dist[rank] , mp.dist[test], rank
 		if mp.dist[rank] + 1 <= mp.dist[test] :
-			mp.prev[test] = rank #fr
+			if mp.main[test] != mp.START:
+				mp.prev[test] = rank 
 			mp.dist[test] = mp.dist[rank] + 1
 					
 	
@@ -176,25 +178,24 @@ def get_rank(x,y) :
 	
 	
 def follow_path() :
-	found = mp.prev[(mp.endy * 10) + mp.endx]
 
-	i = 0
-	found = mp.prev[(mp.endy * 10) + mp.endx]
-	if rank == 0 : 
-		while (found != 0) and i < 100 :
-			mp.found.append(found)
+	if rank == 0 :
+		i = 0 
+		mp.found = []
+		
+		found = mp.prev[(mp.endy * 10) + mp.endx]
+		
+		mp.found.append(found)			
+		while (found != -1) and i < 100 :
+			if found != -1:
+				mp.found.append(found)
 			found = mp.prev[found]
 			i += 1
-		mp.found.append(found)
-		#print mp.found, 'found'
+
 		i = 0
-		mp.found.sort(reverse=True)
-		x = mp.found.pop()
 		while (i < dim) :
-			if (x == i):
+			if ( i in mp.found) and mp.main[i] != mp.START:
 				mp.main[i] = mp.PATH
-				if len(mp.found) > 0 :
-					x = mp.found.pop()
 			i += 1
 		
 def show_maze():

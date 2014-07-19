@@ -26,7 +26,7 @@ UNDEFINED = 999
 
 main = [0] * 100 
 visited = [] 
-prev = [0] * 100 
+prev = [-1] * 100 
 dist = [UNDEFINED] * 100
 found = []
 
