@@ -31,9 +31,9 @@ starttime = 0
 endtime = 0
 
 startx = 1
-starty = 0
+starty = 9#0
 endx = 13
-endy = 9
+endy = 0#9
 
 #enum
 OPEN = 1

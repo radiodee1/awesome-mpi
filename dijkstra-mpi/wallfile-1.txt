@@ -1,6 +1,7 @@
-#comments
-#more comments
+#comments start line with a '#'
+# first line is width/height dimensions separated by comma
 15,10
-#comments here too
+# second line is comma separated 'WALL' indexes -- must all be one line!!
 100, 101, 102, 15,16,17,18
-# closing comments
+
+# closing comments: start and stop values are not included!!
