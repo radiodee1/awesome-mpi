@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 import array_setup as mp
-import numpy
+
+
+	
 
 print
 for x in range (0, mp.width +2):
