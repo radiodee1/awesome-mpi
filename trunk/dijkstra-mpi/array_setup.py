@@ -1,9 +1,5 @@
 #!/usr/bin/python
 
-#from mpi4py import MPI
-import numpy
-import math
-import sys
 
 
 starttime = 0
@@ -41,7 +37,7 @@ for y in range (0 , 10):
 		if endx == x and endy == y :
 			main[ (y * 10) + x] = END
 			
-visited[(starty * 10) + startx] = 0#VISITED
+visited[(starty * 10) + startx] = 0
 dist[(starty * 10) + startx] = 0
 prev[(starty * 10) + startx] = 0
 
@@ -49,7 +45,7 @@ main[(starty * 10) + startx] = START
 
 #non-random walls
 
-for i in range (0, 7) :
+for i in range (0, 7) : #(0,7)
 	main[ (4 * 10) + i] = WALL
 	
 for i in range (4, 10) :
