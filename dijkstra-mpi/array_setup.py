@@ -3,13 +3,15 @@
 import sys
 import fileinput
 
-width = 15#10
-height = 10
+width = 20#15
+height = 20#10
 
 ## make csv file import-able ##
 dim = []
 wall = []
 csv = False
+
+'''
 i = 0
 if len(sys.argv) > 1:
 	csv = True
@@ -25,15 +27,15 @@ if len(sys.argv) > 1:
 			if i == 2:
 				#print 'wall-csv:', line
 				wall = line.split(',')
-			
+'''			
 
 starttime = 0
 endtime = 0
 
-startx = 1
-starty = 9#0
-endx = 13
-endy = 0#9
+startx = 3
+starty = 1#height - 3
+endx = width - 3
+endy = height - 3
 
 #enum
 OPEN = 1
@@ -73,11 +75,12 @@ if csv == True:
 		main[int(i)] = WALL
 
 # non-random walls
-
+onethird = int(height / 3)
+twothirds = int(height * 2 / 3 )
 for i in range (0, 7) : #(0,7)
-	main[ (4 * width) + i] = WALL
+	main[ (onethird * width) + i] = WALL
 	
 for i in range (4, width) :
-	main[ (7 * width) + i] = WALL
+	main[ (twothirds * width) + i] = WALL
 	
 
