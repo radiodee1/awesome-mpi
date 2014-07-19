@@ -21,7 +21,7 @@ def find() :
 	localflag = 0
 	ii = 0
 	directions = []
-	while flag == 0 and ii < 100:
+	while flag == 0 and ii < mp.width * mp.height:
 	
 		#if rank == 0:
 		#	print ii
@@ -39,11 +39,11 @@ def find() :
 			if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0 and near_visited() :
 				must_check(rank - 1)
 
-			if rank + 10 < dim and near_visited() :
-				must_check(rank + 10)
+			if rank + mp.width < dim and near_visited() :
+				must_check(rank + mp.width)
 
-			if rank - 10 >= 0 and near_visited() :
-				must_check(rank - 10)
+			if rank - mp.width >= 0 and near_visited() :
+				must_check(rank - mp.width)
 
 			if near_visited() :
 				mp.visited[rank] = mp.VISITED
@@ -64,18 +64,18 @@ def find() :
 			prev = com.recv(source=rank+1, tag=rank)
 			directions.append(prev)		
 		
-		if rank + 10 < dim :
-			com.send(mp.prev[rank+10], dest=rank+10, tag=rank+10)
+		if rank + mp.width < dim :
+			com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
 			
-		if rank - 10 >= 0 :
-			prev = com.recv(source=rank-10, tag=rank)
+		if rank - mp.width >= 0 :
+			prev = com.recv(source=rank-mp.width, tag=rank)
 			directions.append(prev)		
 		
-		if rank - 10 >= 0 :
-			com.send(mp.prev[rank-10], dest=rank-10, tag=rank-10)
+		if rank - mp.width >= 0 :
+			com.send(mp.prev[rank-mp.width], dest=rank-mp.width, tag=rank-mp.width)
 			
-		if rank + 10 < dim:
-			prev = com.recv(source=rank+10, tag=rank)
+		if rank + mp.width < dim:
+			prev = com.recv(source=rank+mp.width, tag=rank)
 			directions.append(prev)
 		
 		if mp.main[rank] != mp.START:	
@@ -101,19 +101,19 @@ def find() :
 			if dist != mp.UNDEFINED :
 				mp.dist[rank] = dist
 		
-		if rank + 10 < dim :
-			com.send(mp.dist[rank+10], dest=rank+10, tag=rank+10 + dim)
+		if rank + mp.width < dim :
+			com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
 			
-		if rank - 10 >= 0 :
-			dist = com.recv(source=rank-10, tag=rank + dim)
+		if rank - mp.width >= 0 :
+			dist = com.recv(source=rank-mp.width, tag=rank + dim)
 			if dist != mp.UNDEFINED :
 				mp.dist[rank] = dist
 		
-		if rank - 10 >= 0 :
-			com.send(mp.dist[rank-10], dest=rank-10, tag=rank-10 + dim)
+		if rank - mp.width >= 0 :
+			com.send(mp.dist[rank-mp.width], dest=rank-mp.width, tag=rank-mp.width + dim)
 			
-		if rank + 10 < dim:
-			dist = com.recv(source=rank+10, tag=rank + dim)
+		if rank + mp.width < dim:
+			dist = com.recv(source=rank+mp.width, tag=rank + dim)
 			if dist != mp.UNDEFINED :
 				mp.dist[rank] = dist
 		
@@ -147,11 +147,11 @@ def near_visited() :
 	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0 :
 		if mp.visited[rank - 1] == mp.VISITED:
 			return True
-	if rank + 10 < dim:
-		if mp.visited[rank + 10] == mp.VISITED:
+	if rank + mp.width < dim:
+		if mp.visited[rank + mp.width] == mp.VISITED:
 			return True
-	if rank - 10 >= 0:
-		if mp.visited[rank -10] == mp.VISITED:
+	if rank - mp.width >= 0:
+		if mp.visited[rank - mp.width] == mp.VISITED:
 			return True
 	if rank == get_rank(mp.startx, mp.starty) :
 		return True
@@ -168,13 +168,13 @@ def must_check(test):
 					
 	
 def get_x(rank) :
-	return rank - (10 * int(rank / 10))
+	return rank - (mp.width * int(rank / mp.width))
 	
 def get_y(rank) :
-	return int(rank / 10)
+	return int(rank / mp.width)
 	
 def get_rank(x,y) :
-	return (y * 10) + x
+	return (y * mp.width) + x
 	
 	
 def follow_path() :
@@ -183,10 +183,10 @@ def follow_path() :
 		i = 0 
 		mp.found = []
 		
-		found = mp.prev[(mp.endy * 10) + mp.endx]
+		found = mp.prev[(mp.endy * mp.width) + mp.endx]
 		
 		mp.found.append(found)			
-		while (found != -1) and i < 100 :
+		while (found != -1) and i < mp.width * mp.height :
 			if found != -1:
 				mp.found.append(found)
 			found = mp.prev[found]
@@ -201,29 +201,29 @@ def follow_path() :
 def show_maze():
 	if rank == 0:	
 		print
-		for x in range (0,10 + 2):
-			if x < 10 + 1:
+		for x in range (0,mp.width + 2):
+			if x < mp.width + 1:
 				print '#',
 			else:
 				print '#'
 
-		for y in range (0 , 10):
+		for y in range (0 , mp.height):
 			print '#',
-			for x in range (0, 10):
-				if mp.main[ (y * 10) + x] == mp.FREE :
+			for x in range (0, mp.width):
+				if mp.main[ (y * mp.width) + x] == mp.FREE :
 					print ' ',
-				if mp.main[ (y * 10) + x] == mp.START :
+				if mp.main[ (y * mp.width) + x] == mp.START :
 					print 'S',
-				if mp.main[ (y * 10) + x] == mp.END :
+				if mp.main[ (y * mp.width) + x] == mp.END :
 					print 'X',
-				if mp.main[ (y * 10) + x] == mp.WALL :
+				if mp.main[ (y * mp.width) + x] == mp.WALL :
 					print '#',
-				if mp.main[ (y * 10) + x] == mp.PATH :
+				if mp.main[ (y * mp.width) + x] == mp.PATH :
 					print 'O',
 			print '#',
 			print
 
-		for x in range (0,10 + 2):
+		for x in range (0,mp.width + 2):
 			print '#',
 		print
 		print
