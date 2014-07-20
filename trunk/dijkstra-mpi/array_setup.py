@@ -1,10 +1,13 @@
 #!/usr/bin/python
 
+'''
+# comment in for csv file
 import sys
 import fileinput
+'''
 
-width = 20#15
-height = 20#10
+width = 20
+height = 10#10
 
 ## make csv file import-able ##
 dim = []
@@ -12,6 +15,7 @@ wall = []
 csv = False
 
 '''
+# comment in for csv file
 i = 0
 if len(sys.argv) > 1:
 	csv = True
@@ -35,7 +39,7 @@ endtime = 0
 startx = 3
 starty = 1#height - 3
 endx = width - 3
-endy = height - 3
+endy = height - 2
 
 #enum
 OPEN = 1
