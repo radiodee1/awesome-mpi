@@ -6,7 +6,7 @@ import sys
 import fileinput
 '''
 
-width = 20
+width = 10#20
 height = 10#10
 
 ## make csv file import-able ##
@@ -87,4 +87,7 @@ for i in range (0, 7) : #(0,7)
 for i in range (4, width) :
 	main[ (twothirds * width) + i] = WALL
 	
+# test for unreachable goal	
+for i in range (0, width) :
+	main[ (twothirds * width) + i] = WALL
 

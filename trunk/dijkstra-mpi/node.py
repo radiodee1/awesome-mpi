@@ -2,10 +2,7 @@
 
 from mpi4py import MPI
 import array_setup as mp
-import numpy
-import math
-import sys
-import array
+
 
 com = MPI.COMM_WORLD
 rank = com.Get_rank()
@@ -20,7 +17,9 @@ def find() :
 	flag = 0
 	localflag = 0
 	ii = 0
-	directions = []
+	
+	lasttot = 0
+	
 	while flag == 0 and ii < mp.width * mp.height:
 	
 		#if rank == 0:
@@ -48,88 +47,33 @@ def find() :
 			if near_visited() :
 				mp.visited[rank] = mp.VISITED
 			
-		## send and recv of 4 dist and prev ##
-		prev = 0
-		if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
-			com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
-	
-		if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
-			prev = com.recv(source=rank-1, tag=rank)
-			directions.append(prev)
 		
-		if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
-			com.send(mp.prev[rank-1], dest=rank-1, tag=rank-1)
-			
-		if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
-			prev = com.recv(source=rank+1, tag=rank)
-			directions.append(prev)		
+		fix_prev()
+		fix_dist()
 		
-		if rank + mp.width < dim :
-			com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
-			
-		if rank - mp.width >= 0 :
-			prev = com.recv(source=rank-mp.width, tag=rank)
-			directions.append(prev)		
-		
-		if rank - mp.width >= 0 :
-			com.send(mp.prev[rank-mp.width], dest=rank-mp.width, tag=rank-mp.width)
-			
-		if rank + mp.width < dim:
-			prev = com.recv(source=rank+mp.width, tag=rank)
-			directions.append(prev)
-		
-		if mp.main[rank] != mp.START:	
-			mp.prev[rank] = max(directions)
-		else :
-			mp.prev[rank] = -1
-		dist = 0 
-		
-		## send and recv of 4 dist and prev ##
-		if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
-			com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
-		
-		if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
-			dist = com.recv(source=rank-1, tag=rank + dim)
-			if dist != mp.UNDEFINED :
-				mp.dist[rank] = dist
-			
-		if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
-			com.send(mp.dist[rank-1], dest=rank-1, tag=rank-1 + dim)
-			
-		if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
-			dist = com.recv(source=rank+1, tag=rank + dim)
-			if dist != mp.UNDEFINED :
-				mp.dist[rank] = dist
-		
-		if rank + mp.width < dim :
-			com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
-			
-		if rank - mp.width >= 0 :
-			dist = com.recv(source=rank-mp.width, tag=rank + dim)
-			if dist != mp.UNDEFINED :
-				mp.dist[rank] = dist
-		
-		if rank - mp.width >= 0 :
-			com.send(mp.dist[rank-mp.width], dest=rank-mp.width, tag=rank-mp.width + dim)
-			
-		if rank + mp.width < dim:
-			dist = com.recv(source=rank+mp.width, tag=rank + dim)
-			if dist != mp.UNDEFINED :
-				mp.dist[rank] = dist
-		
-		
-		#fix_prev()
 		mp.prev = com.allgather(mp.prev[rank])
 		mp.dist = com.allgather(mp.dist[rank])
 		
 		ii += 1
 		
+		localtot = 0
+		localflag = 0
+		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+			localtot = 1
+		
+		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+		
+		if localtot >= mp.width * mp.height or total == lasttot:
+			localflag = 1	 
+			if rank == 0:
+				print 'goal is unreachable?? At:', total
 			
 		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
 			localflag = 1
-		else:
-			localflag = 0	
-		flag = com.allreduce(localflag, op=MPI.MAX)
+			
+		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+		
+		lasttot = total
 		
 	follow_path()
 	show_maze()
@@ -165,7 +109,83 @@ def must_check(test):
 			if mp.main[test] != mp.START:
 				mp.prev[test] = rank 
 			mp.dist[test] = mp.dist[rank] + 1
-					
+				
+def fix_dist():
+	## send and recv of 4 dist  ##
+	## pass values up, down, right, and left ##
+	dist = 0
+	
+	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+	
+	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+		dist = com.recv(source=rank-1, tag=rank + dim)
+		if dist != mp.UNDEFINED :
+			mp.dist[rank] = dist
+		
+	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+		com.send(mp.dist[rank-1], dest=rank-1, tag=rank-1 + dim)
+		
+	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+		dist = com.recv(source=rank+1, tag=rank + dim)
+		if dist != mp.UNDEFINED :
+			mp.dist[rank] = dist
+	
+	if rank + mp.width < dim :
+		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+		
+	if rank - mp.width >= 0 :
+		dist = com.recv(source=rank-mp.width, tag=rank + dim)
+		if dist != mp.UNDEFINED :
+			mp.dist[rank] = dist
+	
+	if rank - mp.width >= 0 :
+		com.send(mp.dist[rank-mp.width], dest=rank-mp.width, tag=rank-mp.width + dim)
+		
+	if rank + mp.width < dim:
+		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+		if dist != mp.UNDEFINED :
+			mp.dist[rank] = dist
+	
+
+def fix_prev():
+	## send and recv of 4 prev ##
+	## pass values up, down, right, and left ##
+	directions = []
+	prev = 0
+	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+
+	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+		prev = com.recv(source=rank-1, tag=rank)
+		directions.append(prev)
+	
+	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+		com.send(mp.prev[rank-1], dest=rank-1, tag=rank-1)
+		
+	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+		prev = com.recv(source=rank+1, tag=rank)
+		directions.append(prev)		
+	
+	if rank + mp.width < dim :
+		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+		
+	if rank - mp.width >= 0 :
+		prev = com.recv(source=rank-mp.width, tag=rank)
+		directions.append(prev)		
+	
+	if rank - mp.width >= 0 :
+		com.send(mp.prev[rank-mp.width], dest=rank-mp.width, tag=rank-mp.width)
+		
+	if rank + mp.width < dim:
+		prev = com.recv(source=rank+mp.width, tag=rank)
+		directions.append(prev)
+	
+	if mp.main[rank] != mp.START:	
+		mp.prev[rank] = max(directions)
+	else :
+		mp.prev[rank] = -1
+	
 	
 def get_x(rank) :
 	return rank - (mp.width * int(rank / mp.width))
