@@ -1,0 +1,420 @@
+
+# # # # # # # # # # # #
+#                     #
+#       S             #
+#                     #
+# # # # # # # #       #
+#                     #
+#                     #
+#         # # # # # # #
+#                     #
+#               X     #
+#                     #
+# # # # # # # # # # # #
+
+
+# # # # # # # # # # # #
+#                     #
+#       S             #
+#       O O O O O     #
+# # # # # # # # O     #
+#               O     #
+#       O O O O O     #
+#       O # # # # # # #
+#       O             #
+#       O O O O X     #
+#                     #
+# # # # # # # # # # # #
+
+69.6225817204
+40.219391  	show_maze()
+40.296567  	mp.starttime = MPI.Wtime()
+40.296583  	flag = 0
+40.296587  	localflag = 0
+40.296590  	ii = 0
+40.296594  	lasttot = 0
+
+
+40.296596  	while flag == 0 and ii < mp.width * mp.height:
+40.296600  		mp.visited = com.allgather(mp.visited[rank])
+40.851393  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+40.851401  			if mp.main[rank] == mp.START :
+40.851405  			if get_y(rank) == get_y(rank + 1) and rank + 1 < dim and near_visited() :
+40.851436  			if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0 and near_visited() :
+40.851443  			if rank + mp.width < dim and near_visited() :
+40.851460  			if rank - mp.width >= 0 and near_visited() :
+40.851464  			if near_visited() :
+40.851480  		fix_prev()
+41.016299  		fix_dist()
+41.178279  		mp.prev = com.allgather(mp.prev[rank])
+41.744401  		mp.dist = com.allgather(mp.dist[rank])
+42.447399  		ii += 1
+42.447404  		localtot = 0
+42.447407  		localflag = 0
+42.447410  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+42.447415  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+43.097402  		if localtot >= mp.width * mp.height or total == lasttot:
+43.097408  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+43.097412  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+43.749410  		lasttot = total
+
+one program cycle:	3.452818
+function length:	3.452814
+time for allgather:	0.554793 #line 39
+time for allgather:	0.566122 #line 49
+
+
+43.749414  	while flag == 0 and ii < mp.width * mp.height:
+43.749419  		mp.visited = com.allgather(mp.visited[rank])
+44.393395  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+44.393401  			if mp.main[rank] == mp.START :
+44.393404  			if get_y(rank) == get_y(rank + 1) and rank + 1 < dim and near_visited() :
+44.393433  			if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0 and near_visited() :
+44.393440  			if rank + mp.width < dim and near_visited() :
+44.393457  			if rank - mp.width >= 0 and near_visited() :
+44.393461  			if near_visited() :
+44.393478  		fix_prev()
+44.613318  		fix_dist()
+44.813279  		mp.prev = com.allgather(mp.prev[rank])
+45.378390  		mp.dist = com.allgather(mp.dist[rank])
+46.028399  		ii += 1
+46.028403  		localtot = 0
+46.028406  		localflag = 0
+46.028408  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+46.028413  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+46.677401  		if localtot >= mp.width * mp.height or total == lasttot:
+46.677408  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+46.677412  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+47.340400  		lasttot = total
+47.340405  	while flag == 0 and ii < mp.width * mp.height:
+47.340410  		mp.visited = com.allgather(mp.visited[rank])
+47.965398  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+47.965404  			if mp.main[rank] == mp.START :
+47.965407  			if get_y(rank) == get_y(rank + 1) and rank + 1 < dim and near_visited() :
+47.965436  			if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0 and near_visited() :
+47.965442  			if rank + mp.width < dim and near_visited() :
+47.965460  			if rank - mp.width >= 0 and near_visited() :
+47.965462  			if near_visited() :
+47.965480  		fix_prev()
+48.121300  		fix_dist()
+48.284296  		mp.prev = com.allgather(mp.prev[rank])
+48.846596  		mp.dist = com.allgather(mp.dist[rank])
+49.576393  		ii += 1
+49.576397  		localtot = 0
+49.576399  		localflag = 0
+49.576401  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+49.576406  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+50.142405  		if localtot >= mp.width * mp.height or total == lasttot:
+50.142415  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+50.142419  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+50.706407  		lasttot = total
+50.706412  	while flag == 0 and ii < mp.width * mp.height:
+50.706417  		mp.visited = com.allgather(mp.visited[rank])
+51.433393  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+51.433401  			if mp.main[rank] == mp.START :
+51.433404  			if get_y(rank) == get_y(rank + 1) and rank + 1 < dim and near_visited() :
+51.433433  			if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0 and near_visited() :
+51.433441  			if rank + mp.width < dim and near_visited() :
+51.433458  			if rank - mp.width >= 0 and near_visited() :
+51.433461  			if near_visited() :
+51.433477  		fix_prev()
+51.594296  		fix_dist()
+51.757284  		mp.prev = com.allgather(mp.prev[rank])
+52.284400  		mp.dist = com.allgather(mp.dist[rank])
+53.011397  		ii += 1
+53.011402  		localtot = 0
+53.011405  		localflag = 0
+53.011407  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+53.011412  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+53.660398  		if localtot >= mp.width * mp.height or total == lasttot:
+53.660405  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+53.660409  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+54.365402  		lasttot = total
+54.365407  	while flag == 0 and ii < mp.width * mp.height:
+54.365412  		mp.visited = com.allgather(mp.visited[rank])
+54.948393  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+54.948401  			if mp.main[rank] == mp.START :
+54.948404  			if get_y(rank) == get_y(rank + 1) and rank + 1 < dim and near_visited() :
+54.948611  				must_check(rank + 1)
+54.948616  			if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0 and near_visited() :
+54.948623  			if rank + mp.width < dim and near_visited() :
+54.948633  				must_check(rank + mp.width)
+54.948637  			if rank - mp.width >= 0 and near_visited() :
+54.948640  			if near_visited() :
+54.948648  				mp.visited[rank] = mp.VISITED
+54.948652  		fix_prev()
+55.109304  		fix_dist()
+55.356289  		mp.prev = com.allgather(mp.prev[rank])
+56.006391  		mp.dist = com.allgather(mp.dist[rank])
+56.494403  		ii += 1
+56.494407  		localtot = 0
+56.494410  		localflag = 0
+56.494412  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+56.494415  			localtot = 1
+56.494418  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+57.074406  		if localtot >= mp.width * mp.height or total == lasttot:
+57.074412  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+57.074418  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+57.798410  		lasttot = total
+57.798415  	while flag == 0 and ii < mp.width * mp.height:
+57.798421  		mp.visited = com.allgather(mp.visited[rank])
+58.458391  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+58.458398  		fix_prev()
+58.625295  		fix_dist()
+58.783288  		mp.prev = com.allgather(mp.prev[rank])
+59.355391  		mp.dist = com.allgather(mp.dist[rank])
+59.964399  		ii += 1
+59.964404  		localtot = 0
+59.964406  		localflag = 0
+59.964409  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+59.964413  			localtot = 1
+59.964415  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+ 0.691400  		if localtot >= mp.width * mp.height or total == lasttot:
+ 0.691407  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+ 0.691412  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+ 1.259410  		lasttot = total
+ 1.259415  	while flag == 0 and ii < mp.width * mp.height:
+ 1.259420  		mp.visited = com.allgather(mp.visited[rank])
+ 1.966397  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+ 1.966403  		fix_prev()
+ 2.048322  		fix_dist()
+ 2.215288  		mp.prev = com.allgather(mp.prev[rank])
+ 3.018395  		mp.dist = com.allgather(mp.dist[rank])
+ 3.607405  		ii += 1
+ 3.607410  		localtot = 0
+ 3.607413  		localflag = 0
+ 3.607416  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+ 3.607420  			localtot = 1
+ 3.607423  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+ 4.260403  		if localtot >= mp.width * mp.height or total == lasttot:
+ 4.260409  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+ 4.260415  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+ 4.814405  		lasttot = total
+ 4.814410  	while flag == 0 and ii < mp.width * mp.height:
+ 4.814415  		mp.visited = com.allgather(mp.visited[rank])
+ 5.472397  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+ 5.472403  		fix_prev()
+ 5.628287  		fix_dist()
+ 5.790293  		mp.prev = com.allgather(mp.prev[rank])
+ 6.516392  		mp.dist = com.allgather(mp.dist[rank])
+ 7.154394  		ii += 1
+ 7.154399  		localtot = 0
+ 7.154402  		localflag = 0
+ 7.154404  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+ 7.154408  			localtot = 1
+ 7.154411  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+ 7.805400  		if localtot >= mp.width * mp.height or total == lasttot:
+ 7.805407  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+ 7.805419  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+ 8.343405  		lasttot = total
+ 8.343411  	while flag == 0 and ii < mp.width * mp.height:
+ 8.343416  		mp.visited = com.allgather(mp.visited[rank])
+ 8.882398  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+ 8.882405  		fix_prev()
+ 9.041287  		fix_dist()
+ 9.199294  		mp.prev = com.allgather(mp.prev[rank])
+ 9.844402  		mp.dist = com.allgather(mp.dist[rank])
+10.469396  		ii += 1
+10.469401  		localtot = 0
+10.469404  		localflag = 0
+10.469406  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+10.469410  			localtot = 1
+10.469412  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+11.192407  		if localtot >= mp.width * mp.height or total == lasttot:
+11.192413  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+11.192418  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+11.827405  		lasttot = total
+11.827410  	while flag == 0 and ii < mp.width * mp.height:
+11.827415  		mp.visited = com.allgather(mp.visited[rank])
+12.405390  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+12.405396  		fix_prev()
+12.568281  		fix_dist()
+12.727298  		mp.prev = com.allgather(mp.prev[rank])
+13.360398  		mp.dist = com.allgather(mp.dist[rank])
+13.914400  		ii += 1
+13.914406  		localtot = 0
+13.914409  		localflag = 0
+13.914412  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+13.914416  			localtot = 1
+13.914418  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+14.640402  		if localtot >= mp.width * mp.height or total == lasttot:
+14.640410  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+14.640415  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+15.194406  		lasttot = total
+15.194411  	while flag == 0 and ii < mp.width * mp.height:
+15.194416  		mp.visited = com.allgather(mp.visited[rank])
+15.794396  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+15.794401  		fix_prev()
+16.122283  		fix_dist()
+16.281298  		mp.prev = com.allgather(mp.prev[rank])
+16.848394  		mp.dist = com.allgather(mp.dist[rank])
+17.489393  		ii += 1
+17.489398  		localtot = 0
+17.489400  		localflag = 0
+17.489402  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+17.489406  			localtot = 1
+17.489408  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+18.114415  		if localtot >= mp.width * mp.height or total == lasttot:
+18.114431  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+18.114437  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+18.781402  		lasttot = total
+18.781408  	while flag == 0 and ii < mp.width * mp.height:
+18.781412  		mp.visited = com.allgather(mp.visited[rank])
+19.369403  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+19.369410  		fix_prev()
+19.533296  		fix_dist()
+19.613334  		mp.prev = com.allgather(mp.prev[rank])
+20.341398  		mp.dist = com.allgather(mp.dist[rank])
+20.892398  		ii += 1
+20.892403  		localtot = 0
+20.892405  		localflag = 0
+20.892407  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+20.892411  			localtot = 1
+20.892417  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+21.607406  		if localtot >= mp.width * mp.height or total == lasttot:
+21.607413  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+21.607418  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+22.182408  		lasttot = total
+22.182414  	while flag == 0 and ii < mp.width * mp.height:
+22.182419  		mp.visited = com.allgather(mp.visited[rank])
+22.829389  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+22.829395  		fix_prev()
+22.992291  		fix_dist()
+23.149431  		mp.prev = com.allgather(mp.prev[rank])
+23.838397  		mp.dist = com.allgather(mp.dist[rank])
+24.416398  		ii += 1
+24.416403  		localtot = 0
+24.416405  		localflag = 0
+24.416408  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+24.416411  			localtot = 1
+24.416414  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+25.039400  		if localtot >= mp.width * mp.height or total == lasttot:
+25.039407  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+25.039412  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+25.654405  		lasttot = total
+25.654411  	while flag == 0 and ii < mp.width * mp.height:
+25.654416  		mp.visited = com.allgather(mp.visited[rank])
+26.273399  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+26.273406  		fix_prev()
+26.515291  		fix_dist()
+26.678301  		mp.prev = com.allgather(mp.prev[rank])
+27.229399  		mp.dist = com.allgather(mp.dist[rank])
+27.839395  		ii += 1
+27.839400  		localtot = 0
+27.839403  		localflag = 0
+27.839405  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+27.839409  			localtot = 1
+27.839412  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+28.480398  		if localtot >= mp.width * mp.height or total == lasttot:
+28.480414  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+28.480420  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+29.199894  		lasttot = total
+29.199899  	while flag == 0 and ii < mp.width * mp.height:
+29.199904  		mp.visited = com.allgather(mp.visited[rank])
+29.812394  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+29.812400  		fix_prev()
+29.982299  		fix_dist()
+30.145288  		mp.prev = com.allgather(mp.prev[rank])
+30.774396  		mp.dist = com.allgather(mp.dist[rank])
+31.399396  		ii += 1
+31.399401  		localtot = 0
+31.399403  		localflag = 0
+31.399407  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+31.399410  			localtot = 1
+31.399413  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+32.024405  		if localtot >= mp.width * mp.height or total == lasttot:
+32.024411  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+32.024416  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+32.670404  		lasttot = total
+32.670409  	while flag == 0 and ii < mp.width * mp.height:
+32.670414  		mp.visited = com.allgather(mp.visited[rank])
+33.220393  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+33.220399  		fix_prev()
+33.378286  		fix_dist()
+33.545290  		mp.prev = com.allgather(mp.prev[rank])
+34.204400  		mp.dist = com.allgather(mp.dist[rank])
+34.934393  		ii += 1
+34.934399  		localtot = 0
+34.934401  		localflag = 0
+34.934404  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+34.934407  			localtot = 1
+34.934409  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+35.520400  		if localtot >= mp.width * mp.height or total == lasttot:
+35.520406  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+35.520411  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+36.087406  		lasttot = total
+36.087411  	while flag == 0 and ii < mp.width * mp.height:
+36.087416  		mp.visited = com.allgather(mp.visited[rank])
+36.735396  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+36.735402  		fix_prev()
+36.894304  		fix_dist()
+37.040298  		mp.prev = com.allgather(mp.prev[rank])
+37.543398  		mp.dist = com.allgather(mp.dist[rank])
+38.181400  		ii += 1
+38.181405  		localtot = 0
+38.181408  		localflag = 0
+38.181410  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+38.181414  			localtot = 1
+38.181422  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+38.825679  		if localtot >= mp.width * mp.height or total == lasttot:
+38.825685  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+38.825691  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+39.460411  		lasttot = total
+39.460417  	while flag == 0 and ii < mp.width * mp.height:
+39.460422  		mp.visited = com.allgather(mp.visited[rank])
+40.029395  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+40.029401  		fix_prev()
+40.274303  		fix_dist()
+40.421278  		mp.prev = com.allgather(mp.prev[rank])
+40.973393  		mp.dist = com.allgather(mp.dist[rank])
+41.613399  		ii += 1
+41.613404  		localtot = 0
+41.613407  		localflag = 0
+41.613410  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+41.613414  			localtot = 1
+41.613416  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+42.298463  		if localtot >= mp.width * mp.height or total == lasttot:
+42.298471  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+42.298477  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+42.951406  		lasttot = total
+42.951411  	while flag == 0 and ii < mp.width * mp.height:
+42.951417  		mp.visited = com.allgather(mp.visited[rank])
+43.597392  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+43.597398  		fix_prev()
+43.758288  		fix_dist()
+43.921297  		mp.prev = com.allgather(mp.prev[rank])
+44.649392  		mp.dist = com.allgather(mp.dist[rank])
+45.207409  		ii += 1
+45.207415  		localtot = 0
+45.207418  		localflag = 0
+45.207421  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+45.207425  			localtot = 1
+45.207427  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+45.835408  		if localtot >= mp.width * mp.height or total == lasttot:
+45.835415  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+45.835421  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+46.406411  		lasttot = total
+46.406417  	while flag == 0 and ii < mp.width * mp.height:
+46.406422  		mp.visited = com.allgather(mp.visited[rank])
+47.110391  		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
+47.110397  		fix_prev()
+47.220300  		fix_dist()
+47.387286  		mp.prev = com.allgather(mp.prev[rank])
+48.032896  		mp.dist = com.allgather(mp.dist[rank])
+48.646407  		ii += 1
+48.646413  		localtot = 0
+48.646416  		localflag = 0
+48.646419  		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+48.646429  			localtot = 1
+48.646432  		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
+49.331403  		if localtot >= mp.width * mp.height or total == lasttot:
+49.331410  		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+49.331415  		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
+49.876147  		lasttot = total
+49.876152  	while flag == 0 and ii < mp.width * mp.height:
+49.876155  	follow_path()
+49.876350  	show_maze()
+49.919152  	if rank == 0:
+49.919157  		mp.endtime = MPI.Wtime()
+49.919165  		print mp.endtime - mp.starttime
+49.919182  	return 
