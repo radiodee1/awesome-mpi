@@ -1,0 +1,370 @@
+
+# # # # # # # # # # # #
+#                     #
+#       S             #
+#                     #
+# # # # # # # #       #
+#                     #
+#                     #
+#         # # # # # # #
+#                     #
+#               X     #
+#                     #
+# # # # # # # # # # # #
+
+
+# # # # # # # # # # # #
+#                     #
+#       S             #
+#       O O O O O     #
+# # # # # # # # O     #
+#               O     #
+#       O O O O O     #
+#       O # # # # # # #
+#       O             #
+#       O O O O X     #
+#                     #
+# # # # # # # # # # # #
+
+70.0655047894
+
+51.601316  	dist = 0
+51.601320  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+51.601330  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+51.601343  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+51.601350  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+51.601356  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+51.601363  		dist = com.recv(source=rank+1, tag=rank + dim)
+51.673286  		if dist != mp.UNDEFINED :
+51.673293  	if rank + mp.width < dim :
+51.673297  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+51.673309  	if rank - mp.width >= 0 :
+51.673312  	if rank - mp.width >= 0 :
+51.673314  	if rank + mp.width < dim:
+51.673317  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+51.791305  		if dist != mp.UNDEFINED :
+
+one program cycle:	3.429982
+function length:	0.189989
+com.send:			0.000012 #line 40
+com.recv:			0.071923 #line 37
+
+55.031298  	dist = 0
+55.031302  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+55.031313  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+55.031325  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+55.031332  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+55.031339  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+55.031345  		dist = com.recv(source=rank+1, tag=rank + dim)
+55.144094  		if dist != mp.UNDEFINED :
+55.144099  	if rank + mp.width < dim :
+55.144102  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+55.144115  	if rank - mp.width >= 0 :
+55.144119  	if rank - mp.width >= 0 :
+55.144121  	if rank + mp.width < dim:
+55.144123  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+55.220272  		if dist != mp.UNDEFINED :
+58.371883  	dist = 0
+58.371888  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+58.371898  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+58.371910  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+58.371917  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+58.371923  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+58.371930  		dist = com.recv(source=rank+1, tag=rank + dim)
+58.435274  		if dist != mp.UNDEFINED :
+58.435280  	if rank + mp.width < dim :
+58.435283  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+58.435295  	if rank - mp.width >= 0 :
+58.435298  	if rank - mp.width >= 0 :
+58.435300  	if rank + mp.width < dim:
+58.435303  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+58.502583  		if dist != mp.UNDEFINED :
+ 1.743305  	dist = 0
+ 1.743310  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+ 1.743324  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+ 1.743339  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+ 1.743346  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+ 1.743353  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+ 1.743359  		dist = com.recv(source=rank+1, tag=rank + dim)
+ 1.812409  		if dist != mp.UNDEFINED :
+ 1.812414  			mp.dist[rank] = dist
+ 1.812419  	if rank + mp.width < dim :
+ 1.812422  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+ 1.812435  	if rank - mp.width >= 0 :
+ 1.812439  	if rank - mp.width >= 0 :
+ 1.812441  	if rank + mp.width < dim:
+ 1.812444  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+ 1.947290  		if dist != mp.UNDEFINED :
+ 1.947296  			mp.dist[rank] = dist
+ 5.513284  	dist = 0
+ 5.513288  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+ 5.513298  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+ 5.513310  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+ 5.513317  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+ 5.513324  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+ 5.513330  		dist = com.recv(source=rank+1, tag=rank + dim)
+ 5.584290  		if dist != mp.UNDEFINED :
+ 5.584295  			mp.dist[rank] = dist
+ 5.584299  	if rank + mp.width < dim :
+ 5.584302  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+ 5.584315  	if rank - mp.width >= 0 :
+ 5.584317  	if rank - mp.width >= 0 :
+ 5.584320  	if rank + mp.width < dim:
+ 5.584322  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+ 5.654281  		if dist != mp.UNDEFINED :
+ 5.654287  			mp.dist[rank] = dist
+ 8.902328  	dist = 0
+ 8.902333  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+ 8.902343  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+ 8.902355  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+ 8.902362  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+ 8.902368  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+ 8.902375  		dist = com.recv(source=rank+1, tag=rank + dim)
+ 8.975298  		if dist != mp.UNDEFINED :
+ 8.975303  			mp.dist[rank] = dist
+ 8.975306  	if rank + mp.width < dim :
+ 8.975310  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+ 8.975323  	if rank - mp.width >= 0 :
+ 8.975325  	if rank - mp.width >= 0 :
+ 8.975327  	if rank + mp.width < dim:
+ 8.975330  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+ 8.977344  		if dist != mp.UNDEFINED :
+ 8.977347  			mp.dist[rank] = dist
+12.386301  	dist = 0
+12.386305  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+12.386488  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+12.386501  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+12.386509  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+12.386515  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+12.386522  		dist = com.recv(source=rank+1, tag=rank + dim)
+12.431292  		if dist != mp.UNDEFINED :
+12.431298  			mp.dist[rank] = dist
+12.431301  	if rank + mp.width < dim :
+12.431304  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+12.431317  	if rank - mp.width >= 0 :
+12.431320  	if rank - mp.width >= 0 :
+12.431322  	if rank + mp.width < dim:
+12.431324  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+12.498566  		if dist != mp.UNDEFINED :
+12.498571  			mp.dist[rank] = dist
+15.980305  	dist = 0
+15.980308  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+15.980318  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+15.980330  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+15.980336  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+15.980342  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+15.980354  		dist = com.recv(source=rank+1, tag=rank + dim)
+16.121282  		if dist != mp.UNDEFINED :
+16.121287  			mp.dist[rank] = dist
+16.121291  	if rank + mp.width < dim :
+16.121294  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+16.121306  	if rank - mp.width >= 0 :
+16.121309  	if rank - mp.width >= 0 :
+16.121311  	if rank + mp.width < dim:
+16.121314  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+16.188514  		if dist != mp.UNDEFINED :
+16.188519  			mp.dist[rank] = dist
+19.431354  	dist = 0
+19.431358  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+19.431368  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+19.431377  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+19.431384  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+19.431391  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+19.431397  		dist = com.recv(source=rank+1, tag=rank + dim)
+19.575294  		if dist != mp.UNDEFINED :
+19.575300  			mp.dist[rank] = dist
+19.575304  	if rank + mp.width < dim :
+19.575307  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+19.575320  	if rank - mp.width >= 0 :
+19.575323  	if rank - mp.width >= 0 :
+19.575325  	if rank + mp.width < dim:
+19.575327  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+19.606923  		if dist != mp.UNDEFINED :
+19.606928  			mp.dist[rank] = dist
+23.091331  	dist = 0
+23.091335  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+23.091347  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+23.091359  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+23.091365  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+23.091371  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+23.091378  		dist = com.recv(source=rank+1, tag=rank + dim)
+23.162273  		if dist != mp.UNDEFINED :
+23.162278  			mp.dist[rank] = dist
+23.162282  	if rank + mp.width < dim :
+23.162284  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+23.162297  	if rank - mp.width >= 0 :
+23.162299  	if rank - mp.width >= 0 :
+23.162302  	if rank + mp.width < dim:
+23.162305  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+23.232283  		if dist != mp.UNDEFINED :
+23.232288  			mp.dist[rank] = dist
+26.563297  	dist = 0
+26.563301  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+26.563312  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+26.563325  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+26.563332  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+26.563344  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+26.563351  		dist = com.recv(source=rank+1, tag=rank + dim)
+26.653296  		if dist != mp.UNDEFINED :
+26.653302  			mp.dist[rank] = dist
+26.653307  	if rank + mp.width < dim :
+26.653310  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+26.653324  	if rank - mp.width >= 0 :
+26.653327  	if rank - mp.width >= 0 :
+26.653329  	if rank + mp.width < dim:
+26.653332  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+26.694277  		if dist != mp.UNDEFINED :
+26.694282  			mp.dist[rank] = dist
+30.203309  	dist = 0
+30.203313  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+30.203323  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+30.203335  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+30.203342  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+30.203349  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+30.203355  		dist = com.recv(source=rank+1, tag=rank + dim)
+30.247274  		if dist != mp.UNDEFINED :
+30.247280  			mp.dist[rank] = dist
+30.247283  	if rank + mp.width < dim :
+30.247286  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+30.247298  	if rank - mp.width >= 0 :
+30.247301  	if rank - mp.width >= 0 :
+30.247303  	if rank + mp.width < dim:
+30.247306  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+30.317297  		if dist != mp.UNDEFINED :
+30.317302  			mp.dist[rank] = dist
+33.799309  	dist = 0
+33.799313  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+33.799325  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+33.799338  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+33.799346  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+33.799353  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+33.799359  		dist = com.recv(source=rank+1, tag=rank + dim)
+33.944216  		if dist != mp.UNDEFINED :
+33.944221  			mp.dist[rank] = dist
+33.944224  	if rank + mp.width < dim :
+33.944227  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+33.944244  	if rank - mp.width >= 0 :
+33.944247  	if rank - mp.width >= 0 :
+33.944249  	if rank + mp.width < dim:
+33.944251  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+34.017294  		if dist != mp.UNDEFINED :
+34.017299  			mp.dist[rank] = dist
+37.398308  	dist = 0
+37.398312  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+37.398322  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+37.398334  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+37.398346  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+37.398352  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+37.398359  		dist = com.recv(source=rank+1, tag=rank + dim)
+37.476292  		if dist != mp.UNDEFINED :
+37.476297  			mp.dist[rank] = dist
+37.476300  	if rank + mp.width < dim :
+37.476303  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+37.476316  	if rank - mp.width >= 0 :
+37.476319  	if rank - mp.width >= 0 :
+37.476321  	if rank + mp.width < dim:
+37.476323  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+37.546290  		if dist != mp.UNDEFINED :
+37.546295  			mp.dist[rank] = dist
+40.847300  	dist = 0
+40.847305  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+40.847318  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+40.847331  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+40.847338  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+40.847345  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+40.847352  		dist = com.recv(source=rank+1, tag=rank + dim)
+40.918277  		if dist != mp.UNDEFINED :
+40.918282  			mp.dist[rank] = dist
+40.918285  	if rank + mp.width < dim :
+40.918289  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+40.918302  	if rank - mp.width >= 0 :
+40.918304  	if rank - mp.width >= 0 :
+40.918307  	if rank + mp.width < dim:
+40.918309  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+40.988297  		if dist != mp.UNDEFINED :
+40.988303  			mp.dist[rank] = dist
+44.290370  	dist = 0
+44.290375  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+44.290387  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+44.290400  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+44.290408  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+44.290414  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+44.290421  		dist = com.recv(source=rank+1, tag=rank + dim)
+44.360745  		if dist != mp.UNDEFINED :
+44.360750  			mp.dist[rank] = dist
+44.360754  	if rank + mp.width < dim :
+44.360757  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+44.360770  	if rank - mp.width >= 0 :
+44.360772  	if rank - mp.width >= 0 :
+44.360775  	if rank + mp.width < dim:
+44.360777  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+44.420330  		if dist != mp.UNDEFINED :
+44.420335  			mp.dist[rank] = dist
+47.815296  	dist = 0
+47.815300  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+47.815309  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+47.815325  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+47.815333  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+47.815339  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+47.815345  		dist = com.recv(source=rank+1, tag=rank + dim)
+47.888279  		if dist != mp.UNDEFINED :
+47.888284  			mp.dist[rank] = dist
+47.888288  	if rank + mp.width < dim :
+47.888291  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+47.888303  	if rank - mp.width >= 0 :
+47.888306  	if rank - mp.width >= 0 :
+47.888308  	if rank + mp.width < dim:
+47.888310  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+47.929287  		if dist != mp.UNDEFINED :
+47.929293  			mp.dist[rank] = dist
+51.267294  	dist = 0
+51.267299  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+51.267310  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+51.267322  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+51.267330  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+51.267337  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+51.267344  		dist = com.recv(source=rank+1, tag=rank + dim)
+51.294269  		if dist != mp.UNDEFINED :
+51.294274  			mp.dist[rank] = dist
+51.294278  	if rank + mp.width < dim :
+51.294281  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+51.294294  	if rank - mp.width >= 0 :
+51.294297  	if rank - mp.width >= 0 :
+51.294299  	if rank + mp.width < dim:
+51.294301  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+51.435275  		if dist != mp.UNDEFINED :
+51.435280  			mp.dist[rank] = dist
+54.675283  	dist = 0
+54.675287  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+54.675298  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+54.675311  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+54.675318  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+54.675324  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+54.675331  		dist = com.recv(source=rank+1, tag=rank + dim)
+54.770291  		if dist != mp.UNDEFINED :
+54.770297  			mp.dist[rank] = dist
+54.770300  	if rank + mp.width < dim :
+54.770304  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+54.770318  	if rank - mp.width >= 0 :
+54.770320  	if rank - mp.width >= 0 :
+54.770323  	if rank + mp.width < dim:
+54.770325  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+54.906299  		if dist != mp.UNDEFINED :
+54.906304  			mp.dist[rank] = dist
+58.326352  	dist = 0
+58.326357  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+58.326372  		com.send(mp.dist[rank+1], dest=rank+1, tag=rank+1 + dim)
+58.326385  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+58.326392  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+58.326398  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+58.326404  		dist = com.recv(source=rank+1, tag=rank + dim)
+58.396752  		if dist != mp.UNDEFINED :
+58.396758  			mp.dist[rank] = dist
+58.396762  	if rank + mp.width < dim :
+58.396765  		com.send(mp.dist[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + dim)
+58.396778  	if rank - mp.width >= 0 :
+58.396781  	if rank - mp.width >= 0 :
+58.396783  	if rank + mp.width < dim:
+58.396785  		dist = com.recv(source=rank+mp.width, tag=rank + dim)
+58.457079  		if dist != mp.UNDEFINED :
+58.457085  			mp.dist[rank] = dist
