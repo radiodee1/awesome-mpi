@@ -88,6 +88,6 @@ for i in range (4, width) :
 	main[ (twothirds * width) + i] = WALL
 	
 # test for unreachable goal	
-for i in range (0, width) :
-	main[ (twothirds * width) + i] = WALL
+#for i in range (0, width) :
+#	main[ (twothirds * width) + i] = WALL
 
