@@ -1,0 +1,48 @@
+
+# # # # # # # # # # # # # # # # # # # # # #
+#       S                       # # # #   #
+#                                         #
+#                                         #
+#                                         #
+#                                         #
+# # # # # # # #                           #
+#                                         #
+#                                         #
+#                                         #
+#                                         #
+#         # # # # # # # # # # # # # # # # #
+#                                         #
+#                                         #
+#                                         #
+#                                   X     #
+# # # # # # # # # # # # # # # # # # # # # #
+
+
+# # # # # # # # # # # # # # # # # # # # # #
+#       S                       # # # #   #
+#       O                                 #
+#       O                                 #
+#       O                                 #
+#       O O O O O                         #
+# # # # # # # # O                         #
+#               O                         #
+#               O                         #
+#               O                         #
+#       O O O O O                         #
+#       O # # # # # # # # # # # # # # # # #
+#       O                                 #
+#       O                                 #
+#       O                                 #
+#       O O O O O O O O O O O O O O X     #
+# # # # # # # # # # # # # # # # # # # # # #
+
+30.2343120575
+Unexpected state 1 in vc 0x7fd166a381c0
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   PID 2939 RUNNING AT vm-liebman-node2
+=   EXIT CODE: 1
+=   CLEANING UP REMAINING PROCESSES
+=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
+===================================================================================
