@@ -1,10 +1,10 @@
 #!/usr/bin/python
 
-'''
+
 # comment in for csv file
 import sys
 import fileinput
-'''
+
 
 width = 10#20
 height = 10#10
@@ -14,7 +14,7 @@ dim = []
 wall = []
 csv = False
 
-'''
+
 # comment in for csv file
 i = 0
 if len(sys.argv) > 1:
@@ -31,15 +31,15 @@ if len(sys.argv) > 1:
 			if i == 2:
 				#print 'wall-csv:', line
 				wall = line.split(',')
-'''			
+		
 
 starttime = 0
 endtime = 0
 
 startx = 3
-starty = 1#height - 3
+starty = 0#height - 3
 endx = width - 3
-endy = height - 2
+endy = height - 1
 
 #enum
 OPEN = 1
