@@ -25,8 +25,8 @@ def find() :
 		#if rank == 0:
 		#	print ii
 		
-		mp.visited = com.allgather(mp.visited[rank])
-		
+		#mp.visited = com.allgather(mp.visited[rank])
+		fix_visited()
 		
 		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
 			if mp.main[rank] == mp.START :
@@ -51,8 +51,10 @@ def find() :
 		fix_prev()
 		fix_dist()
 		
+		
+		## the two lines that follow share all info with all nodes ##
 		mp.prev = com.allgather(mp.prev[rank])
-		mp.dist = com.allgather(mp.dist[rank])
+		#mp.dist = com.allgather(mp.dist[rank])
 		
 		ii += 1
 		
@@ -110,6 +112,44 @@ def must_check(test):
 				mp.prev[test] = rank 
 			mp.dist[test] = mp.dist[rank] + 1
 				
+				
+def fix_visited():
+	## this method is unused ##
+
+	visit = 0
+	
+	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+		com.send(mp.visited[rank+1], dest=rank+1, tag=rank+1 + (dim*2))
+	
+	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+		visit = com.recv(source=rank-1, tag=rank + (dim*2))
+		if visit != mp.FREE :
+			mp.visited[rank] = visit
+		
+	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+		com.send(mp.visited[rank-1], dest=rank-1, tag=rank-1 + (dim*2))
+		
+	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+		visit = com.recv(source=rank+1, tag=rank + (dim*2))
+		if visit != mp.FREE :
+			mp.visited[rank] = visit
+	
+	if rank + mp.width < dim :
+		com.send(mp.visited[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + (dim*2))
+		
+	if rank - mp.width >= 0 :
+		visit = com.recv(source=rank-mp.width, tag=rank + (dim*2))
+		if visit != mp.FREE :
+			mp.visited[rank] = visit
+	
+	if rank - mp.width >= 0 :
+		com.send(mp.visited[rank-mp.width], dest=rank-mp.width, tag=rank-mp.width + (dim*2))
+		
+	if rank + mp.width < dim:
+		visit = com.recv(source=rank+mp.width, tag=rank + (dim*2))
+		if visit != mp.FREE :
+			mp.visited[rank] = visit
+
 def fix_dist():
 	## send and recv of 4 dist  ##
 	## pass values up, down, right, and left ##
