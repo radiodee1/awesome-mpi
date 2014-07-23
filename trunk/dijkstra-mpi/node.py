@@ -52,9 +52,6 @@ def find() :
 		fix_dist()
 		fix_visited()
 		
-		## the line that follows shares all info with all nodes ##
-		#mp.prev = com.allgather(mp.prev[rank])
-		
 		ii += 1
 		
 		localtot = 0
@@ -76,6 +73,7 @@ def find() :
 		
 		lasttot = total
 		
+	## here we must call allgather once so rank 0 has all info ##
 	mp.prev = com.allgather(mp.prev[rank])
 	follow_path()
 	show_maze()
