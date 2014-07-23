@@ -1,0 +1,389 @@
+
+# # # # # # # # # # # #
+#                     #
+#       S             #
+#                     #
+# # # # # # # #       #
+#                     #
+#                     #
+#         # # # # # # #
+#                     #
+#               X     #
+#                     #
+# # # # # # # # # # # #
+
+
+# # # # # # # # # # # #
+#                     #
+#       S             #
+#       O O O O O     #
+# # # # # # # # O     #
+#               O     #
+#       O O O O O     #
+#       O # # # # # # #
+#       O             #
+#       O O O O X     #
+#                     #
+# # # # # # # # # # # #
+
+4.24464797974
+10.381693  	directions = []
+10.381698  	prev = 0
+10.381700  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+10.381704  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+10.381719  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+10.381724  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+10.381728  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+10.381731  		prev = com.recv(source=rank+1, tag=rank)
+10.385422  		directions.append(prev)		
+10.385426  	if rank + mp.width < dim :
+10.385427  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+10.400422  	if rank - mp.width >= 0 :
+10.400426  	if rank - mp.width >= 0 :
+10.400427  	if rank + mp.width < dim:
+10.400429  		prev = com.recv(source=rank+mp.width, tag=rank)
+10.402432  		directions.append(prev)
+10.402435  	if mp.main[rank] != mp.START:	
+10.402437  		mp.prev[rank] = max(directions)
+10.573474  	directions = []
+10.573478  	prev = 0
+10.573480  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+10.573483  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+10.573491  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+10.573495  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+10.573499  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+10.573503  		prev = com.recv(source=rank+1, tag=rank)
+10.575551  		directions.append(prev)		
+10.575555  	if rank + mp.width < dim :
+10.575557  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+10.575585  	if rank - mp.width >= 0 :
+10.575588  	if rank - mp.width >= 0 :
+10.575590  	if rank + mp.width < dim:
+10.575591  		prev = com.recv(source=rank+mp.width, tag=rank)
+10.576416  		directions.append(prev)
+10.576419  	if mp.main[rank] != mp.START:	
+10.576421  		mp.prev[rank] = max(directions)
+10.765344  	directions = []
+10.765348  	prev = 0
+10.765350  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+10.765354  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+10.765362  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+10.765366  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+10.765370  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+10.765374  		prev = com.recv(source=rank+1, tag=rank)
+10.769319  		directions.append(prev)		
+10.769322  	if rank + mp.width < dim :
+10.769324  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+10.769350  	if rank - mp.width >= 0 :
+10.769353  	if rank - mp.width >= 0 :
+10.769354  	if rank + mp.width < dim:
+10.769356  		prev = com.recv(source=rank+mp.width, tag=rank)
+10.773459  		directions.append(prev)
+10.773464  	if mp.main[rank] != mp.START:	
+10.773468  		mp.prev[rank] = max(directions)
+10.925790  	directions = []
+10.925794  	prev = 0
+10.925796  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+10.925799  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+10.925809  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+10.925814  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+10.925817  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+10.925821  		prev = com.recv(source=rank+1, tag=rank)
+10.930345  		directions.append(prev)		
+10.930348  	if rank + mp.width < dim :
+10.930350  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+10.930375  	if rank - mp.width >= 0 :
+10.930378  	if rank - mp.width >= 0 :
+10.930379  	if rank + mp.width < dim:
+10.930381  		prev = com.recv(source=rank+mp.width, tag=rank)
+10.932180  		directions.append(prev)
+10.932183  	if mp.main[rank] != mp.START:	
+10.932185  		mp.prev[rank] = max(directions)
+11.077250  	directions = []
+11.077254  	prev = 0
+11.077256  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+11.077260  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+11.077268  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+11.077272  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+11.077276  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+11.077279  		prev = com.recv(source=rank+1, tag=rank)
+11.081529  		directions.append(prev)		
+11.081532  	if rank + mp.width < dim :
+11.081534  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+11.081560  	if rank - mp.width >= 0 :
+11.081563  	if rank - mp.width >= 0 :
+11.081565  	if rank + mp.width < dim:
+11.081566  		prev = com.recv(source=rank+mp.width, tag=rank)
+11.084946  		directions.append(prev)
+11.084949  	if mp.main[rank] != mp.START:	
+11.084963  		mp.prev[rank] = max(directions)
+11.253039  	directions = []
+11.253043  	prev = 0
+11.253045  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+11.253052  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+11.253061  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+11.253065  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+11.253069  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+11.253073  		prev = com.recv(source=rank+1, tag=rank)
+11.255335  		directions.append(prev)		
+11.255338  	if rank + mp.width < dim :
+11.255340  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+11.255366  	if rank - mp.width >= 0 :
+11.255369  	if rank - mp.width >= 0 :
+11.255371  	if rank + mp.width < dim:
+11.255373  		prev = com.recv(source=rank+mp.width, tag=rank)
+11.259345  		directions.append(prev)
+11.259349  	if mp.main[rank] != mp.START:	
+11.259353  		mp.prev[rank] = max(directions)
+11.409889  	directions = []
+11.409893  	prev = 0
+11.409895  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+11.409902  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+11.409912  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+11.409916  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+11.409920  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+11.409923  		prev = com.recv(source=rank+1, tag=rank)
+11.412804  		directions.append(prev)		
+11.412808  	if rank + mp.width < dim :
+11.412810  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+11.412825  	if rank - mp.width >= 0 :
+11.412828  	if rank - mp.width >= 0 :
+11.412830  	if rank + mp.width < dim:
+11.412831  		prev = com.recv(source=rank+mp.width, tag=rank)
+11.422570  		directions.append(prev)
+11.422573  	if mp.main[rank] != mp.START:	
+11.422575  		mp.prev[rank] = max(directions)
+11.596868  	directions = []
+11.596875  	prev = 0
+11.596878  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+11.596890  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+11.596907  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+11.596912  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+11.596916  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+11.596920  		prev = com.recv(source=rank+1, tag=rank)
+11.606437  		directions.append(prev)		
+11.606440  	if rank + mp.width < dim :
+11.606442  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+11.606469  	if rank - mp.width >= 0 :
+11.606472  	if rank - mp.width >= 0 :
+11.606473  	if rank + mp.width < dim:
+11.606475  		prev = com.recv(source=rank+mp.width, tag=rank)
+11.609558  		directions.append(prev)
+11.609561  	if mp.main[rank] != mp.START:	
+11.609564  		mp.prev[rank] = max(directions)
+11.758590  	directions = []
+11.758594  	prev = 0
+11.758595  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+11.758602  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+11.758610  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+11.758615  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+11.758619  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+11.758623  		prev = com.recv(source=rank+1, tag=rank)
+11.761301  		directions.append(prev)		
+11.761305  	if rank + mp.width < dim :
+11.761307  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+11.761332  	if rank - mp.width >= 0 :
+11.761334  	if rank - mp.width >= 0 :
+11.761336  	if rank + mp.width < dim:
+11.761338  		prev = com.recv(source=rank+mp.width, tag=rank)
+11.763032  		directions.append(prev)
+11.763036  	if mp.main[rank] != mp.START:	
+11.763038  		mp.prev[rank] = max(directions)
+11.905465  	directions = []
+11.905469  	prev = 0
+11.905471  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+11.905477  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+11.905486  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+11.905491  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+11.905494  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+11.905498  		prev = com.recv(source=rank+1, tag=rank)
+11.911685  		directions.append(prev)		
+11.911689  	if rank + mp.width < dim :
+11.911690  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+11.911723  	if rank - mp.width >= 0 :
+11.911728  	if rank - mp.width >= 0 :
+11.911730  	if rank + mp.width < dim:
+11.911731  		prev = com.recv(source=rank+mp.width, tag=rank)
+11.913567  		directions.append(prev)
+11.913570  	if mp.main[rank] != mp.START:	
+11.913572  		mp.prev[rank] = max(directions)
+12.094842  	directions = []
+12.094845  	prev = 0
+12.094847  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+12.094853  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+12.094861  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+12.094865  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+12.094869  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+12.094873  		prev = com.recv(source=rank+1, tag=rank)
+12.096253  		directions.append(prev)		
+12.096257  	if rank + mp.width < dim :
+12.096258  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+12.096285  	if rank - mp.width >= 0 :
+12.096288  	if rank - mp.width >= 0 :
+12.096289  	if rank + mp.width < dim:
+12.096291  		prev = com.recv(source=rank+mp.width, tag=rank)
+12.117038  		directions.append(prev)
+12.117042  	if mp.main[rank] != mp.START:	
+12.117044  		mp.prev[rank] = max(directions)
+12.311723  	directions = []
+12.311727  	prev = 0
+12.311729  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+12.311736  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+12.311758  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+12.311764  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+12.311767  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+12.311771  		prev = com.recv(source=rank+1, tag=rank)
+12.316620  		directions.append(prev)		
+12.316623  	if rank + mp.width < dim :
+12.316625  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+12.316653  	if rank - mp.width >= 0 :
+12.316656  	if rank - mp.width >= 0 :
+12.316657  	if rank + mp.width < dim:
+12.316659  		prev = com.recv(source=rank+mp.width, tag=rank)
+12.319953  		directions.append(prev)
+12.319956  	if mp.main[rank] != mp.START:	
+12.319958  		mp.prev[rank] = max(directions)
+12.493124  	directions = []
+12.493127  	prev = 0
+12.493129  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+12.493136  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+12.493144  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+12.493149  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+12.493152  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+12.493156  		prev = com.recv(source=rank+1, tag=rank)
+12.497235  		directions.append(prev)		
+12.497238  	if rank + mp.width < dim :
+12.497240  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+12.497271  	if rank - mp.width >= 0 :
+12.497274  	if rank - mp.width >= 0 :
+12.497275  	if rank + mp.width < dim:
+12.497277  		prev = com.recv(source=rank+mp.width, tag=rank)
+12.516767  		directions.append(prev)
+12.516771  	if mp.main[rank] != mp.START:	
+12.516773  		mp.prev[rank] = max(directions)
+12.948095  	directions = []
+12.948098  	prev = 0
+12.948100  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+12.948106  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+12.948115  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+12.948119  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+12.948123  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+12.948127  		prev = com.recv(source=rank+1, tag=rank)
+12.950859  		directions.append(prev)		
+12.950863  	if rank + mp.width < dim :
+12.950865  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+12.950892  	if rank - mp.width >= 0 :
+12.950895  	if rank - mp.width >= 0 :
+12.950897  	if rank + mp.width < dim:
+12.950898  		prev = com.recv(source=rank+mp.width, tag=rank)
+12.952577  		directions.append(prev)
+12.952580  	if mp.main[rank] != mp.START:	
+12.952583  		mp.prev[rank] = max(directions)
+13.085540  	directions = []
+13.085544  	prev = 0
+13.085546  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+13.085556  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+13.085569  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+13.085574  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+13.085577  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+13.085581  		prev = com.recv(source=rank+1, tag=rank)
+13.090430  		directions.append(prev)		
+13.090434  	if rank + mp.width < dim :
+13.090436  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+13.090464  	if rank - mp.width >= 0 :
+13.090467  	if rank - mp.width >= 0 :
+13.090469  	if rank + mp.width < dim:
+13.090471  		prev = com.recv(source=rank+mp.width, tag=rank)
+13.091857  		directions.append(prev)
+13.091860  	if mp.main[rank] != mp.START:	
+13.091863  		mp.prev[rank] = max(directions)
+13.480506  	directions = []
+13.480510  	prev = 0
+13.480512  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+13.480519  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+13.480530  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+13.480534  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+13.480538  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+13.480554  		prev = com.recv(source=rank+1, tag=rank)
+13.487953  		directions.append(prev)		
+13.487956  	if rank + mp.width < dim :
+13.487958  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+13.487984  	if rank - mp.width >= 0 :
+13.487987  	if rank - mp.width >= 0 :
+13.487990  	if rank + mp.width < dim:
+13.487991  		prev = com.recv(source=rank+mp.width, tag=rank)
+13.490035  		directions.append(prev)
+13.490038  	if mp.main[rank] != mp.START:	
+13.490041  		mp.prev[rank] = max(directions)
+13.755413  	directions = []
+13.755417  	prev = 0
+13.755419  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+13.755427  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+13.755437  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+13.755442  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+13.755445  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+13.755449  		prev = com.recv(source=rank+1, tag=rank)
+13.759390  		directions.append(prev)		
+13.759393  	if rank + mp.width < dim :
+13.759395  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+13.759419  	if rank - mp.width >= 0 :
+13.759422  	if rank - mp.width >= 0 :
+13.759424  	if rank + mp.width < dim:
+13.759426  		prev = com.recv(source=rank+mp.width, tag=rank)
+13.761714  		directions.append(prev)
+13.761717  	if mp.main[rank] != mp.START:	
+13.761720  		mp.prev[rank] = max(directions)
+13.928830  	directions = []
+13.928834  	prev = 0
+13.928836  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+13.928842  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+13.928859  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+13.928864  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+13.928868  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+13.928872  		prev = com.recv(source=rank+1, tag=rank)
+13.934621  		directions.append(prev)		
+13.934624  	if rank + mp.width < dim :
+13.934633  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+13.934660  	if rank - mp.width >= 0 :
+13.934663  	if rank - mp.width >= 0 :
+13.934665  	if rank + mp.width < dim:
+13.934666  		prev = com.recv(source=rank+mp.width, tag=rank)
+13.936548  		directions.append(prev)
+13.936551  	if mp.main[rank] != mp.START:	
+13.936553  		mp.prev[rank] = max(directions)
+14.110141  	directions = []
+14.110145  	prev = 0
+14.110146  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+14.110165  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+14.110174  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+14.110178  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+14.110182  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+14.110186  		prev = com.recv(source=rank+1, tag=rank)
+14.115190  		directions.append(prev)		
+14.115193  	if rank + mp.width < dim :
+14.115195  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+14.115218  	if rank - mp.width >= 0 :
+14.115221  	if rank - mp.width >= 0 :
+14.115222  	if rank + mp.width < dim:
+14.115224  		prev = com.recv(source=rank+mp.width, tag=rank)
+14.115927  		directions.append(prev)
+14.115931  	if mp.main[rank] != mp.START:	
+14.115933  		mp.prev[rank] = max(directions)
+14.280030  	directions = []
+14.280033  	prev = 0
+14.280035  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+14.280042  		com.send(mp.prev[rank+1], dest=rank+1, tag=rank+1)
+14.280051  	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
+14.280056  	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+14.280060  	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+14.280063  		prev = com.recv(source=rank+1, tag=rank)
+14.282622  		directions.append(prev)		
+14.282625  	if rank + mp.width < dim :
+14.282627  		com.send(mp.prev[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width)
+14.282645  	if rank - mp.width >= 0 :
+14.282648  	if rank - mp.width >= 0 :
+14.282649  	if rank + mp.width < dim:
+14.282651  		prev = com.recv(source=rank+mp.width, tag=rank)
+14.286001  		directions.append(prev)
+14.286004  	if mp.main[rank] != mp.START:	
+14.286007  		mp.prev[rank] = max(directions)

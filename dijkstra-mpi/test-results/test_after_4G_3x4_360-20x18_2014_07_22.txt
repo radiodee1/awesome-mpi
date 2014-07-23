@@ -1,0 +1,55 @@
+
+# # # # # # # # # # # # # # # # # # # # # #
+#       S                                 #
+#                                         #
+#                                         #
+#                                         #
+#                                         #
+#                                         #
+# # # # # # # #                           #
+#                                         #
+#                                         #
+#                                         #
+#                                         #
+#                                         #
+#         # # # # # # # # # # # # # # # # #
+#                                         #
+#                                         #
+#                                         #
+#                                         #
+#                                   X     #
+# # # # # # # # # # # # # # # # # # # # # #
+
+
+# # # # # # # # # # # # # # # # # # # # # #
+#       S                                 #
+#       O                                 #
+#       O                                 #
+#       O                                 #
+#       O                                 #
+#       O O O O O                         #
+# # # # # # # # O                         #
+#               O                         #
+#               O                         #
+#               O                         #
+#               O                         #
+#       O O O O O                         #
+#       O # # # # # # # # # # # # # # # # #
+#       O                                 #
+#       O                                 #
+#       O                                 #
+#       O                                 #
+#       O O O O O O O O O O O O O O X     #
+# # # # # # # # # # # # # # # # # # # # # #
+
+94.002423048
+Unexpected state 1 in vc 0x7ff6ea1b5118
+Unexpected state 1 in vc 0x7fe5217d3be0
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   PID 3861 RUNNING AT vm-liebman-node2
+=   EXIT CODE: 1
+=   CLEANING UP REMAINING PROCESSES
+=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
+===================================================================================

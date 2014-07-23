@@ -1,0 +1,56 @@
+
+# # # # # # # # # # # # # # # # # # # # # #
+#       S                                 #
+#                                         #
+#                                         #
+#                                         #
+#                                         #
+#                                         #
+# # # # # # # #                           #
+#                                         #
+#                                         #
+#                                         #
+#                                         #
+#                                         #
+#         # # # # # # # # # # # # # # # # #
+#                                         #
+#                                         #
+#                                         #
+#                                         #
+#                                         #
+#                                   X     #
+# # # # # # # # # # # # # # # # # # # # # #
+
+
+# # # # # # # # # # # # # # # # # # # # # #
+#       S                                 #
+#       O                                 #
+#       O                                 #
+#       O                                 #
+#       O                                 #
+#       O O O O O                         #
+# # # # # # # # O                         #
+#               O                         #
+#               O                         #
+#               O                         #
+#               O                         #
+#       O O O O O                         #
+#       O # # # # # # # # # # # # # # # # #
+#       O                                 #
+#       O                                 #
+#       O                                 #
+#       O                                 #
+#       O                                 #
+#       O O O O O O O O O O O O O O X     #
+# # # # # # # # # # # # # # # # # # # # # #
+
+67.9345960617
+Unexpected state 1 in vc 0x7f8f35e7ced8
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   PID 4608 RUNNING AT vm-liebman-node1
+=   EXIT CODE: 1
+=   CLEANING UP REMAINING PROCESSES
+=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
+===================================================================================
