@@ -26,7 +26,7 @@ def find() :
 		#	print ii
 		
 		#mp.visited = com.allgather(mp.visited[rank])
-		fix_visited()
+		#fix_visited()
 		
 		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
 			if mp.main[rank] == mp.START :
@@ -50,7 +50,7 @@ def find() :
 		
 		fix_prev()
 		fix_dist()
-		
+		fix_visited()
 		
 		## the two lines that follow share all info with all nodes ##
 		mp.prev = com.allgather(mp.prev[rank])
@@ -127,7 +127,7 @@ def fix_visited():
 			
 	visit = 0
 	if get_y(rank) == get_y(rank ) and rank -1 >= 0 :
-		com.send(mp.visited[rank-1], dest=rank-1, tag=rank-1 + (dim*2))
+		com.send(mp.visited[rank], dest=rank-1, tag=rank-1 + (dim*2))
 		
 	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
 		visit = com.recv(source=rank+1, tag=rank + (dim*2))
