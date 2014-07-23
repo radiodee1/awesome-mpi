@@ -26,7 +26,7 @@ def find() :
 		#	print ii
 		
 		#mp.visited = com.allgather(mp.visited[rank])
-		## removed and replaces by 'fix_visited()'
+		## removed and replaced by 'fix_visited()' ##
 		
 		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
 			if mp.main[rank] == mp.START :
