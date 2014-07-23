@@ -26,7 +26,7 @@ def find() :
 		#	print ii
 		
 		#mp.visited = com.allgather(mp.visited[rank])
-		#fix_visited()
+		## removed and replaces by 'fix_visited()'
 		
 		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
 			if mp.main[rank] == mp.START :
@@ -47,14 +47,13 @@ def find() :
 			if near_visited() :
 				mp.visited[rank] = mp.VISITED
 			
-		
+		## these three lines share data with adjacent nodes ##
 		fix_prev()
 		fix_dist()
 		fix_visited()
 		
-		## the two lines that follow share all info with all nodes ##
+		## the line that follows shares all info with all nodes ##
 		mp.prev = com.allgather(mp.prev[rank])
-		#mp.dist = com.allgather(mp.dist[rank])
 		
 		ii += 1
 		
@@ -114,7 +113,7 @@ def must_check(test):
 				
 				
 def fix_visited():
-	## this method is unused ##
+	## this method is used in place of 'allgather' ##
 
 	visit = 0
 	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
