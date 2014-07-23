@@ -65,7 +65,7 @@ def find() :
 		
 		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
 		
-		if localtot >= mp.width * mp.height or total == lasttot:
+		if total >= mp.width * mp.height or total == lasttot:
 			localflag = 1	 
 			if rank == 0:
 				print 'goal is unreachable?? At:', total
@@ -117,38 +117,40 @@ def fix_visited():
 	## this method is unused ##
 
 	visit = 0
-	
 	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
-		com.send(mp.visited[rank+1], dest=rank+1, tag=rank+1 + (dim*2))
+		com.send(mp.visited[rank], dest=rank+1, tag=rank+1 + (dim*2))
 	
 	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
 		visit = com.recv(source=rank-1, tag=rank + (dim*2))
 		if visit != mp.FREE :
-			mp.visited[rank] = visit
-		
-	if get_y(rank) == get_y(rank - 1) and rank -1 >= 0 :
+			mp.visited[rank-1] = visit
+			
+	visit = 0
+	if get_y(rank) == get_y(rank ) and rank -1 >= 0 :
 		com.send(mp.visited[rank-1], dest=rank-1, tag=rank-1 + (dim*2))
 		
 	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
 		visit = com.recv(source=rank+1, tag=rank + (dim*2))
 		if visit != mp.FREE :
-			mp.visited[rank] = visit
-	
+			mp.visited[rank+1] = visit
+
+	visit = 0	
 	if rank + mp.width < dim :
-		com.send(mp.visited[rank+mp.width], dest=rank+mp.width, tag=rank+mp.width + (dim*2))
+		com.send(mp.visited[rank], dest=rank+mp.width, tag=rank+mp.width + (dim*2))
 		
 	if rank - mp.width >= 0 :
 		visit = com.recv(source=rank-mp.width, tag=rank + (dim*2))
 		if visit != mp.FREE :
-			mp.visited[rank] = visit
+			mp.visited[rank- mp.width] = visit
 	
+	visit = 0
 	if rank - mp.width >= 0 :
-		com.send(mp.visited[rank-mp.width], dest=rank-mp.width, tag=rank-mp.width + (dim*2))
+		com.send(mp.visited[rank], dest=rank-mp.width, tag=rank-mp.width + (dim*2))
 		
 	if rank + mp.width < dim:
 		visit = com.recv(source=rank+mp.width, tag=rank + (dim*2))
 		if visit != mp.FREE :
-			mp.visited[rank] = visit
+			mp.visited[rank + mp.width] = visit
 
 def fix_dist():
 	## send and recv of 4 dist  ##
