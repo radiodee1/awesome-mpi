@@ -39,7 +39,7 @@ endtime = 0
 startx = 3
 starty = 0#height - 1
 endx = width - 3
-endy = height - 1
+endy =  height - 1
 
 #enum
 OPEN = 1
