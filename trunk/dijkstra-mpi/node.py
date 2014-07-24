@@ -27,26 +27,31 @@ def find() :
 		
 		#mp.visited = com.allgather(mp.visited[rank])
 		## removed and replaced by 'fix_visited()' ##
+		#fix_visited()
 		
-		if mp.visited[rank] == mp.FREE and mp.main[rank] != mp.WALL : 
-			if mp.main[rank] == mp.START :
-				must_check(rank)
-			
+		if mp.visited[mp.CENTER] == mp.FREE and mp.main[rank] != mp.WALL :
+				#and mp.main[rank] != mp.END: 
+						
 			if get_y(rank) == get_y(rank + 1) and rank + 1 < dim and near_visited() :
-				must_check(rank + 1)
+				must_check(rank + 1, mp.RIGHT)
 
 			if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0 and near_visited() :
-				must_check(rank - 1)
+				must_check(rank - 1, mp.LEFT)
 
 			if rank + mp.width < dim and near_visited() :
-				must_check(rank + mp.width)
+				must_check(rank + mp.width, mp.DOWN)
 
 			if rank - mp.width >= 0 and near_visited() :
-				must_check(rank - mp.width)
+				must_check(rank - mp.width, mp.UP)
+
+			if mp.main[rank] == mp.START :
+				must_check(rank, mp.CENTER)
+				
 
 			if near_visited() :
-				mp.visited[rank] = mp.VISITED
-			
+				mp.visited[mp.CENTER] = mp.VISITED
+							
+				
 		## these three lines share data with adjacent nodes ##
 		fix_prev()
 		fix_dist()
@@ -56,7 +61,7 @@ def find() :
 		
 		localtot = 0
 		localflag = 0
-		if mp.visited[rank] == mp.VISITED or mp.main[rank] == mp.WALL:
+		if mp.visited[mp.CENTER] == mp.VISITED or mp.main[rank] == mp.WALL:
 			localtot = 1
 		
 		total = com.allreduce(localtot, op=MPI.SUM) # this line hogs time!
@@ -66,12 +71,13 @@ def find() :
 			if rank == 0:
 				print 'goal is unreachable?? At:', total
 			
-		if mp.visited[rank] == mp.VISITED and mp.main[rank] == mp.END :
+		if mp.visited[mp.CENTER] == mp.VISITED and mp.main[rank] == mp.END :
 			localflag = 1
 			
 		flag = com.allreduce(localflag, op=MPI.MAX) # this line is essential!
 		
 		lasttot = total
+		
 		
 	## here we must call allgather once so rank 0 has all info ##
 	mp.prev = com.allgather(mp.prev[rank])
@@ -86,29 +92,30 @@ def find() :
 def near_visited() :
 	
 	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
-		if mp.visited[rank + 1] == mp.VISITED:
+		if mp.visited[mp.RIGHT] == mp.VISITED:
 			return True
 	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0 :
-		if mp.visited[rank - 1] == mp.VISITED:
+		if mp.visited[mp.LEFT] == mp.VISITED:
 			return True
 	if rank + mp.width < dim:
-		if mp.visited[rank + mp.width] == mp.VISITED:
+		if mp.visited[mp.DOWN] == mp.VISITED:
 			return True
 	if rank - mp.width >= 0:
-		if mp.visited[rank - mp.width] == mp.VISITED:
+		if mp.visited[mp.UP] == mp.VISITED:
 			return True
-	if rank == get_rank(mp.startx, mp.starty) :
+	if rank == get_rank(mp.startx, mp.starty)  :
 		return True
 	return False
 		
 		
-def must_check(test):
+def must_check(test, direction):
 	
-	if mp.visited[test] != mp.VISITED and mp.main[rank] != mp.WALL:
+	if mp.visited[direction] != mp.VISITED and mp.main[rank] != mp.WALL:
 		if mp.dist[rank] + 1 <= mp.dist[test] :
-			if mp.main[test] != mp.START:
+			if mp.main[test] != mp.START  :
 				mp.prev[test] = rank 
-			mp.dist[test] = mp.dist[rank] + 1
+				mp.dist[test] = mp.dist[rank] + 1
+	
 				
 				
 def fix_visited():
@@ -116,39 +123,39 @@ def fix_visited():
 
 	visit = 0
 	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
-		com.send(mp.visited[rank], dest=rank+1, tag=rank+1 + (dim*2))
+		com.send(mp.visited[mp.CENTER], dest=rank+1, tag=rank + (dim*2))
 	
 	if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0:
-		visit = com.recv(source=rank-1, tag=rank + (dim*2))
+		visit = com.recv(source=rank-1, tag=rank -1 + (dim*2))
 		if visit != mp.FREE :
-			mp.visited[rank-1] = visit
+			mp.visited[mp.LEFT] = visit
 			
 	visit = 0
-	if get_y(rank) == get_y(rank ) and rank -1 >= 0 :
-		com.send(mp.visited[rank], dest=rank-1, tag=rank-1 + (dim*2))
+	if get_y(rank) == get_y(rank -1 ) and rank -1 >= 0 :
+		com.send(mp.visited[mp.CENTER], dest=rank-1, tag=rank + (dim*2))
 		
 	if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
-		visit = com.recv(source=rank+1, tag=rank + (dim*2))
+		visit = com.recv(source=rank+1, tag=rank + 1 + (dim*2))
 		if visit != mp.FREE :
-			mp.visited[rank+1] = visit
+			mp.visited[mp.RIGHT] = visit
 
 	visit = 0	
 	if rank + mp.width < dim :
-		com.send(mp.visited[rank], dest=rank+mp.width, tag=rank+mp.width + (dim*2))
+		com.send(mp.visited[mp.CENTER], dest=rank+mp.width, tag=rank + (dim*2))
 		
 	if rank - mp.width >= 0 :
-		visit = com.recv(source=rank-mp.width, tag=rank + (dim*2))
+		visit = com.recv(source=rank-mp.width, tag=rank - mp.width + (dim*2))
 		if visit != mp.FREE :
-			mp.visited[rank- mp.width] = visit
+			mp.visited[mp.UP] = visit
 	
 	visit = 0
 	if rank - mp.width >= 0 :
-		com.send(mp.visited[rank], dest=rank-mp.width, tag=rank-mp.width + (dim*2))
+		com.send(mp.visited[mp.CENTER], dest=rank-mp.width, tag=rank + (dim*2))
 		
 	if rank + mp.width < dim:
-		visit = com.recv(source=rank+mp.width, tag=rank + (dim*2))
+		visit = com.recv(source=rank+mp.width, tag=rank + mp.width + (dim*2))
 		if visit != mp.FREE :
-			mp.visited[rank + mp.width] = visit
+			mp.visited[mp.DOWN] = visit
 
 def fix_dist():
 	## send and recv of 4 dist  ##
@@ -223,8 +230,8 @@ def fix_prev():
 	
 	if mp.main[rank] != mp.START:	
 		mp.prev[rank] = max(directions)
-	else :
-		mp.prev[rank] = -1
+	#else :
+	#	mp.prev[rank] = -1
 	
 	
 def get_x(rank) :
@@ -244,14 +251,14 @@ def follow_path() :
 		mp.found = []
 		
 		found = mp.prev[(mp.endy * mp.width) + mp.endx]
-		
-		mp.found.append(found)			
+		print found
+		#mp.found.append(found)			
 		while (found != -1) and i < mp.width * mp.height :
 			if found != -1:
 				mp.found.append(found)
 			found = mp.prev[found]
 			i += 1
-
+		print mp.found
 		i = 0
 		while (i < dim) :
 			if ( i in mp.found) and mp.main[i] != mp.START:
@@ -270,6 +277,7 @@ def show_maze():
 		for y in range (0 , mp.height):
 			print '#',
 			for x in range (0, mp.width):
+				
 				if mp.main[ (y * mp.width) + x] == mp.FREE :
 					print ' ',
 				if mp.main[ (y * mp.width) + x] == mp.START :
@@ -280,6 +288,8 @@ def show_maze():
 					print '#',
 				if mp.main[ (y * mp.width) + x] == mp.PATH :
 					print 'O',
+				
+				
 			print '#',
 			print
 
@@ -287,3 +297,5 @@ def show_maze():
 			print '#',
 		print
 		print
+		
+
