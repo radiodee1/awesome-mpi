@@ -74,11 +74,10 @@ def find() :
 		
 		lasttot = total
 		
-		
-	## here we must call allgather once so rank 0 has all info ##
-	mp.prev = com.allgather(mp.prev[rank])
+	
 	follow_path()
 	show_maze()
+	
 	if rank == 0:
 		mp.endtime = MPI.Wtime()
 		print mp.endtime - mp.starttime
@@ -239,8 +238,11 @@ def get_rank(x,y) :
 	
 	
 def follow_path() :
-
+	## here we must call gather once so rank 0 has all info ##
+	mp.prev = com.gather(mp.prev[rank])
 	if rank == 0 :
+
+		#print mp.prev
 		i = 0 
 		mp.found = []
 		
