@@ -25,12 +25,8 @@ def find() :
 		#if rank == 0:
 		#	print ii
 		
-		#mp.visited = com.allgather(mp.visited[rank])
-		## removed and replaced by 'fix_visited()' ##
-		#fix_visited()
 		
 		if mp.visited[mp.CENTER] == mp.FREE and mp.main[rank] != mp.WALL :
-				#and mp.main[rank] != mp.END: 
 						
 			if get_y(rank) == get_y(rank + 1) and rank + 1 < dim and near_visited() :
 				must_check(rank + 1, mp.RIGHT)
@@ -230,8 +226,6 @@ def fix_prev():
 	
 	if mp.main[rank] != mp.START:	
 		mp.prev[rank] = max(directions)
-	#else :
-	#	mp.prev[rank] = -1
 	
 	
 def get_x(rank) :
@@ -251,14 +245,13 @@ def follow_path() :
 		mp.found = []
 		
 		found = mp.prev[(mp.endy * mp.width) + mp.endx]
-		print found
-		#mp.found.append(found)			
+
 		while (found != -1) and i < mp.width * mp.height :
 			if found != -1:
 				mp.found.append(found)
 			found = mp.prev[found]
 			i += 1
-		print mp.found
+		
 		i = 0
 		while (i < dim) :
 			if ( i in mp.found) and mp.main[i] != mp.START:
