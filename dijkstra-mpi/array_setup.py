@@ -51,10 +51,16 @@ VISITED = 1
 FREE = 0
 UNDEFINED = 999
 
-
+#enum for indexes
+CENTER = 0
+UP = 1
+DOWN = 2
+LEFT = 3
+RIGHT = 4
+SIZE = 5
 
 main = [0] * (width * height) 
-visited = [0] * (width * height)
+visited = [0] * SIZE #(width * height)
 prev = [-1] * (width * height)
 dist = [UNDEFINED] * (width * height)
 found = []
@@ -68,9 +74,9 @@ for y in range (0 , height):
 		if endx == x and endy == y :
 			main[ (y * width) + x] = END
 			
-visited[(starty * width) + startx] = 0
+
 dist[(starty * width) + startx] = 0
-prev[(starty * width) + startx] = 0
+prev[(starty * width) + startx] = -1
 
 main[(starty * width) + startx] = START
 
