@@ -41,12 +41,26 @@ class CL(object):
  
         self.a = numpy.array(range(self.size), dtype=numpy.float32)
         self.b = numpy.array(range(self.size), dtype=numpy.float32)
+        
+        self.maze = numpy.array(range(self.size), dtype=numpy.float32)
+        self.visited = numpy.array(range(self.size), dtype=numpy.float32)
+        self.dist = numpy.array(range(self.size), dtype=numpy.float32)
+        self.prev = numpy.array(range(self.size), dtype=numpy.float32)
  
         self.a_buf = cl.Buffer(self.ctx, mf.READ_ONLY | mf.COPY_HOST_PTR,
                                hostbuf=self.a)
+                               
+        self.maze_buf = cl.Buffer(self.ctx, mf.READ_ONLY | mf.COPY_HOST_PTR,
+                               hostbuf=self.maze)   
+                                                   
         self.b_buf = cl.Buffer(self.ctx, mf.READ_ONLY | mf.COPY_HOST_PTR,
                                hostbuf=self.b)
         self.dest_buf = cl.Buffer(self.ctx, mf.WRITE_ONLY, self.b.nbytes)
+        
+        self.visited_buf = cl.Buffer(self.ctx, mf.READ_WRITE, self.maze.nbytes)
+        self.dist_buf = cl.Buffer(self.ctx, mf.READ_WRITE, self.maze.nbytes)
+        self.prev_buf = cl.Buffer(self.ctx, mf.READ_WRITE, self.maze.nbytes)
+        
  
     def execute(self):
         self.program.part1(self.queue, self.a.shape, None, self.a_buf, self.b_buf, self.dest_buf)
@@ -66,9 +80,11 @@ def add(s=10) :
     print s, endtime - starttime 
 
 def show():
-	f = pg.image.load('map.png')
+	surface = pg.image.load('map.png')
+	string = pg.image.tostring(surface, 'RGB')
+	#print string
 	
-	white = (255, 64, 64)
+	white = (64, 64, 64)
 	w = 640
 	h = 480
 	screen = pg.display.set_mode((w, h))
@@ -76,8 +92,12 @@ def show():
 	running = 1
 
 	while running:
+	
+		for event in pg.event.get():
+			if event.type == pg.QUIT:
+				sys.exit()
 		screen.fill((white))
-		screen.blit(f,(0,0))
+		screen.blit(surface,(0,-10))
 		pg.display.flip()
 
 
