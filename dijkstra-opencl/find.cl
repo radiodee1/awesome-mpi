@@ -42,7 +42,28 @@
         	//visited[ii] = 1;
         	//return 1;
         }
-        void must_check(int  ii) {
+        void must_check(
+        		__global float* maze, 
+         		__global float* visited, 
+         		__global float* dist, 
+         		__global float* prev,
+        		int  test) {
+        		
+            unsigned int ii = get_global_id(0);
+        	int VISITED = 1;
+        	int WALL = 2;// copy from below!!
+        	int START = 3;
+        
+        	if   (visited[test] !=   VISITED &&   maze[ii] !=   WALL) {
+				if  ( dist[ii] + 1 <=   dist[test] ) {
+					if   (maze[test] !=   START  ) {
+				  		prev[test] = ii; 
+				  		dist[test] =   dist[ii] + 1;
+				  	}
+				}
+			}
+	
+        
         
         }
         
@@ -80,24 +101,24 @@
 
 					if (get_y(width,ii) == get_y(width,ii + 1)  
 						&& ii + 1 < dim  && near_visited(visited, width, height)) {
-						must_check(ii + 1);
+						must_check(maze, visited, dist, prev, ii + 1);
 					}
 
 					if (get_y(width,  ii) == get_y(width,  ii - 1)  
 						&& ( ii >= 1)  && near_visited(visited, width, height)) {
-						must_check(ii - 1);
+						must_check(maze, visited, dist, prev, ii - 1);
 					}
 
 					if ( ii +  width < dim  && near_visited(visited, width, height)) {
-						must_check(ii +  width);
+						must_check(maze, visited, dist, prev, ii +  width);
 					}
 
 					if (( ii >=  width)   && near_visited(visited, width, height)) {
-						must_check(ii -  width);
+						must_check(maze, visited, dist, prev, ii -  width);
 					}
 
 					if  ( maze[ii] ==  START) {
-						must_check(ii);
+						must_check(maze, visited, dist, prev, ii);
 					}
 
 					if (near_visited(visited, width, height)) {
