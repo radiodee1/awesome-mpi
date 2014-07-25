@@ -9,6 +9,15 @@
         	return (y * width) + x;
         }
         
+        int near_visited(__global float* visited) {
+            unsigned int ii = get_global_id(0);
+        	visited[ii] = 1;
+        	return 1;
+        }
+        void must_check(int test) {
+        
+        }
+        
          __kernel void find(
          		__global float* maze, 
          		__global float* visited, 
@@ -36,33 +45,39 @@
  			unsigned int flag = 0;
  			unsigned int localflag = 0;
  			unsigned int i = 0;
-       		
-       		while (flag == 0 && i < dim) {
-       		
-		   		if (visited[ii] ==  FREE && main[ii] !=  WALL) {
-						
-					if (get_y(width,ii) == get_y(width,ii + 1)  && ii + 1 < dim  && near_visited()) {
-						must_check(ii + 1,  RIGHT);
+       		int test;
+       		//while (flag == 0 && i < dim) {
+       		if (1) {
+		   		if (visited[ii] ==  FREE &&  maze[ii] !=  WALL) {
+					test = ii;
+					if (get_y(width,ii) == get_y(width,ii + 1)  
+						&& ii + 1 < dim  && near_visited(visited)) {
+						must_check(ii + 1);
 					}
-					if (get_y(width, ii) == get_y(width, ii - 1)  && ii - 1 >= 0  && near_visited()) {
-						must_check(ii - 1,  LEFT);
+					test = ii;
+					if (get_y(width, test) == get_y(width, test - 1)  
+						&& test - 1 >= 0  && near_visited(visited)) {
+						must_check(ii - 1);
 					}
-					if (ii +  width < dim  && near_visited()) {
-						must_check(ii +  width,  DOWN);
+					test = ii;
+					if (test +  width < dim  && near_visited(visited)) {
+						must_check(ii +  width);
 					}
-					if (ii -  width >= 0  && near_visited()) {
-						must_check(ii -  width,  UP);
+					test = ii;
+					if (test -  width >= 0  && near_visited(visited)) {
+						must_check(ii -  width);
 					}
-					if  (main[ii] ==  START) {
-						must_check(ii,  CENTER);
+					test = ii;
+					if  ( maze[ii] ==  START) {
+						must_check(ii);
 					}
 
-					if (near_visited()) {
+					if (near_visited(visited)) {
 						 visited[ii] =  VISITED;
 					}
 				}
        		}
            
-           prev[ii] =  maze[ii];
+           //prev[ii] =  maze[ii];
            
         }

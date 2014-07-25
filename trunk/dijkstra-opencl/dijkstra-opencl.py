@@ -133,15 +133,16 @@ class Interface(object) :
 				
 					if maze[ (y * mz.width) + x] == mz.FREE :
 						print ' ',
-					if maze[ (y * mz.width) + x] == mz.START :
+					elif maze[ (y * mz.width) + x] == mz.START :
 						print 'S',
-					if maze[ (y * mz.width) + x] == mz.END :
+					elif maze[ (y * mz.width) + x] == mz.END :
 						print 'X',
-					if maze[ (y * mz.width) + x] == mz.WALL :
+					elif maze[ (y * mz.width) + x] == mz.WALL :
 						print '#',
-					if maze[ (y * mz.width) + x] == mz.PATH :
+					elif maze[ (y * mz.width) + x] == mz.PATH :
 						print 'O',
-				
+					else:
+						print maze[(y * mz.width) + x],
 				
 				print '#',
 				print
