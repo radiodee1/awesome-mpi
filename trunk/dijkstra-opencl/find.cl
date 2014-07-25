@@ -95,8 +95,8 @@
  			unsigned int localflag = 0;
  			unsigned int i = 0;
 
-       		//while (flag == 0 && i < dim) {
-       		if (1) {
+       		while (flag == 0 && i < dim) {
+       		//if (1) {
 		   		if (visited[ii] ==  FREE &&  maze[ii] !=  WALL) {
 
 					if (get_y(width,ii) == get_y(width,ii + 1)  
@@ -126,6 +126,14 @@
 					}
 				}
        		}
+       		
+           barrier(CLK_LOCAL_MEM_FENCE);
+           
+           if (visited[ii] == VISITED && maze[ii] == END ){
+           		flag = 1;
+           		localflag = 1;
+           }
+			//	localflag = 1
            
            //prev[ii] =  maze[ii];
            

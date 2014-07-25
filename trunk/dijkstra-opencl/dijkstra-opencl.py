@@ -59,7 +59,9 @@ class CL(object):
 								hostbuf=self.dimension)
 
 	def execute(self):
-		self.program.find(self.queue, self.maze.shape, None, 
+		for i in range(0,10):
+			print 'here'
+			self.program.find(self.queue, self.maze.shape, None, 
 				self.maze_buf, self.visited_buf, self.dist_buf, self.prev_buf, 
 				self.dimension_buf)
 				
@@ -74,11 +76,15 @@ class CL(object):
 		cl.enqueue_read_buffer(self.queue, self.prev_buf, prev).wait()        
 		
 		self.prev = prev
+		self.visited = visited
 		#print prev
 		#print mz.maze
 		
 	def get_prev(self):
 		return self.prev
+
+	def get_visited(self):
+		return self.visited
 
 	def get_width(self):
 		return self.width
@@ -164,7 +170,7 @@ class Interface(object) :
 
 
 if __name__ == '__main__': 
-	starttime = time.clock()
+
 	matrixd = CL()
 	
 	i = Interface()
@@ -172,10 +178,11 @@ if __name__ == '__main__':
 
 	i.show_png(matrixd)
 	
+	starttime = time.clock()	
 	matrixd.load_kernel()
 	matrixd.set_buffers()
 	matrixd.execute()
-	a = matrixd.get_prev()
+	a = matrixd.get_visited()
 	print a
 	endtime = time.clock()
 	print  endtime - starttime 
