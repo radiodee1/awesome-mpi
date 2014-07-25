@@ -20,6 +20,7 @@ class CL(object):
 		self.height = mz.height
 		self.size = mz.width * mz.height
 		self.prev = []
+		self.maze = mz.maze
 		
 		self.ctx = cl.create_some_context()
 		self.queue = cl.CommandQueue(self.ctx)
@@ -37,7 +38,7 @@ class CL(object):
 		mf = cl.mem_flags
 
 	
-		self.maze = numpy.array(mz.maze, dtype=numpy.float32)
+		self.maze = numpy.array(self.maze, dtype=numpy.float32)
 		self.visited = numpy.array(([mz.FREE] * self.size), dtype=numpy.float32)
 		self.dist = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.float32)
 		self.prev = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.float32)
@@ -84,13 +85,18 @@ class CL(object):
 	
 	def get_height(self):
 		return self.height
+		
+	def set_map(self, maze):
+		self.maze = maze
+		
 
 class Interface(object) :
 
 	def __init__(self):
-		self.mapname = 'map.png'	
+		self.mapname = 'map.png'
+		self.map  =[]	
 		
-	def show_png(self):
+	def show_png(self , cl):
 		surface = pg.image.load(self.mapname)
 		string = pg.image.tostring(surface, 'RGB')
 		#print string
@@ -106,10 +112,13 @@ class Interface(object) :
 	
 			for event in pg.event.get():
 				if event.type == pg.QUIT:
-					sys.exit()
+					running = 0
 			screen.fill((white))
 			screen.blit(surface,(0,0))
 			pg.display.flip()
+			
+		print 'load info'
+		cl.set_map(mz.maze)
 
 
 	def show_maze(self, maze = [], width = 10, height = 10):
@@ -121,33 +130,33 @@ class Interface(object) :
 		
 		if True:	
 			print
-			for x in range (0,mz.width + 2):
-				if x < mz.width + 1:
+			for x in range (0,width + 2):
+				if x < width + 1:
 					print '#',
 				else:
 					print '#'
 
-			for y in range (0 , mz.height):
+			for y in range (0 , height):
 				print '#',
-				for x in range (0, mz.width):
+				for x in range (0, width):
 				
-					if maze[ (y * mz.width) + x] == mz.FREE :
+					if maze[ (y * width) + x] == mz.FREE :
 						print ' ',
-					elif maze[ (y * mz.width) + x] == mz.START :
+					elif maze[ (y * width) + x] == mz.START :
 						print 'S',
-					elif maze[ (y * mz.width) + x] == mz.END :
+					elif maze[ (y * width) + x] == mz.END :
 						print 'X',
-					elif maze[ (y * mz.width) + x] == mz.WALL :
+					elif maze[ (y * width) + x] == mz.WALL :
 						print '#',
-					elif maze[ (y * mz.width) + x] == mz.PATH :
+					elif maze[ (y * width) + x] == mz.PATH :
 						print 'O',
 					else:
-						print maze[(y * mz.width) + x],
+						print 'P',
 				
 				print '#',
 				print
 
-			for x in range (0,mz.width + 2):
+			for x in range (0,width + 2):
 				print '#',
 			print
 			print
@@ -157,6 +166,12 @@ class Interface(object) :
 if __name__ == '__main__': 
 	starttime = time.clock()
 	matrixd = CL()
+	
+	i = Interface()
+	i.show_maze(mz.maze, mz.width, mz.height)
+
+	i.show_png(matrixd)
+	
 	matrixd.load_kernel()
 	matrixd.set_buffers()
 	matrixd.execute()
@@ -165,10 +180,8 @@ if __name__ == '__main__':
 	endtime = time.clock()
 	print  endtime - starttime 
 
-	i = Interface()
-	i.show_maze(mz.maze, mz.width, mz.height)
 	i.show_maze(a , matrixd.get_width(), matrixd.get_height())
-	i.show_png()
+	
 	
 	
 	
