@@ -60,9 +60,9 @@ class CL(object):
 								hostbuf=self.dimension)
 
 	def execute(self):
-		for i in range(0,15):
+		for i in range(0,20):
 			print 'here'
-			self.program.find(self.queue, self.maze.shape, None, 
+			self.program.find(self.queue, self.maze.shape, self.maze.shape, 
 				self.maze_buf, self.visited_buf, self.dist_buf, self.prev_buf, 
 				self.dimension_buf)
 				

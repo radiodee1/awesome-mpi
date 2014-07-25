@@ -19,6 +19,8 @@
             int VISITED = 1;
             int START = 3;
             
+            //barrier(CLK_LOCAL_MEM_FENCE);
+            
 			if (get_y(width,ii) == get_y(width,ii + 1) &&  ii + 1 < dim ) {
 				if  ( visited[ii+1] ==   VISITED){
 					return 1;
@@ -70,7 +72,7 @@
 				}
 			}
 	
-            barrier(CLK_LOCAL_MEM_FENCE);
+            //barrier(CLK_LOCAL_MEM_FENCE);
         
         }
         
@@ -104,6 +106,8 @@
 
        		//while (flag == 0 && i < dim) {
        		if (1) {
+       		
+       			i ++;
 		   		if (visited[ii] ==  FREE &&  maze[ii] !=  WALL) {
 
 					if (get_y(width,ii) == get_y(width,ii + 1)  
