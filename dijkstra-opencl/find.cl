@@ -3,16 +3,21 @@
         }
         
         int get_y(int width, int ii) {
-        	return ii / width;
+        	return (int)( ii / width);
         }
         int get_index(int width, int x, int y) {
         	return (y * width) + x;
         }
         
-        int near_visited(__global float* visited, int width, int height) {
+        int near_visited( __global float* maze, 
+        			__global float* visited, 
+        			int width, 
+        			int height) {
+        			
             unsigned int ii = get_global_id(0);
             int dim = width * height;
             int VISITED = 1;
+            int START = 3;
             
 			if (get_y(width,ii) == get_y(width,ii + 1) &&  ii + 1 < dim ) {
 				if  ( visited[ii+1] ==   VISITED){
@@ -34,8 +39,9 @@
 					return 1;
 				}
 			}
-			//if  ii == get_ ii(  startx,   starty)  :
-			//	return 1
+			if  (maze[ii] == START ){
+				return 1;
+			}
 			return 0;
             
             
@@ -53,9 +59,10 @@
         	int VISITED = 1;
         	int WALL = 2;// copy from below!!
         	int START = 3;
+        	int UNDEFINED = -1;
         
         	if   (visited[test] !=   VISITED &&   maze[ii] !=   WALL) {
-				if  ( dist[ii] + 1 <=   dist[test] ) {
+				if  ( dist[ii] + 1 <=   dist[test] || dist[test] == UNDEFINED ) {
 					if   (maze[test] !=   START  ) {
 				  		prev[test] = ii; 
 				  		dist[test] =   dist[ii] + 1;
@@ -63,7 +70,7 @@
 				}
 			}
 	
-        
+            barrier(CLK_LOCAL_MEM_FENCE);
         
         }
         
@@ -95,25 +102,25 @@
  			unsigned int localflag = 0;
  			unsigned int i = 0;
 
-       		while (flag == 0 && i < dim) {
-       		//if (1) {
+       		//while (flag == 0 && i < dim) {
+       		if (1) {
 		   		if (visited[ii] ==  FREE &&  maze[ii] !=  WALL) {
 
 					if (get_y(width,ii) == get_y(width,ii + 1)  
-						&& ii + 1 < dim  && near_visited(visited, width, height)) {
+						&& ii + 1 < dim  && near_visited(maze, visited, width, height)) {
 						must_check(maze, visited, dist, prev, ii + 1);
 					}
 
 					if (get_y(width,  ii) == get_y(width,  ii - 1)  
-						&& ( ii >= 1)  && near_visited(visited, width, height)) {
+						&& ( ii >= 1)  && near_visited(maze, visited, width, height)) {
 						must_check(maze, visited, dist, prev, ii - 1);
 					}
 
-					if ( ii +  width < dim  && near_visited(visited, width, height)) {
+					if ( ii +  width < dim  && near_visited(maze, visited, width, height)) {
 						must_check(maze, visited, dist, prev, ii +  width);
 					}
 
-					if (( ii >=  width)   && near_visited(visited, width, height)) {
+					if (( ii >=  width)   && near_visited(maze, visited, width, height)) {
 						must_check(maze, visited, dist, prev, ii -  width);
 					}
 
@@ -121,7 +128,7 @@
 						must_check(maze, visited, dist, prev, ii);
 					}
 
-					if (near_visited(visited, width, height)) {
+					if (near_visited(maze, visited, width, height)) {
 						 visited[ii] =  VISITED;
 					}
 				}
@@ -132,9 +139,9 @@
            if (visited[ii] == VISITED && maze[ii] == END ){
            		flag = 1;
            		localflag = 1;
+           		return;
            }
-			//	localflag = 1
-           
-           //prev[ii] =  maze[ii];
+			//	
+			
            
         }

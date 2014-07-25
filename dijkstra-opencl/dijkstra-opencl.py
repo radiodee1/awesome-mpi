@@ -21,6 +21,7 @@ class CL(object):
 		self.size = mz.width * mz.height
 		self.prev = []
 		self.maze = mz.maze
+		self.found = []
 		
 		self.ctx = cl.create_some_context()
 		self.queue = cl.CommandQueue(self.ctx)
@@ -59,7 +60,7 @@ class CL(object):
 								hostbuf=self.dimension)
 
 	def execute(self):
-		for i in range(0,10):
+		for i in range(0,15):
 			print 'here'
 			self.program.find(self.queue, self.maze.shape, None, 
 				self.maze_buf, self.visited_buf, self.dist_buf, self.prev_buf, 
@@ -77,8 +78,35 @@ class CL(object):
 		
 		self.prev = prev
 		self.visited = visited
+		self.dist = dist
 		#print prev
 		#print mz.maze
+	
+	def follow_path(self) :
+		## here we must call gather once so rank 0 has all info ##
+		#self.prev = com.gather(mp.prev[rank])
+		dim = self.width * self.height
+		if True: #rank == 0 :
+
+			print self.prev, 'prev'
+			i = 0 
+			self.found = []
+		
+			found = self.prev[(mz.endy * self.width) + mz.endx]
+
+			while (found != -1) and i < self.width * self.height :
+				if found != -1:
+					self.found.append(int(found))
+				found = self.prev[found]
+				i += 1
+			print self.found, 'found',dim
+			
+			i = 0
+			while (i < dim) :
+				if ( i in self.found) and self.maze[i] != mz.START:
+					self.maze[i] = mz.PATH
+					print 'here two'
+				i += 1	
 		
 	def get_prev(self):
 		return self.prev
@@ -86,14 +114,20 @@ class CL(object):
 	def get_visited(self):
 		return self.visited
 
+	def get_dist(self):
+		return self.dist
+
 	def get_width(self):
 		return self.width
 	
 	def get_height(self):
 		return self.height
 		
+	def get_maze(self):
+		return self.maze		
 	def set_map(self, maze):
 		self.maze = maze
+		
 		
 
 class Interface(object) :
@@ -182,7 +216,8 @@ if __name__ == '__main__':
 	matrixd.load_kernel()
 	matrixd.set_buffers()
 	matrixd.execute()
-	a = matrixd.get_visited()
+	matrixd.follow_path()
+	a = matrixd.get_maze()
 	print a
 	endtime = time.clock()
 	print  endtime - starttime 
