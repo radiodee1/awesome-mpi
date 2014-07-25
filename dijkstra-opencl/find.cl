@@ -14,7 +14,7 @@
         	visited[ii] = 1;
         	return 1;
         }
-        void must_check(int test) {
+        void must_check(int  ii) {
         
         }
         
@@ -45,29 +45,29 @@
  			unsigned int flag = 0;
  			unsigned int localflag = 0;
  			unsigned int i = 0;
-       		int test;
+
        		//while (flag == 0 && i < dim) {
        		if (1) {
 		   		if (visited[ii] ==  FREE &&  maze[ii] !=  WALL) {
-					test = ii;
+
 					if (get_y(width,ii) == get_y(width,ii + 1)  
 						&& ii + 1 < dim  && near_visited(visited)) {
 						must_check(ii + 1);
 					}
-					test = ii;
-					if (get_y(width, test) == get_y(width, test - 1)  
-						&& test - 1 >= 0  && near_visited(visited)) {
+
+					if (get_y(width,  ii) == get_y(width,  ii - 1)  
+						&& ( ii >= 1)  && near_visited(visited)) {
 						must_check(ii - 1);
 					}
-					test = ii;
-					if (test +  width < dim  && near_visited(visited)) {
+
+					if ( ii +  width < dim  && near_visited(visited)) {
 						must_check(ii +  width);
 					}
-					test = ii;
-					if (test -  width >= 0  && near_visited(visited)) {
+
+					if (( ii >=  width)   && near_visited(visited)) {
 						must_check(ii -  width);
 					}
-					test = ii;
+
 					if  ( maze[ii] ==  START) {
 						must_check(ii);
 					}
