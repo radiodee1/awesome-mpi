@@ -41,61 +41,58 @@ starty = 0#height - 1
 endx = width - 3
 endy =  height - 1
 
-#enum
+#enum for maze
 OPEN = 1
 WALL = 2
 START = 3
 END = 4
 PATH = 5
+
+#enum for visited
 VISITED = 1
 FREE = 0
-UNDEFINED = 999
 
-#enum for indexes
-CENTER = 0
-UP = 1
-DOWN = 2
-LEFT = 3
-RIGHT = 4
-SIZE = 5
+#enum for distance
+UNDEFINED = -1
 
-main = [0] * (width * height) 
-visited = [0] * SIZE #(width * height)
-prev = [-1] * (width * height)
+
+maze = [0] * (width * height) 
+#visited = [0] * (width * height)
+#prev = [-1] * (width * height)
 dist = [UNDEFINED] * (width * height)
-found = []
+#found = []
 
 
 for y in range (0 , height):
 	for x in range (0, width):
-		main[ (y * width) + x] = FREE
+		maze[ (y * width) + x] = FREE
 		if startx == x and starty == y :
-			main[ (y * width) + x] = START
+			maze[ (y * width) + x] = START
 		if endx == x and endy == y :
-			main[ (y * width) + x] = END
+			maze[ (y * width) + x] = END
 			
 
 dist[(starty * width) + startx] = 0
-prev[(starty * width) + startx] = -1
+#prev[(starty * width) + startx] = -1
 
-main[(starty * width) + startx] = START
+maze[(starty * width) + startx] = START
 
 # wall from file input
 if csv == True:
 	for i in wall :
 		#print int(i)
-		main[int(i)] = WALL
+		maze[int(i)] = WALL
 
 # non-random walls
 onethird = int(height / 3)
 twothirds = int(height * 2 / 3 )
 for i in range (0, 7) : #(0,7)
-	main[ (onethird * width) + i] = WALL
+	maze[ (onethird * width) + i] = WALL
 	
 for i in range (4, width) :
-	main[ (twothirds * width) + i] = WALL
+	maze[ (twothirds * width) + i] = WALL
 	
 # test for unreachable goal	
 #for i in range (0, width) :
-#	main[ (twothirds * width) + i] = WALL
+#	maze[ (twothirds * width) + i] = WALL
 

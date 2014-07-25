@@ -18,5 +18,5 @@ float add(float a, float b)
  			unsigned int height = dimension[1];
  			
            //c[i] = add (a[i] , b[i]);
-           prev[ii] = width;
+           prev[ii] = maze[ii];
         }

@@ -25,10 +25,12 @@ class CL(object):
         self.ctx = cl.create_some_context()
         self.queue = cl.CommandQueue(self.ctx)
 
+	'''
 	self.FREE = 0
 	self.WALL = 1
 	self.UNDEFINED = -1
 	self.VISITED = 1
+ 	'''
  
     def load_program(self):
     	fstr = ''
@@ -42,10 +44,10 @@ class CL(object):
 		mf = cl.mem_flags
 
 		
-		self.maze = numpy.array([self.FREE] * self.size, dtype=numpy.float32)
-		self.visited = numpy.array(([self.FREE] * self.size), dtype=numpy.float32)
-		self.dist = numpy.array(([self.UNDEFINED] * self.size), dtype=numpy.float32)
-		self.prev = numpy.array(([self.UNDEFINED] * self.size), dtype=numpy.float32)
+		self.maze = numpy.array(mz.maze, dtype=numpy.float32)
+		self.visited = numpy.array(([mz.FREE] * self.size), dtype=numpy.float32)
+		self.dist = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.float32)
+		self.prev = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.float32)
 
 		self.dimension = numpy.array(([self.width, self.height]), dtype=numpy.float32)
 		               
@@ -79,6 +81,7 @@ class CL(object):
         #print ( "a", self.a)
         #print ( "b", self.b)
         print prev
+        print mz.maze
  
 def add(s=10) :
     starttime = time.clock()
@@ -89,7 +92,7 @@ def add(s=10) :
     endtime = time.clock()
     print s, endtime - starttime 
 
-def show():
+def show_png():
 	surface = pg.image.load('map.png')
 	string = pg.image.tostring(surface, 'RGB')
 	#print string
@@ -111,9 +114,45 @@ def show():
 		pg.display.flip()
 
 
+def show_maze():
+	if True:	
+		print
+		for x in range (0,mz.width + 2):
+			if x < mz.width + 1:
+				print '#',
+			else:
+				print '#'
+
+		for y in range (0 , mz.height):
+			print '#',
+			for x in range (0, mz.width):
+				
+				if mz.maze[ (y * mz.width) + x] == mz.FREE :
+					print ' ',
+				if mz.maze[ (y * mz.width) + x] == mz.START :
+					print 'S',
+				if mz.maze[ (y * mz.width) + x] == mz.END :
+					print 'X',
+				if mz.maze[ (y * mz.width) + x] == mz.WALL :
+					print '#',
+				if mz.maze[ (y * mz.width) + x] == mz.PATH :
+					print 'O',
+				
+				
+			print '#',
+			print
+
+		for x in range (0,mz.width + 2):
+			print '#',
+		print
+		print
+		
+
+
 if __name__ == '__main__': 
 	add()
-	show()
-
+	show_maze()
+	show_png()
+	
 	
 	
