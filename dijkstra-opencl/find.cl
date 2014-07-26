@@ -1,3 +1,14 @@
+		#define FREE  0
+    	#define OPEN  1
+    	#define WALL  2
+    	#define START  3
+    	#define END  4
+    	#define PATH  5
+
+		#define VISITED  1
+		#define UNDEFINED  -1
+		
+		
 		int get_x(int width,  int ii) {
  			return ii - (width * (ii / width));   
         }
@@ -16,10 +27,7 @@
         			
             unsigned int ii = get_global_id(0);
             int dim = width * height;
-            int VISITED = 1;
-            int START = 3;
             
-            //barrier(CLK_LOCAL_MEM_FENCE);
             
 			if (get_y(width,ii) == get_y(width,ii + 1) &&  ii + 1 < dim ) {
 				if  ( visited[ii+1] ==   VISITED){
@@ -58,10 +66,7 @@
         		int  test) {
         		
             unsigned int ii = get_global_id(0);
-        	int VISITED = 1;
-        	int WALL = 2;// copy from below!!
-        	int START = 3;
-        	int UNDEFINED = -1;
+        	
         
         	if   (visited[test] !=   VISITED &&   maze[ii] !=   WALL) {
 				if  ( dist[ii] + 1 <=   dist[test] || dist[test] == UNDEFINED ) {
@@ -84,15 +89,7 @@
          		__global float* dimension)
          		
         {
-        	int FREE = 0;
-        	int OPEN = 1;
-        	int WALL = 2;
-        	int START = 3;
-        	int END = 4;
-        	int PATH = 5;
-
-			int VISITED = 1;
-			int UNDEFINED = -1;
+        	
 			
             unsigned int ii = get_global_id(0);
             
@@ -143,6 +140,7 @@
            if (visited[ii] == VISITED && maze[ii] == END ){
            		flag = 1;
            		localflag = 1;
+           		//dimension[2] = 1;
            		return;
            }
 			//	
