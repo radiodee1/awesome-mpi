@@ -6,8 +6,8 @@ import sys
 import fileinput
 
 
-width = 10#20
-height = 10#10
+width = 8#20
+height = 8#10
 
 ## make csv file import-able ##
 dim = []
@@ -19,7 +19,7 @@ csv = False
 i = 0
 if len(sys.argv) > 1:
 	csv = True
-	#print sys.argv[1]
+	print sys.argv[1], 'filename'
 	for line in fileinput.input(sys.argv[1]):
 		if not '#' in line[0] :
 			i += 1
@@ -80,14 +80,15 @@ maze[(starty * width) + startx] = START
 # wall from file input
 if csv == True:
 	for i in wall :
-		#print int(i)
-		if i < width * height:
+		print int(i)
+		if int(i) < width * height:
+			print 'add wall'
 			maze[int(i)] = WALL
 
 # non-random walls
 onethird = int(height / 3)
 twothirds = int(height * 2 / 3 )
-for i in range (0, 7) : #(0,7)
+for i in range (0, 6) : #(0,7)
 	maze[ (onethird * width) + i] = WALL
 	
 for i in range (4, width) :

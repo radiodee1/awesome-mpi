@@ -33,12 +33,12 @@
             int dim = width * height;
             
             
-			if (get_y(width,ii) == get_y(width,ii + 1) &&  ii + 1 < dim ) {
+			if ( (ii + 1 < dim ) && get_y(width,ii) == get_y(width,ii + 1)  ) {
 				if  ( visited[ii+1] ==   VISITED){
 					return TRUE;
 				}
 			}
-			if( get_y(width, ii) == get_y(width, ii - 1) &&  ii >= 1 )  {
+			if( (ii >= 1 ) && get_y(width, ii) == get_y(width, ii - 1)  )  {
 				if  ( visited[ii - 1] ==   VISITED){
 					return TRUE;
 				}
@@ -73,7 +73,7 @@
         	
         
         	if   (visited[test] !=   VISITED &&   maze[ii] !=   WALL 
-        			&& maze[test] != WALL) {
+        			&& maze[test] != WALL && maze[ii] != WALL) {
 				if  ( dist[ii] + 1 <=   dist[test] || (dist[test] == UNDEFINED  )) {
 					if   (maze[test] !=   START  ) {
 				  		prev[test] = ii; 
@@ -113,13 +113,13 @@
        			i ++;
 		   		if (visited[ii] ==  FREE &&  maze[ii] !=  WALL) {
 
-					if (get_y(width,ii) == get_y(width,ii + 1)  
-						&& ii + 1 < dim  && near_visited(ii, maze, visited, width, height)) {
+					if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1)  
+						&& near_visited(ii, maze, visited, width, height)) {
 						must_check(maze, visited, dist, prev, ii + 1);
 					}
 
-					if (get_y(width,  ii) == get_y(width,  ii - 1)  
-						&& ( ii >= 1)  && near_visited(ii, maze, visited, width, height)) {
+					if ( (ii >=1) && get_y(width,  ii) == get_y(width,  ii - 1)  
+						&& near_visited(ii, maze, visited, width, height)) {
 						must_check(maze, visited, dist, prev, ii - 1);
 					}
 
@@ -141,9 +141,9 @@
 				}
        		}
        		
-           barrier(CLK_LOCAL_MEM_FENCE);
+           //barrier(CLK_LOCAL_MEM_FENCE);
            
-           if (visited[ii] == VISITED && maze[ii] == END ){
+           if (visited[ii] == VISITED && maze[ii] == END && FALSE){
            		flag = 1;
            		localflag = 1;
            		//dimension[2] = 1;

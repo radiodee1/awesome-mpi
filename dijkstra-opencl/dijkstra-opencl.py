@@ -93,9 +93,9 @@ class CL(object):
 	
 	def follow_path(self) :
 		## here we must call gather once so rank 0 has all info ##
-		#self.prev = com.gather(mp.prev[rank])
+		
 		dim = self.width * self.height
-		if True: #rank == 0 :
+		if True: 
 
 			print self.prev, 'prev'
 			i = 0 
@@ -135,9 +135,19 @@ class CL(object):
 		return self.height
 		
 	def get_maze(self):
-		return self.maze		
-	def set_map(self, maze):
+		return self.maze	
+			
+	def set_map(self, maze, width=-1, height=-1):
 		self.maze = maze
+		if width == -1:
+			self.width = mz.width
+		else:
+			self.width = width
+			
+		if height == -1:
+			self.height = mz.height
+		else:
+			self.height = height
 		
 		
 
@@ -169,7 +179,7 @@ class Interface(object) :
 			pg.display.flip()
 			
 		print 'load info'
-		cl.set_map(mz.maze)
+		cl.set_map(mz.maze, mz.width, mz.height)
 
 
 	def show_maze(self, maze = [], width = 10, height = 10):
@@ -201,8 +211,10 @@ class Interface(object) :
 						print '#',
 					elif maze[ (y * width) + x] == mz.PATH :
 						print 'O',
+					elif maze[ (y * width) + x] == mz.UNDEFINED :
+						print 'U',
 					else:
-						print 'P',
+						print maze[ (y * width) + x] ,
 				
 				print '#',
 				print
@@ -219,22 +231,25 @@ if __name__ == '__main__':
 	matrixd = CL()
 	
 	i = Interface()
-	i.show_maze(mz.maze, mz.width, mz.height)
+
 
 	i.show_png(matrixd)
 	
-	starttime = time.clock()	
+	starttime = time.clock()
+	matrixd.set_map(mz.maze, mz.width, mz.height)	
+	i.show_maze(mz.maze, mz.width, mz.height)
+	
 	matrixd.load_kernel()
 	matrixd.set_buffers()
 	matrixd.execute()
 	matrixd.follow_path()
-	a = matrixd.get_maze()
-	print a
+	a = matrixd.get_prev()
+	print a, 'get maze'
 	endtime = time.clock()
 	print  endtime - starttime 
 
 	i.show_maze(a , matrixd.get_width(), matrixd.get_height())
-	
+	i.show_maze(matrixd.get_maze() , matrixd.get_width(), matrixd.get_height())
 	
 	
 	
