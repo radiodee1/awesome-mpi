@@ -34,22 +34,22 @@
             
             
 			if ( (ii + 1 < dim ) && get_y(width,ii) == get_y(width,ii + 1)  ) {
-				if  ( visited[ii+1] ==   VISITED){
+				if  ( visited[ii+1] ==   VISITED && maze[ii+1] != WALL ){
 					return TRUE;
 				}
 			}
 			if( (ii >= 1 ) && get_y(width, ii) == get_y(width, ii - 1)  )  {
-				if  ( visited[ii - 1] ==   VISITED){
+				if  ( visited[ii - 1] ==   VISITED && maze[ii-1] != WALL){
 					return TRUE;
 				}
 			}
 			if  (ii +   width < dim) {
-				if   (visited[ii + width] ==   VISITED) {
+				if   (visited[ii + width] ==   VISITED && maze[ii+ width] != WALL) {
 					return TRUE;
 				}
 			}
 			if  (ii >= width ) {
-				if   (visited[ii - width] ==   VISITED) {
+				if   (visited[ii - width] ==   VISITED && maze[ii-width] != WALL) {
 					return TRUE;
 				}
 			}
@@ -59,8 +59,7 @@
 			return FALSE;
             
             
-        	//visited[ii] = 1;
-        	//return 1;
+        	
         }
         void must_check(
         		int ii,
