@@ -39,12 +39,12 @@ class CL(object):
 		mf = cl.mem_flags
 
 	
-		self.maze = numpy.array(self.maze, dtype=numpy.float32)
-		self.visited = numpy.array(([mz.FREE] * self.size), dtype=numpy.float32)
-		self.dist = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.float32)
-		self.prev = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.float32)
+		self.maze = numpy.array(self.maze, dtype=numpy.int32)
+		self.visited = numpy.array(([mz.FREE] * self.size), dtype=numpy.int32)
+		self.dist = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.int32)
+		self.prev = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.int32)
 
-		self.dimension = numpy.array(([self.width, self.height, 0]), dtype=numpy.float32)
+		self.dimension = numpy.array(([self.width, self.height, 0]), dtype=numpy.int32)
 			           
 		self.maze_buf = cl.Buffer(self.ctx, mf.READ_WRITE | mf.COPY_HOST_PTR,
 					           hostbuf=self.maze)   
