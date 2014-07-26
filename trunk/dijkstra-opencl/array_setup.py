@@ -19,7 +19,7 @@ csv = False
 i = 0
 if len(sys.argv) > 1:
 	csv = True
-	print sys.argv[1], 'filename'
+	#print sys.argv[1], 'filename'
 	for line in fileinput.input(sys.argv[1]):
 		if not '#' in line[0] :
 			i += 1
@@ -80,9 +80,9 @@ maze[(starty * width) + startx] = START
 # wall from file input
 if csv == True:
 	for i in wall :
-		print int(i)
+		#print int(i)
 		if int(i) < width * height:
-			print 'add wall'
+			#print 'add wall'
 			maze[int(i)] = WALL
 
 # non-random walls

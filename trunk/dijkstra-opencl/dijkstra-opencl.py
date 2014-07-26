@@ -43,8 +43,12 @@ class CL(object):
 		self.visited = numpy.array(([mz.FREE] * self.size), dtype=numpy.int32)
 		self.dist = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.int32)
 		self.prev = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.int32)
-
-		self.dimension = numpy.array(([self.width, self.height, 0]), dtype=numpy.int32)
+		
+		prepdim = [0] * self.size
+		prepdim[0] = self.width
+		prepdim[1] = self.height
+		
+		self.dimension = numpy.array((prepdim), dtype=numpy.int32)
 			           
 		self.maze_buf = cl.Buffer(self.ctx, mf.READ_WRITE | mf.COPY_HOST_PTR,
 					           hostbuf=self.maze)   
@@ -67,15 +71,19 @@ class CL(object):
 		dimension = numpy.empty_like(self.dimension)
 		loop = 0
 		
-		for i in range(0,self.size):
-		#while loop == 0:
+		#for i in range(0,self.size):
+		while loop == 0:
 			print 'here',
 			self.program.find(self.queue, self.maze.shape, self.maze.shape, 
-				self.maze_buf, self.visited_buf, self.dist_buf, self.prev_buf, 
+				self.maze_buf, 
+				self.visited_buf, 
+				self.dist_buf, 
+				self.prev_buf, 
 				self.dimension_buf)
 				
-			#cl.enqueue_read_buffer(self.queue, self.dimension_buf, dimension).wait()        
-			#loop = dimension[2]
+			cl.enqueue_read_buffer(self.queue, self.dimension_buf, dimension).wait()        
+			print dimension[2],
+			loop = dimension[2]
 		
 		'''
 			at some point may remove 'wait' on visited_buf and dist_buf!!
@@ -92,7 +100,6 @@ class CL(object):
 		#print mz.maze
 	
 	def follow_path(self) :
-		## here we must call gather once so rank 0 has all info ##
 		
 		dim = self.width * self.height
 		if True: 
@@ -107,7 +114,7 @@ class CL(object):
 				if found != -1:
 					self.found.append(int(found))
 				else :
-					print int( found / width), found - (int(found / width) * width)
+					print int( found / width), found - (int(found / width) * width), 'y,x'
 				found = self.prev[found]
 				i += 1
 			print self.found, 'found', len(self.found)
