@@ -44,7 +44,7 @@ class CL(object):
 		self.dist = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.float32)
 		self.prev = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.float32)
 
-		self.dimension = numpy.array(([self.width, self.height]), dtype=numpy.float32)
+		self.dimension = numpy.array(([self.width, self.height, 0]), dtype=numpy.float32)
 			           
 		self.maze_buf = cl.Buffer(self.ctx, mf.READ_WRITE | mf.COPY_HOST_PTR,
 					           hostbuf=self.maze)   
@@ -60,22 +60,31 @@ class CL(object):
 								hostbuf=self.dimension)
 
 	def execute(self):
-		for i in range(0,20):
-			print 'here'
+	
+		visited = numpy.empty_like(self.maze)
+		dist = numpy.empty_like(self.maze)
+		prev = numpy.empty_like(self.maze)
+		dimension = numpy.empty_like(self.dimension)
+		loop = 0
+		
+		for i in range(0,140):
+		#while loop == 0:
+			print 'here',
 			self.program.find(self.queue, self.maze.shape, self.maze.shape, 
 				self.maze_buf, self.visited_buf, self.dist_buf, self.prev_buf, 
 				self.dimension_buf)
 				
-		visited = numpy.empty_like(self.maze)
-		dist = numpy.empty_like(self.maze)
-		prev = numpy.empty_like(self.maze)
+			cl.enqueue_read_buffer(self.queue, self.dimension_buf, dimension).wait()        
+			loop = dimension[2]
+		
 		'''
 			at some point may remove 'wait' on visited_buf and dist_buf!!
 		'''
+		print 'loop end'
 		cl.enqueue_read_buffer(self.queue, self.visited_buf, visited).wait()
 		cl.enqueue_read_buffer(self.queue, self.dist_buf, dist).wait()
 		cl.enqueue_read_buffer(self.queue, self.prev_buf, prev).wait()        
-		
+
 		self.prev = prev
 		self.visited = visited
 		self.dist = dist
@@ -99,13 +108,13 @@ class CL(object):
 					self.found.append(int(found))
 				found = self.prev[found]
 				i += 1
-			print self.found, 'found',dim
+			print self.found, 'found', len(self.found)
 			
 			i = 0
 			while (i < dim) :
 				if ( i in self.found) and self.maze[i] != mz.START:
 					self.maze[i] = mz.PATH
-					print 'here two'
+					
 				i += 1	
 		
 	def get_prev(self):

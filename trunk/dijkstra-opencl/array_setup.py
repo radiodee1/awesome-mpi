@@ -81,7 +81,8 @@ maze[(starty * width) + startx] = START
 if csv == True:
 	for i in wall :
 		#print int(i)
-		maze[int(i)] = WALL
+		if i < width * height:
+			maze[int(i)] = WALL
 
 # non-random walls
 onethird = int(height / 3)
