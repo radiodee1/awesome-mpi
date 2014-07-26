@@ -23,6 +23,10 @@ class CL(object):
 		self.maze = mz.maze
 		self.found = []
 		
+		print cl.device_info.LOCAL_MEM_SIZE, 'local mem size'
+		print cl.device_info.MAX_WORK_GROUP_SIZE, 'max work group size'
+		print cl.device_info.QUEUE_PROPERTIES, 'queue properties'
+		
 		self.ctx = cl.create_some_context()
 		self.queue = cl.CommandQueue(self.ctx)
 
@@ -44,7 +48,7 @@ class CL(object):
 		self.dist = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.int32)
 		self.prev = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.int32)
 		
-		prepdim = [0] * self.size
+		prepdim = [0] * 3#self.size
 		prepdim[0] = self.width
 		prepdim[1] = self.height
 		
