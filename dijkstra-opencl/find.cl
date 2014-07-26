@@ -63,21 +63,26 @@
         	//return 1;
         }
         void must_check(
+        		int ii,
         		__global int* maze, 
          		__global int* visited, 
          		__global int* dist, 
          		__global int* prev,
         		int  test) {
         		
-            unsigned int ii = get_global_id(0);
-        	
+            //unsigned int ii = get_global_id(0);
+        	int alt = 0;
         
         	if   (visited[test] !=   VISITED &&   maze[ii] !=   WALL 
         			&& maze[test] != WALL && maze[ii] != WALL) {
-				if  ( dist[ii] + 1 <=   dist[test] || (dist[test] == UNDEFINED  )) {
+        			
+        		alt = dist[ii] + 1;
+        		if (dist[ii] == UNDEFINED ) alt = 1;
+        		
+				if  ( /*alt <=   dist[test] ||*/ (dist[test] == UNDEFINED  )) {
 					if   (maze[test] !=   START  ) {
 				  		prev[test] = ii; 
-				  		dist[test] =   dist[ii] + 1;
+				  		dist[test] = alt;
 				  	}
 				  	//dist[test] =   dist[ii] + 1;
 				}
@@ -115,24 +120,24 @@
 
 					if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1)  
 						&& near_visited(ii, maze, visited, width, height)) {
-						must_check(maze, visited, dist, prev, ii + 1);
+						must_check(ii,maze, visited, dist, prev, ii + 1);
 					}
 
 					if ( (ii >=1) && get_y(width,  ii) == get_y(width,  ii - 1)  
 						&& near_visited(ii, maze, visited, width, height)) {
-						must_check(maze, visited, dist, prev, ii - 1);
+						must_check(ii,maze, visited, dist, prev, ii - 1);
 					}
 
 					if ( ii +  width < dim  && near_visited(ii, maze, visited, width, height)) {
-						must_check(maze, visited, dist, prev, ii +  width);
+						must_check(ii,maze, visited, dist, prev, ii +  width);
 					}
 
 					if (( ii >=  width)   && near_visited(ii, maze, visited, width, height)) {
-						must_check(maze, visited, dist, prev, ii -  width);
+						must_check(ii,maze, visited, dist, prev, ii -  width);
 					}
 
 					if  ( maze[ii] ==  START) {
-						must_check(maze, visited, dist, prev, ii);
+						must_check(ii,maze, visited, dist, prev, ii);
 					}
 
 					if ( near_visited(ii, maze, visited, width, height)) {
@@ -141,13 +146,13 @@
 				}
        		}
        		
-           //barrier(CLK_LOCAL_MEM_FENCE);
+           barrier(CLK_LOCAL_MEM_FENCE);
            
-           if (visited[ii] == VISITED && maze[ii] == END && FALSE){
+           if (visited[ii] == VISITED && maze[ii] == END ){
            		flag = 1;
            		localflag = 1;
-           		//dimension[2] = 1;
-           		return;
+           		dimension[2] = 1;
+           		//return;
            }
 			//	
 			
