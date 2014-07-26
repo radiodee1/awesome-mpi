@@ -20,8 +20,8 @@
         	return (y * width) + x;
         }
         
-        int near_visited( __global float* maze, 
-        			__global float* visited, 
+        int near_visited( __global int* maze, 
+        			__global int* visited, 
         			int width, 
         			int height) {
         			
@@ -59,10 +59,10 @@
         	//return 1;
         }
         void must_check(
-        		__global float* maze, 
-         		__global float* visited, 
-         		__global float* dist, 
-         		__global float* prev,
+        		__global int* maze, 
+         		__global int* visited, 
+         		__global int* dist, 
+         		__global int* prev,
         		int  test) {
         		
             unsigned int ii = get_global_id(0);
@@ -82,11 +82,11 @@
         }
         
          __kernel void find(
-         		__global float* maze, 
-         		__global float* visited, 
-         		__global float* dist, 
-         		__global float* prev,
-         		__global float* dimension)
+         		__global int* maze, 
+         		__global int* visited, 
+         		__global int* dist, 
+         		__global int* prev,
+         		__global int* dimension)
          		
         {
         	
