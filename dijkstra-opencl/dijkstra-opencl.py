@@ -248,7 +248,7 @@ class Interface(object) :
 		smallsurf.blit(surface,(0,0),((x,y), (cl.width, cl.height)))
 		
 		
-		pg.transform.threshold(bwsurf, smallsurf,(0,0,0,0),(0,0,0,0), (255,255,255,0), 1)	
+		pg.transform.threshold(bwsurf, smallsurf,(0,0,0,0),(100,100,100,0), (255,255,255,0), 1)	
 		screensurf = pg.transform.scale(bwsurf, (w,h))
 		
 		running = 1
