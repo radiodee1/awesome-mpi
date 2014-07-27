@@ -7,6 +7,7 @@ import time
 import fileinput
 from PIL import Image
 import pygame as pg
+import pygame.gfxdraw as pgd
 
 import sys
 
@@ -115,7 +116,7 @@ class CL(object):
 		dim = self.width * self.height
 		if True: 
 
-			print self.prev, 'prev'
+			#print self.prev, 'prev'
 			i = 0 
 			self.found = []
 		
@@ -128,7 +129,7 @@ class CL(object):
 					print int( found / width), found - (int(found / width) * width), 'y,x'
 				found = self.prev[found]
 				i += 1
-			print self.found, 'found', len(self.found)
+			#print self.found, 'found', len(self.found)
 			
 			i = 0
 			while (i < dim) :
@@ -176,26 +177,77 @@ class Interface(object) :
 		self.map  =[]	
 		
 	def show_png(self , cl):
-		surface = pg.image.load(self.mapname)
-		string = pg.image.tostring(surface, 'RGB')
-		#print string
 	
+		x = 0
+		y = 0
 		white = (64, 64, 64)
-		w = 640
+		w = 480
 		h = 480
+		
+		surface = pg.image.load(self.mapname)
+		#pgd.rectangle(surface, ((0,0),(cl.width,cl.height)), (255,0,0))
+		#string = pg.image.tostring(surface, 'RGB')
+		#print string
+
+		print x,y, cl.width, cl.height
+		#screensurf = pg.transform.scale(smallsurf, (w,h))
+		screensurf = surface
 		screen = pg.display.set_mode((w, h))
 		screen.fill((white))
+		
+		quit = 0
 		running = 1
-
 		while running:
-	
+
 			for event in pg.event.get():
 				if event.type == pg.QUIT:
 					running = 0
-			screen.fill((white))
-			screen.blit(surface,(0,0))
-			pg.display.flip()
+					quit = 1	
+				if event.type == pg.KEYUP:
+					if event.key == pg.K_RETURN:
+						running = 0
+					if event.key == pg.K_UP:
+						y -= 5
+						if y < 0 : 
+							y = 0
+					if event.key == pg.K_DOWN:
+						y += 5
+						if y + cl.height > screensurf.get_height() : 
+							y = screensurf.get_height() - cl.height 
+							
+					if event.key == pg.K_LEFT:
+						x -= 5
+						if x < 0 : 
+							x = 0
+					if event.key == pg.K_RIGHT:
+						x += 5
+						if x + cl.width > screensurf.get_width() : 
+							x = screensurf.get_width() - cl.width 			
 			
+			screensurf = surface.copy()
+			pgd.rectangle(screensurf, ((x,y),(cl.width,cl.height)), (255,0,0))
+			screen.blit(screensurf,(0,0))
+			pg.display.flip()
+			#screen.fill((white))
+			
+		screen.fill((white))
+		smallsurf = pg.Surface((cl.width, cl.height))
+		smallsurf.blit(surface,(0,0),((x,y), (cl.width, cl.height)))
+		screensurf = pg.transform.scale(smallsurf, (w,h))	
+		#screensurf = smallsurf.copy()
+			
+		running = 1
+		while running == 1 and quit == 0:
+			#screen.blit(screensurf,(0,0))
+			for event in pg.event.get():
+				if event.type == pg.QUIT:
+					running = 0
+					quit = 1	
+			
+			screen.fill((white))
+			screen.blit(screensurf,(0,0))
+			pg.display.flip()
+		
 		print 'load info'
 		cl.set_map(mz.maze, mz.width, mz.height)
 
@@ -255,18 +307,18 @@ if __name__ == '__main__':
 	
 	starttime = time.clock()
 	matrixd.set_map(mz.maze, mz.width, mz.height)	
-	i.show_maze(mz.maze, mz.width, mz.height)
+	#i.show_maze(mz.maze, mz.width, mz.height)
 	
 	matrixd.load_kernel()
 	matrixd.set_buffers()
 	matrixd.execute()
 	matrixd.follow_path()
 	a = matrixd.get_dist()
-	print a, 'get dist'
+	#print a, 'get dist'
 	endtime = time.clock()
 	print  endtime - starttime 
 
-	i.show_maze(a , matrixd.get_width(), matrixd.get_height())
+	#i.show_maze(a , matrixd.get_width(), matrixd.get_height())
 	i.show_maze(matrixd.get_maze() , matrixd.get_width(), matrixd.get_height())
 	
 	
