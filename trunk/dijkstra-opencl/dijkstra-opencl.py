@@ -91,7 +91,7 @@ class CL(object):
 		#for i in range(0,20):#self.size):
 		while loop == 0:
 			print 'here',
-			self.program.find(self.queue, self.maze.shape,self.maze.shape, #[10],
+			self.program.find(self.queue, self.maze.shape,self.maze.shape, 
 				self.maze_buf, 
 				self.visited_buf, 
 				self.dist_buf, 
@@ -243,10 +243,14 @@ class Interface(object) :
 			
 		screen.fill((white))
 		smallsurf = pg.Surface((cl.width, cl.height))
+		bwsurf = pg.Surface((cl.width, cl.height))
 		smallsurf.blit(surface,(0,0),((x,y), (cl.width, cl.height)))
-		screensurf = pg.transform.scale(smallsurf, (w,h))	
+		
+		
+		pg.transform.threshold(bwsurf, smallsurf,(0,0,0,0),(0,0,0,0), (255,255,255,0), 1)	
 		#screensurf = smallsurf.copy()
-			
+		screensurf = pg.transform.scale(bwsurf, (w,h))
+		
 		running = 1
 		while running == 1 and quit == 0:
 			#screen.blit(screensurf,(0,0))
