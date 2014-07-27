@@ -29,7 +29,8 @@ class CL(object):
 		print cl.device_info.QUEUE_PROPERTIES, 'queue properties'
 		
 		self.ctx = cl.create_some_context()
-		self.queue = cl.CommandQueue(self.ctx)
+		self.queue = cl.CommandQueue(self.ctx,
+			properties = 0)#cl.command_queue_properties.OUT_OF_ORDER_EXEC_MODE_ENABLE)
 
 
 	def load_kernel(self):
