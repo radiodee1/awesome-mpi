@@ -133,11 +133,20 @@
  			unsigned int localflag = 0;
  			unsigned int i = 0;
 
+			if (visited[ii] == VISITED && maze[ii] == END ){
+           		flag = 1;
+           		localflag = 1;
+           		dimension[2] = 1;
+           		//return;
+           }
+
        		//while (flag == 0 && i < dim) {
-       		if (1) {
+       		if (flag == 0) {
        		
        			i ++;
 		   		if ((visited[ii] ==  FREE &&  maze[ii] !=  WALL) ) {
+
+					
 
 					if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1)  
 						&& near_visited(ii, maze, visited, width, height)) {
@@ -163,7 +172,7 @@
 						//must_check(ii,maze, visited, dist, prev, mutex, ii);						
 					}
 
-					if ( near_visited(ii, maze, visited, width, height)) {
+					if (near_visited(ii, maze, visited, width, height)) {
 						// visited[ii] =  VISITED;
 						atom_xchg(&visited[ii], VISITED);
 					}
@@ -173,17 +182,20 @@
            barrier(CLK_LOCAL_MEM_FENCE);
            
            if (maze[ii] == START && visited[ii] != VISITED) {
+           		while(LOCK(&mutex[ii]) != LOCKME);// spin
            		visited[ii] = VISITED;
            		dist[ii] = 0;
            		prev[ii] = UNDEFINED;
+           		UNLOCK(&mutex[ii]);
            }
-           
+           /*
            if (visited[ii] == VISITED && maze[ii] == END ){
            		flag = 1;
            		localflag = 1;
            		dimension[2] = 1;
            		//return;
            }
+           */
 			//	
 			
            

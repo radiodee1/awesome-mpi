@@ -91,6 +91,7 @@ class CL(object):
 				self.mutex_buf,
 				self.dimension_buf)
 				
+			
 			cl.enqueue_read_buffer(self.queue, self.dimension_buf, dimension).wait()        
 			print dimension[2],
 			loop = dimension[2]

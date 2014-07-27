@@ -38,8 +38,8 @@ endtime = 0
 
 startx = 3
 starty = 0#height - 1
-endx = width - 1#3
-endy =  0#height - 1
+endx = width - 3
+endy =  height - 1
 
 #enum for maze
 OPEN = 1
