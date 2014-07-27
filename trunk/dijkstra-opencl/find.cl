@@ -139,9 +139,16 @@
            		dimension[2] = 1;
            		//return;
            }
-
+			else if (maze[ii] == START && visited[ii] != VISITED) {
+           		while(LOCK(&mutex[ii]) != LOCKME);// spin
+           		visited[ii] = VISITED;
+           		dist[ii] = 0;
+           		prev[ii] = UNDEFINED;
+           		UNLOCK(&mutex[ii]);
+           }
+           else {
        		//while (flag == 0 && i < dim) {
-       		if (flag == 0) {
+       		//if (flag == 0) {
        		
        			i ++;
 		   		if ((visited[ii] ==  FREE &&  maze[ii] !=  WALL) ) {
@@ -181,21 +188,8 @@
        		
            barrier(CLK_LOCAL_MEM_FENCE);
            
-           if (maze[ii] == START && visited[ii] != VISITED) {
-           		while(LOCK(&mutex[ii]) != LOCKME);// spin
-           		visited[ii] = VISITED;
-           		dist[ii] = 0;
-           		prev[ii] = UNDEFINED;
-           		UNLOCK(&mutex[ii]);
-           }
-           /*
-           if (visited[ii] == VISITED && maze[ii] == END ){
-           		flag = 1;
-           		localflag = 1;
-           		dimension[2] = 1;
-           		//return;
-           }
-           */
+           
+           
 			//	
 			
            
