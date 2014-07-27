@@ -13,14 +13,26 @@ height = 8#10
 dim = []
 wall = []
 csv = False
-
+gui = True
 
 # comment in for csv file
-i = 0
+
 if len(sys.argv) > 1:
+	for j in range(0, len(sys.argv)):
+		if sys.argv[j] == '-nogui':
+			gui = False
+	
+
+i = 0
+k = 0
+if len(sys.argv) > 1 and gui == True:
 	csv = True
-	#print sys.argv[1], 'filename'
-	for line in fileinput.input(sys.argv[1]):
+	
+	for j in range(0, len(sys.argv)):
+		if sys.argv[j].endswith('.txt'):
+			k = j
+	
+	for line in fileinput.input(sys.argv[k]):
 		if not '#' in line[0] :
 			i += 1
 			if i == 1:
