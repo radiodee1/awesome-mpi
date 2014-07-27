@@ -1,3 +1,10 @@
+		#pragma OPENCL EXTENSION cl_khr_int64_base_atomics : enable
+		
+		#define LOCKME 999
+		
+		#define LOCK(a) atom_cmpxchg(a, 0, 999)
+		#define UNLOCK(a) atom_xchg(a, 0)
+		
 		#define FREE  0
     	#define OPEN  1
     	#define WALL  2
@@ -34,27 +41,31 @@
             
             
 			if ( (ii + 1 < dim ) && get_y(width,ii) == get_y(width,ii + 1)  ) {
-				if  ( visited[ii+1] ==   VISITED && maze[ii+1] != WALL ){
+				//if (dist[ii+1] != UNDEFINED ) return TRUE;
+				if  ( visited[ii+1] !=   FREE && maze[ii+1] != WALL ){
 					return TRUE;
 				}
 			}
 			if( (ii >= 1 ) && get_y(width, ii) == get_y(width, ii - 1)  )  {
-				if  ( visited[ii - 1] ==   VISITED && maze[ii-1] != WALL){
+				//if (dist[ii-1] != UNDEFINED ) return TRUE;
+				if  ( visited[ii - 1] !=   FREE && maze[ii-1] != WALL){
 					return TRUE;
 				}
 			}
 			if  (ii +   width < dim) {
-				if   (visited[ii + width] ==   VISITED && maze[ii+ width] != WALL) {
+				//if (dist[ii+width] != UNDEFINED ) return TRUE;
+				if   (visited[ii + width] !=   FREE && maze[ii+ width] != WALL) {
 					return TRUE;
 				}
 			}
 			if  (ii >= width ) {
-				if   (visited[ii - width] ==   VISITED && maze[ii-width] != WALL) {
+				//if (dist[ii-width] != UNDEFINED ) return TRUE;
+				if   (visited[ii - width] !=  FREE && maze[ii-width] != WALL) {
 					return TRUE;
 				}
 			}
-			if  (maze[ii] == START ){
-				return TRUE;
+			if  (maze[ii] == START  ){
+				//return TRUE;
 			}
 			return FALSE;
             
@@ -67,23 +78,32 @@
          		__global int* visited, 
          		__global int* dist, 
          		__global int* prev,
+         		__global int* mutex,
         		int  test) {
         		
-            //unsigned int ii = get_global_id(0);
+            //ii = get_global_id(0);
         	int alt = 0;
         
-        	if   (visited[test] !=   VISITED &&   maze[ii] !=   WALL 
+        	if   ((visited[test] !=   VISITED ) 
         			&& maze[test] != WALL && maze[ii] != WALL) {
         			
         		alt = dist[ii] + 1;
         		if (dist[ii] == UNDEFINED ) alt = 1;
         		
-				if  ( /*alt <=   dist[test] ||*/ (dist[test] == UNDEFINED  )) {
-					if   (maze[test] !=   START  ) {
+				if  ( /*alt <=   dist[test] ||*/ (dist[test] == UNDEFINED  ) ) {
+					if   (maze[test] !=   START || (maze[ii] == START && test != ii)) {
+					
+						while(LOCK(&mutex[test]) != LOCKME);// spin
 				  		prev[test] = ii; 
+				  		//atom_xchg(&prev[test], ii);
+				  		
 				  		dist[test] = alt;
+				  		//atom_add(&dist[test], alt);
+				  		UNLOCK(&mutex[test]);
 				  	}
-				  	//dist[test] =   dist[ii] + 1;
+				  	
+				  	
+				  	//dist[test] =  alt;// dist[ii] + 1;
 				}
 			}
 	
@@ -96,6 +116,7 @@
          		__global int* visited, 
          		__global int* dist, 
          		__global int* prev,
+         		__global int* mutex,
          		__global int* dimension)
          		
         {
@@ -115,37 +136,46 @@
        		if (1) {
        		
        			i ++;
-		   		if (visited[ii] ==  FREE &&  maze[ii] !=  WALL) {
+		   		if ((visited[ii] ==  FREE &&  maze[ii] !=  WALL) ) {
 
 					if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1)  
 						&& near_visited(ii, maze, visited, width, height)) {
-						must_check(ii,maze, visited, dist, prev, ii + 1);
+						must_check(ii,maze, visited, dist, prev, mutex,ii + 1);
 					}
 
 					if ( (ii >=1) && get_y(width,  ii) == get_y(width,  ii - 1)  
 						&& near_visited(ii, maze, visited, width, height)) {
-						must_check(ii,maze, visited, dist, prev, ii - 1);
+						must_check(ii,maze, visited, dist, prev, mutex, ii - 1);
 					}
 
 					if ( ii +  width < dim  && near_visited(ii, maze, visited, width, height)) {
-						must_check(ii,maze, visited, dist, prev, ii +  width);
+						must_check(ii,maze, visited, dist, prev, mutex, ii +  width);
 					}
 
 					if (( ii >=  width)   && near_visited(ii, maze, visited, width, height)) {
-						must_check(ii,maze, visited, dist, prev, ii -  width);
+						must_check(ii,maze, visited, dist, prev, mutex, ii -  width);
 					}
 
 					if  ( maze[ii] ==  START) {
-						must_check(ii,maze, visited, dist, prev, ii);
+						dist[ii] = 0;
+						atom_xchg(&visited[ii], VISITED);
+						//must_check(ii,maze, visited, dist, prev, mutex, ii);						
 					}
 
 					if ( near_visited(ii, maze, visited, width, height)) {
-						 visited[ii] =  VISITED;
+						// visited[ii] =  VISITED;
+						atom_xchg(&visited[ii], VISITED);
 					}
 				}
        		}
        		
            barrier(CLK_LOCAL_MEM_FENCE);
+           
+           if (maze[ii] == START) {
+           		visited[ii] = VISITED;
+           		dist[ii] = 0;
+           		prev[ii] = UNDEFINED;
+           }
            
            if (visited[ii] == VISITED && maze[ii] == END ){
            		flag = 1;

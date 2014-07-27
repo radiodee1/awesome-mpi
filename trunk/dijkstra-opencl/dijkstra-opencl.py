@@ -47,6 +47,7 @@ class CL(object):
 		self.visited = numpy.array(([mz.FREE] * self.size), dtype=numpy.int32)
 		self.dist = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.int32)
 		self.prev = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.int32)
+		self.mutex = numpy.array(([mz.FREE] * self.size), dtype=numpy.int32)
 		
 		prepdim = [0] * 3#self.size
 		prepdim[0] = self.width
@@ -67,6 +68,10 @@ class CL(object):
 		self.dimension_buf = cl.Buffer(self.ctx, mf.READ_WRITE | mf.COPY_HOST_PTR, 
 								hostbuf=self.dimension)
 
+		self.mutex_buf = cl.Buffer(self.ctx, mf.READ_WRITE | mf.COPY_HOST_PTR, 
+								hostbuf=self.mutex)
+
+
 	def execute(self):
 	
 		visited = numpy.empty_like(self.maze)
@@ -75,7 +80,7 @@ class CL(object):
 		dimension = numpy.empty_like(self.dimension)
 		loop = 0
 		
-		#for i in range(0,self.size):
+		#for i in range(0,1):#self.size):
 		while loop == 0:
 			print 'here',
 			self.program.find(self.queue, self.maze.shape, self.maze.shape, 
@@ -83,6 +88,7 @@ class CL(object):
 				self.visited_buf, 
 				self.dist_buf, 
 				self.prev_buf, 
+				self.mutex_buf,
 				self.dimension_buf)
 				
 			cl.enqueue_read_buffer(self.queue, self.dimension_buf, dimension).wait()        
@@ -254,8 +260,8 @@ if __name__ == '__main__':
 	matrixd.set_buffers()
 	matrixd.execute()
 	matrixd.follow_path()
-	a = matrixd.get_prev()
-	print a, 'get maze'
+	a = matrixd.get_dist()
+	print a, 'get dist'
 	endtime = time.clock()
 	print  endtime - starttime 
 
