@@ -39,14 +39,17 @@
 
             int dim = width * height;
             
+            if  (maze[ii] == START  ){
+				//return TRUE;
+			}
             
-			if ( (ii + 1 < dim ) && get_y(width,ii) == get_y(width,ii + 1)  ) {
+			if ( (ii + 1 < dim ) && get_y(width,ii) == get_y(width,ii + 1)   ) {
 				//if (dist[ii+1] != UNDEFINED ) return TRUE;
 				if  ( visited[ii+1] !=   FREE && maze[ii+1] != WALL ){
 					return TRUE;
 				}
 			}
-			if( (ii >= 1 ) && get_y(width, ii) == get_y(width, ii - 1)  )  {
+			if( (ii >= 1 ) && get_y(width, ii) == get_y(width, ii - 1)   )  {
 				//if (dist[ii-1] != UNDEFINED ) return TRUE;
 				if  ( visited[ii - 1] !=   FREE && maze[ii-1] != WALL){
 					return TRUE;
@@ -54,19 +57,17 @@
 			}
 			if  (ii +   width < dim) {
 				//if (dist[ii+width] != UNDEFINED ) return TRUE;
-				if   (visited[ii + width] !=   FREE && maze[ii+ width] != WALL) {
+				if   (visited[ii + width] !=   FREE && maze[ii+ width] != WALL  ) {
 					return TRUE;
 				}
 			}
 			if  (ii >= width ) {
 				//if (dist[ii-width] != UNDEFINED ) return TRUE;
-				if   (visited[ii - width] !=  FREE && maze[ii-width] != WALL) {
+				if   (visited[ii - width] !=  FREE && maze[ii-width] != WALL  ) {
 					return TRUE;
 				}
 			}
-			if  (maze[ii] == START  ){
-				//return TRUE;
-			}
+			
 			return FALSE;
             
             
@@ -84,14 +85,14 @@
             //ii = get_global_id(0);
         	int alt = 0;
         
-        	if   ((visited[test] !=   VISITED ) 
+        	if   ((visited[test] !=   VISITED ) && visited[ii] != VISITED
         			&& maze[test] != WALL && maze[ii] != WALL) {
         			
         		alt = dist[ii] + 1;
-        		if (dist[ii] == UNDEFINED ) alt = 1;
+        		if (dist[ii] == UNDEFINED ) alt = 0;
         		
-				if  ( /*alt <=   dist[test] ||*/ (dist[test] == UNDEFINED  ) ) {
-					if   (maze[test] !=   START || (maze[ii] == START && test != ii)) {
+				if  (  (dist[test] == UNDEFINED  ) ) {
+					//if   (maze[test] !=   START || (maze[ii] == START && test != ii)) {
 					
 						while(LOCK(&mutex[test]) != LOCKME);// spin
 				  		prev[test] = ii; 
@@ -100,7 +101,7 @@
 				  		dist[test] = alt;
 				  		//atom_add(&dist[test], alt);
 				  		UNLOCK(&mutex[test]);
-				  	}
+				  	//}
 				  	
 				  	
 				  	//dist[test] =  alt;// dist[ii] + 1;
@@ -157,8 +158,8 @@
 					}
 
 					if  ( maze[ii] ==  START) {
-						dist[ii] = 0;
-						atom_xchg(&visited[ii], VISITED);
+						//dist[ii] = 0;
+						//atom_xchg(&visited[ii], VISITED);
 						//must_check(ii,maze, visited, dist, prev, mutex, ii);						
 					}
 
@@ -171,7 +172,7 @@
        		
            barrier(CLK_LOCAL_MEM_FENCE);
            
-           if (maze[ii] == START) {
+           if (maze[ii] == START && visited[ii] != VISITED) {
            		visited[ii] = VISITED;
            		dist[ii] = 0;
            		prev[ii] = UNDEFINED;

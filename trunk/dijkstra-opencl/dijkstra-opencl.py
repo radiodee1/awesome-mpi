@@ -80,7 +80,7 @@ class CL(object):
 		dimension = numpy.empty_like(self.dimension)
 		loop = 0
 		
-		#for i in range(0,1):#self.size):
+		#for i in range(0,20):#self.size):
 		while loop == 0:
 			print 'here',
 			self.program.find(self.queue, self.maze.shape, self.maze.shape, 
