@@ -178,6 +178,10 @@ class Interface(object) :
 		
 	def show_png(self , cl):
 	
+		if mz.gui == False:
+			cl.set_map(mz.maze, mz.width, mz.height)
+			return
+	
 		x = 0
 		y = 0
 		white = (64, 64, 64)
@@ -302,8 +306,8 @@ if __name__ == '__main__':
 	
 	i = Interface()
 
-
-	i.show_png(matrixd)
+	if mz.gui == True:
+		i.show_png(matrixd)
 	
 	starttime = time.clock()
 	matrixd.set_map(mz.maze, mz.width, mz.height)	
