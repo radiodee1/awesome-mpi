@@ -83,7 +83,7 @@ class CL(object):
 		#for i in range(0,20):#self.size):
 		while loop == 0:
 			print 'here',
-			self.program.find(self.queue, self.maze.shape, self.maze.shape, 
+			self.program.find(self.queue, self.maze.shape,self.maze.shape, #[10],
 				self.maze_buf, 
 				self.visited_buf, 
 				self.dist_buf, 
