@@ -7,7 +7,9 @@ import time, math
 import fileinput
 from PIL import Image
 import pygame as pg
+#import pygame._view
 import pygame.gfxdraw as pgd
+import pygame
 
 import sys
 
@@ -88,8 +90,8 @@ class CL(object):
 		dimension = numpy.empty_like(self.dimension)
 		loop = 0
 		
-		#for i in range(0,20):#self.size):
-		while loop == 0:
+		for i in range(0,self.size):
+		#while loop == 0:
 			print 'here',
 			self.program.find(self.queue, self.maze.shape,self.maze.shape, 
 				self.maze_buf, 
@@ -263,8 +265,19 @@ class Interface(object) :
 			screen.blit(screensurf,(0,0))
 			pg.display.flip()
 		
-		print 'load info'
-		cl.set_map(mz.maze, mz.width, mz.height)
+		sa = [0] * cl.width * cl.height
+		pxarray = pygame.PixelArray(smallsurf)
+		for yy in range (0, cl.width):
+			for xx in range (0, cl.height):
+				p =  pxarray[xx,yy]
+				if p == 0 : p = mz.WALL
+				else : p = 0
+				sa[(yy * cl.width) + xx] = p
+		
+		print sa, 'load info'
+		self.show_maze(sa, cl.width, cl.height)
+		
+		cl.set_map(sa, cl.width, cl.height)
 
 
 	def show_maze(self, maze = [], width = 10, height = 10):
@@ -321,7 +334,9 @@ if __name__ == '__main__':
 		i.show_png(matrixd)
 	
 	starttime = time.clock()
-	matrixd.set_map(mz.maze, mz.width, mz.height)	
+	
+	if mz.gui == False:
+		matrixd.set_map(mz.maze, mz.width, mz.height)	
 	#i.show_maze(mz.maze, mz.width, mz.height)
 	
 	matrixd.load_kernel()
