@@ -30,9 +30,9 @@ class CL(object):
 		print cl.kernel_work_group_info.WORK_GROUP_SIZE, 'work group size'
 		print cl.kernel_work_group_info.PREFERRED_WORK_GROUP_SIZE_MULTIPLE , 'preferred size'
 		
-		print mz.width * mz.height * 5 , 'calculated use'# 4.5 is num of full buffers!
+		print mz.width * mz.height * 5 , 'calculated use'# 5 is num of full buffers!
 		
-		print 'reccomended' , math.sqrt(cl.device_info.MAX_WORK_GROUP_SIZE/5)
+		print 'estimated:' , int(math.sqrt(cl.device_info.MAX_WORK_GROUP_SIZE / 5))
 		
 		self.ctx = cl.create_some_context()
 		self.queue = cl.CommandQueue(self.ctx,
