@@ -91,7 +91,7 @@
         		alt = dist[ii] + 1;
         		if (dist[ii] == UNDEFINED ) alt = 0;
         		
-				if  (  (dist[test] == UNDEFINED  ) ) {
+				if  (  dist[test] == UNDEFINED   ) {
 					//if   (maze[test] !=   START || (maze[ii] == START && test != ii)) {
 					
 						while(LOCK(&mutex[test]) != LOCKME);// spin
