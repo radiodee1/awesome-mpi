@@ -25,24 +25,23 @@ if len(sys.argv) > 1:
 
 i = 0
 k = 0
-if len(sys.argv) > 1 and gui == True:
+if len(sys.argv) > 1 : #and gui == True:
 	csv = True
 	
 	for j in range(0, len(sys.argv)):
 		if sys.argv[j].endswith('.txt'):
 			k = j
-	
-	for line in fileinput.input(sys.argv[k]):
-		if not '#' in line[0] :
-			i += 1
-			if i == 1:
-				#print 'dim:', line
-				dim = line.split(',')
-				width = int(dim[0])
-				height = int(dim[1])
-			if i == 2:
-				#print 'wall-csv:', line
-				wall = line.split(',')
+			for line in fileinput.input(sys.argv[k]):
+				if not '#' in line[0] :
+					i += 1
+					if i == 1:
+						#print 'dim:', line
+						dim = line.split(',')
+						width = int(dim[0])
+						height = int(dim[1])
+					if i == 2:
+						#print 'wall-csv:', line
+						wall = line.split(',')
 		
 
 starttime = 0
