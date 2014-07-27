@@ -27,6 +27,10 @@ class CL(object):
 		print cl.device_info.LOCAL_MEM_SIZE, 'local mem size'
 		print cl.device_info.MAX_WORK_GROUP_SIZE, 'max work group size'
 		print cl.device_info.QUEUE_PROPERTIES, 'queue properties'
+		print cl.kernel_work_group_info.WORK_GROUP_SIZE, 'work group size'
+		print cl.kernel_work_group_info.PREFERRED_WORK_GROUP_SIZE_MULTIPLE , 'preferred size'
+		
+		print mz.width * mz.height * 4.5 , 'calculated use'# 4.5 is num of full buffers!
 		
 		self.ctx = cl.create_some_context()
 		self.queue = cl.CommandQueue(self.ctx,
