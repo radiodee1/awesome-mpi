@@ -117,8 +117,7 @@ class CL(object):
 		self.prev = prev
 		self.visited = visited
 		self.dist = dist
-		#print prev
-		#print mz.maze
+		
 	
 	def follow_path(self) :
 		
@@ -241,7 +240,7 @@ class Interface(object) :
 			pgd.rectangle(screensurf, ((x,y),(cl.width,cl.height)), (255,0,0))
 			screen.blit(screensurf,(0,0))
 			pg.display.flip()
-			#screen.fill((white))
+			
 			
 		screen.fill((white))
 		smallsurf = pg.Surface((cl.width, cl.height))
@@ -250,7 +249,6 @@ class Interface(object) :
 		
 		
 		pg.transform.threshold(bwsurf, smallsurf,(0,0,0,0),(0,0,0,0), (255,255,255,0), 1)	
-		#screensurf = smallsurf.copy()
 		screensurf = pg.transform.scale(bwsurf, (w,h))
 		
 		running = 1
