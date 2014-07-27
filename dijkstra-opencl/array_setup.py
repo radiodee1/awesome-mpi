@@ -6,8 +6,8 @@ import sys
 import fileinput
 
 
-width = 8#20
-height = 8#10
+width = 8#30
+height = 8#30
 
 ## make csv file import-able ##
 dim = []
@@ -25,11 +25,12 @@ if len(sys.argv) > 1:
 
 i = 0
 k = 0
-if len(sys.argv) > 1 : #and gui == True:
-	csv = True
+if len(sys.argv) > 1 : 
+	#csv = True
 	
 	for j in range(0, len(sys.argv)):
 		if sys.argv[j].endswith('.txt'):
+			csv = True
 			k = j
 			for line in fileinput.input(sys.argv[k]):
 				if not '#' in line[0] :
