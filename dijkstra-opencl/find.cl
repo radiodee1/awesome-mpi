@@ -186,7 +186,7 @@
 				}
        		}
        		
-           //barrier(CLK_LOCAL_MEM_FENCE);
+           barrier(CLK_LOCAL_MEM_FENCE);
            
            
            
