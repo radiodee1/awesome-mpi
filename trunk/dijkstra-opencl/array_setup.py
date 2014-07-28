@@ -12,10 +12,17 @@ height = 8#30
 ## make csv file import-able ##
 dim = []
 wall = []
+wallout = []
 csv = False
 gui = True
+output = False
 
-# comment in for csv file
+
+if len(sys.argv) > 1:
+	for j in range(0, len(sys.argv)):
+		if sys.argv[j] == '-output':
+			output = True
+
 
 if len(sys.argv) > 1:
 	for j in range(0, len(sys.argv)):
@@ -94,20 +101,22 @@ maze[(starty * width) + startx] = START
 if csv == True:
 	for i in wall :
 		#print int(i)
-		if int(i) < width * height:
-			#print 'add wall'
-			maze[int(i)] = WALL
+		if i != '':
+			if int(i) < width * height:
+				#print 'add wall'
+				maze[int(i)] = WALL
 
 # non-random walls
-onethird = int(height / 3)
-twothirds = int(height * 2 / 3 )
-for i in range (0, 6) : #(0,7)
-	maze[ (onethird * width) + i] = WALL
+if csv == False:
+	onethird = int(height / 3)
+	twothirds = int(height * 2 / 3 )
+	for i in range (0, 6) : #(0,7)
+		maze[ (onethird * width) + i] = WALL
 	
-for i in range (4, width) :
-	maze[ (twothirds * width) + i] = WALL
+	for i in range (4, width) :
+		maze[ (twothirds * width) + i] = WALL
 	
-# test for unreachable goal	
-#for i in range (0, width) :
-#	maze[ (twothirds * width) + i] = WALL
+	# test for unreachable goal	
+	#for i in range (0, width) :
+	#	maze[ (twothirds * width) + i] = WALL
 
