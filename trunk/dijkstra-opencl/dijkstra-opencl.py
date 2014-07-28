@@ -92,7 +92,7 @@ class CL(object):
 		
 		print self.maze.shape, 'shape'
 		
-		#for i in range(0,self.size*5 ):
+		#for i in range(0,1): #self.size*5 ):
 		while loop == 0:
 			#print 'here',
 			self.program.find(self.queue, self.maze.shape,self.maze.shape, 
