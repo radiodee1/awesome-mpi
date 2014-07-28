@@ -109,7 +109,7 @@ class CL(object):
 		'''
 			at some point may remove 'wait' on visited_buf and dist_buf!!
 		'''
-		print 'loop end'
+		#print 'loop end'
 		cl.enqueue_read_buffer(self.queue, self.visited_buf, visited).wait()
 		cl.enqueue_read_buffer(self.queue, self.dist_buf, dist).wait()
 		cl.enqueue_read_buffer(self.queue, self.prev_buf, prev).wait()        
@@ -123,8 +123,8 @@ class CL(object):
 		
 		dim = self.width * self.height
 		if True: 
-
-			#print self.prev, 'prev'
+			if mz.gui == False:
+				print self.prev, 'prev'
 			i = 0 
 			self.found = []
 		
@@ -448,7 +448,9 @@ if __name__ == '__main__':
 		endtime = time.clock()
 		
 		matrixd.follow_path()
-
+		
+		a = matrixd.get_prev()
+		i.show_maze(a, matrixd.get_width(), matrixd.get_height())
 	#print a, 'get dist'
 	
 	print 'last printout'
