@@ -90,8 +90,8 @@ class CL(object):
 		dimension = numpy.empty_like(self.dimension)
 		loop = 0
 		
-		for i in range(0,self.size*5 ):
-		#while loop == 0:
+		#for i in range(0,self.size*5 ):
+		while loop == 0:
 			#print 'here',
 			self.program.find(self.queue, self.maze.shape,self.maze.shape, 
 				self.maze_buf, 
@@ -284,7 +284,8 @@ class Interface(object) :
 		self.smallsurf.blit(surface,(0,0),((x,y), (cl.width, cl.height)))
 		
 		
-		pg.transform.threshold(bwsurf, self.smallsurf,(0,0,0,0),(100,100,100,0), (255,255,255,0), 1)	
+		pg.transform.threshold(bwsurf, self.smallsurf,
+			(0,0,0,0),(100,100,100,0), (255,255,255,0), 1)	
 		screensurf = pg.transform.scale(bwsurf, (w,h))
 		
 		self.gui_state = 0
@@ -314,6 +315,9 @@ class Interface(object) :
 				if p == 0 : p = mz.WALL
 				else : p = 0
 				sa[(yy * cl.width) + xx] = p
+				if p == mz.WALL:
+					mz.wallout.append((yy * cl.width) + xx)
+					
 		
 		#print sa, 'load info'
 		self.show_maze(sa, cl.width, cl.height)
@@ -438,19 +442,28 @@ if __name__ == '__main__':
 	
 	if mz.gui == False:
 		matrixd.set_map(mz.maze, mz.width, mz.height)	
-
-	
-	'''
-	matrixd.load_kernel()
-	matrixd.set_buffers()
-	matrixd.execute()
-	matrixd.follow_path()
-	'''
+		matrixd.load_kernel()
+		matrixd.set_buffers()
+		matrixd.execute()
+		endtime = time.clock()
+		
+		matrixd.follow_path()
 
 	#print a, 'get dist'
 	
-
+	print 'last printout'
 	i.show_maze(matrixd.get_maze() , matrixd.get_width(), matrixd.get_height())
 	
-	
+	if mz.gui == True and mz.output == True :
+		f = open('outifle.txt','w')
+		f.close()
+		f = open('outifle.txt','a')
+		f.write('#written by program\n')
+		f.write(str(matrixd.get_width()) )
+		f.write(',')
+		f.write(str(matrixd.get_height()))
+		f.write( '\n')
+		for i in mz.wallout :
+			f.write(str(i)+",")
+		f.close()
 	
