@@ -23,6 +23,7 @@ if len(sys.argv) > 1:
 			gui = False
 		
 if gui == True:
+	# 5 is the number of buffers (maze, dist, prev, visited, mutex)
 	dimension = int(math.sqrt(cl.device_info.MAX_WORK_GROUP_SIZE / 5))
 	width = dimension
 	height = dimension
