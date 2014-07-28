@@ -2,9 +2,9 @@
 
 
 # comment in for csv file
-import sys
+import sys, math
 import fileinput
-
+import pyopencl as cl
 
 width = 8#30
 height = 8#30
@@ -21,7 +21,11 @@ if len(sys.argv) > 1:
 	for j in range(0, len(sys.argv)):
 		if sys.argv[j] == '-nogui':
 			gui = False
-	
+		
+if gui == True:
+	dimension = int(math.sqrt(cl.device_info.MAX_WORK_GROUP_SIZE / 5))
+	width = dimension
+	height = dimension
 
 i = 0
 k = 0
