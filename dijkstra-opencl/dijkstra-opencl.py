@@ -316,11 +316,21 @@ class Interface(object) :
 				sa[(yy * cl.width) + xx] = p
 		
 		#print sa, 'load info'
-		#self.show_maze(sa, cl.width, cl.height)
+		self.show_maze(sa, cl.width, cl.height)
+		
+		mz.endx = self.endx
+		mz.endy = self.endy
 		
 		sa[(self.starty * cl.width) + self.startx] = mz.START
 		sa[(self.endy * cl.width) + self.endx] = mz.END
 		cl.set_map(sa, cl.width, cl.height)
+		starttime = time.clock()
+		cl.load_kernel()
+		cl.set_buffers()
+		cl.execute()
+		endtime = time.clock()
+		print  endtime - starttime 
+		cl.follow_path()
 
 	def gui_controls(self, screen, event,w,h):
 		# this helper function puts controls on the screen
@@ -333,7 +343,7 @@ class Interface(object) :
 			if left == True:
 				self.mousex , self.mousey = pg.mouse.get_pos()
 				
-				if self.mousey > self.boundtop \
+				if self.gui_state == 0 and self.mousey > self.boundtop \
 						and self.mousey < self.boundbottom :
 					if self.mousex > self.boundredleft and self.mousex < self.boundredright:
 						print 'red'
@@ -351,6 +361,7 @@ class Interface(object) :
 					self.starty = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
 
 					self.gui_state = 0
+					
 				elif self.gui_state == self.PLACE_END:
 					self.endx = self.mousex / (screen.get_width() / self.smallsurf.get_width())
 					self.endy = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
@@ -422,22 +433,22 @@ if __name__ == '__main__':
 	if mz.gui == True:
 		i.show_png(matrixd)
 	
-	starttime = time.clock()
+
 	
 	if mz.gui == False:
 		matrixd.set_map(mz.maze, mz.width, mz.height)	
-	#i.show_maze(mz.maze, mz.width, mz.height)
+
 	
+	'''
 	matrixd.load_kernel()
 	matrixd.set_buffers()
 	matrixd.execute()
 	matrixd.follow_path()
-	a = matrixd.get_dist()
-	#print a, 'get dist'
-	endtime = time.clock()
-	print  endtime - starttime 
+	'''
 
-	#i.show_maze(a , matrixd.get_width(), matrixd.get_height())
+	#print a, 'get dist'
+	
+
 	i.show_maze(matrixd.get_maze() , matrixd.get_width(), matrixd.get_height())
 	
 	
