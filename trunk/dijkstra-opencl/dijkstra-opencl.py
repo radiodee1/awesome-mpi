@@ -90,6 +90,8 @@ class CL(object):
 		dimension = numpy.empty_like(self.dimension)
 		loop = 0
 		
+		print self.maze.shape, 'shape'
+		
 		#for i in range(0,self.size*5 ):
 		while loop == 0:
 			#print 'here',
