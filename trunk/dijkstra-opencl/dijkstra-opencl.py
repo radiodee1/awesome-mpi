@@ -26,11 +26,11 @@ class CL(object):
 		self.maze = mz.maze
 		self.found = []
 		
-		print cl.device_info.LOCAL_MEM_SIZE, 'local mem size'
+		#print cl.device_info.LOCAL_MEM_SIZE, 'local mem size'
 		print cl.device_info.MAX_WORK_GROUP_SIZE, 'max work group size'
-		print cl.device_info.QUEUE_PROPERTIES, 'queue properties'
-		print cl.kernel_work_group_info.WORK_GROUP_SIZE, 'work group size'
-		print cl.kernel_work_group_info.PREFERRED_WORK_GROUP_SIZE_MULTIPLE , 'preferred size'
+		#print cl.device_info.QUEUE_PROPERTIES, 'queue properties'
+		#print cl.kernel_work_group_info.WORK_GROUP_SIZE, 'work group size'
+		#print cl.kernel_work_group_info.PREFERRED_WORK_GROUP_SIZE_MULTIPLE , 'preferred size'
 		
 		print mz.width * mz.height * 5 , 'calculated use'# 5 is num of full buffers!
 		
@@ -90,9 +90,9 @@ class CL(object):
 		dimension = numpy.empty_like(self.dimension)
 		loop = 0
 		
-		for i in range(0,self.size):
+		for i in range(0,self.size*5 ):
 		#while loop == 0:
-			print 'here',
+			#print 'here',
 			self.program.find(self.queue, self.maze.shape,self.maze.shape, 
 				self.maze_buf, 
 				self.visited_buf, 
@@ -103,7 +103,7 @@ class CL(object):
 				
 			
 			cl.enqueue_read_buffer(self.queue, self.dimension_buf, dimension).wait()        
-			print dimension[2],
+			#print dimension[2],
 			loop = dimension[2]
 		
 		'''
@@ -346,13 +346,13 @@ class Interface(object) :
 				if self.gui_state == 0 and self.mousey > self.boundtop \
 						and self.mousey < self.boundbottom :
 					if self.mousex > self.boundredleft and self.mousex < self.boundredright:
-						print 'red'
+						#print 'red'
 						self.gui_state = self.PLACE_END
 					if self.mousex > self.boundgreenleft and self.mousex < self.boundgreenright:
-						print 'green'
+						#print 'green'
 						self.gui_state = self.PLACE_START
 					if self.mousex > self.boundblueleft and self.mousex < self.boundblueright:
-						print 'blue'
+						#print 'blue'
 						self.running = 0
 						self.gui_state = self.FIND_PATH
 
@@ -369,9 +369,10 @@ class Interface(object) :
 					self.gui_state = 0
 					
 		if (self.startx != -1 and self.starty != -1) :
+		
 			screen.blit(self.startblock,
 				(self.startx * (screen.get_width() / self.smallsurf.get_width()), 
-				self.starty * (screen.get_width() / self.smallsurf.get_width())));
+				self.starty * (screen.get_width() / self.smallsurf.get_width())))
 		
 		if (self.endx != -1 and self.endy != -1) :
 		
