@@ -110,8 +110,8 @@ class CL(object):
 			at some point may remove 'wait' on visited_buf and dist_buf!!
 		'''
 		#print 'loop end'
-		cl.enqueue_read_buffer(self.queue, self.visited_buf, visited).wait()
-		cl.enqueue_read_buffer(self.queue, self.dist_buf, dist).wait()
+		#cl.enqueue_read_buffer(self.queue, self.visited_buf, visited).wait()
+		#cl.enqueue_read_buffer(self.queue, self.dist_buf, dist).wait()
 		cl.enqueue_read_buffer(self.queue, self.prev_buf, prev).wait()        
 
 		self.prev = prev
