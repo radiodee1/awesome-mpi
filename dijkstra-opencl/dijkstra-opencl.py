@@ -195,29 +195,50 @@ class Interface(object) :
 		white = (64, 64, 64)
 		w = 480
 		h = 480
+		self.startx = -1
+		self.starty = -1
+		self.endx = -1
+		self.endy = -1
 		
 		surface = pg.image.load(self.mapname)
 		
-		## initialize components ##
+		## initialize control components ##
 		gray = (16,16,16)
 		red =(255,0,0)
 		green = (0,255,0)
 		blue = (0,0,255)
+		self.boxborder = 5
 		self.boxwidth = 48
 		self.boxheight = 16
-		self.box = pg.Surface((self.boxwidth, self.boxheight))
+		self.box = pg.Surface((self.boxwidth + (self.boxborder * 2), 
+			self.boxheight + (self.boxborder * 2)))
 		self.box.fill(gray)
-		#screen.blit(box ,( w-boxwidth , h - boxheight) )
 		boxred = pg.Surface((16,16))
 		boxred.fill(red)
 		boxgreen = pg.Surface((16,16))
 		boxgreen.fill(green)
 		boxblue = pg.Surface((16,16))
 		boxblue.fill(blue)
-		self.box.blit(boxgreen, (0,0))
-		self.box.blit(boxred, (16,0))
-		self.box.blit(boxblue, (32, 0))
-		#
+		self.box.blit(boxgreen, (0 + self.boxborder,0 + self.boxborder))
+		self.box.blit(boxred, (16 + self.boxborder,0 + self.boxborder))
+		self.box.blit(boxblue, (32 + self.boxborder, 0 + self.boxborder))
+		self.mousex = 0
+		self.mousey = 0
+		self.boundtop = h - (self.box.get_height() - self.boxborder)
+		self.boundbottom = h - self.boxborder
+		self.boundgreenleft = w - (self.box.get_width() -  self.boxborder)
+		self.boundgreenright = w - (self.box.get_width() -  self.boxborder) + 16
+		self.boundredleft = w - (self.box.get_width() -  self.boxborder) + 16
+		self.boundredright = w - (self.box.get_width() -  self.boxborder) + 32
+		self.boundblueleft = w - (self.box.get_width() -  self.boxborder) + 32
+		self.boundblueright = w - (self.box.get_width() -  self.boxborder) + 48
+		self.startblock = pg.Surface((10,10))
+		self.startblock.fill(green)
+		self.endblock = pg.Surface((10,10))
+		self.endblock.fill(red)
+		
+		
+		## display first screen ##
 		screensurf = surface
 		screen = pg.display.set_mode((w, h))
 		screen.fill((white))
@@ -258,20 +279,26 @@ class Interface(object) :
 			
 			
 		screen.fill((white))
-		smallsurf = pg.Surface((cl.width, cl.height))
+		self.smallsurf = pg.Surface((cl.width, cl.height))
 		bwsurf = pg.Surface((cl.width, cl.height))
-		smallsurf.blit(surface,(0,0),((x,y), (cl.width, cl.height)))
+		self.smallsurf.blit(surface,(0,0),((x,y), (cl.width, cl.height)))
 		
 		
-		pg.transform.threshold(bwsurf, smallsurf,(0,0,0,0),(100,100,100,0), (255,255,255,0), 1)	
+		pg.transform.threshold(bwsurf, self.smallsurf,(0,0,0,0),(100,100,100,0), (255,255,255,0), 1)	
 		screensurf = pg.transform.scale(bwsurf, (w,h))
 		
-		running = 1
-		while running == 1 and quit == 0:
+		self.gui_state = 0
+		
+		self.PLACE_START = 1
+		self.PLACE_END = 2
+		self.FIND_PATH = 3
+		
+		self.running = 1
+		while self.running == 1 and quit == 0:
 			#screen.blit(screensurf,(0,0))
 			for event in pg.event.get():
 				if event.type == pg.QUIT:
-					running = 0
+					self.running = 0
 					quit = 1	
 			
 			screen.fill((white))
@@ -280,7 +307,7 @@ class Interface(object) :
 			pg.display.flip()
 		
 		sa = [0] * cl.width * cl.height
-		pxarray = pygame.PixelArray(smallsurf)
+		pxarray = pygame.PixelArray(self.smallsurf)
 		for yy in range (0, cl.width):
 			for xx in range (0, cl.height):
 				p =  pxarray[xx,yy]
@@ -288,32 +315,59 @@ class Interface(object) :
 				else : p = 0
 				sa[(yy * cl.width) + xx] = p
 		
-		print sa, 'load info'
-		self.show_maze(sa, cl.width, cl.height)
+		#print sa, 'load info'
+		#self.show_maze(sa, cl.width, cl.height)
 		
+		sa[(self.starty * cl.width) + self.startx] = mz.START
+		sa[(self.endy * cl.width) + self.endx] = mz.END
 		cl.set_map(sa, cl.width, cl.height)
 
 	def gui_controls(self, screen, event,w,h):
 		# this helper function puts controls on the screen
-		'''
-		gray = (16,16,16)
-		red =(255,0,0)
-		green = (0,255,0)
-		blue = (0,0,255)
-		boxwidth = 48
-		boxheight = 16
-		box = pg.Surface((boxwidth, boxheight))
-		box.fill(gray)
-		screen.blit(box ,( w-boxwidth , h - boxheight) )
-		boxred = pg.Surface((16,16))
-		boxred.fill(red)
-		boxgreen = pg.Surface((16,16))
-		boxgreen.fill(green)
-		boxblue = pg.Surface((16,16))
-		boxblue.fill(blue)
-		#print 'loop',
-		'''
-		screen.blit(self.box ,( w- self.boxwidth , h - self.boxheight) )
+		screen.blit(self.box ,( w- (self.box.get_width()), 
+			h - (self.box.get_height())) )
+		# detect mouse
+		if event.type == pg.MOUSEBUTTONDOWN:
+			#print 'here mouse'
+			left , middle, right = pg.mouse.get_pressed() 
+			if left == True:
+				self.mousex , self.mousey = pg.mouse.get_pos()
+				
+				if self.mousey > self.boundtop \
+						and self.mousey < self.boundbottom :
+					if self.mousex > self.boundredleft and self.mousex < self.boundredright:
+						print 'red'
+						self.gui_state = self.PLACE_END
+					if self.mousex > self.boundgreenleft and self.mousex < self.boundgreenright:
+						print 'green'
+						self.gui_state = self.PLACE_START
+					if self.mousex > self.boundblueleft and self.mousex < self.boundblueright:
+						print 'blue'
+						self.running = 0
+						self.gui_state = self.FIND_PATH
+
+				elif self.gui_state == self.PLACE_START:
+					self.startx = self.mousex / (screen.get_width() / self.smallsurf.get_width())
+					self.starty = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
+
+					self.gui_state = 0
+				elif self.gui_state == self.PLACE_END:
+					self.endx = self.mousex / (screen.get_width() / self.smallsurf.get_width())
+					self.endy = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
+
+					self.gui_state = 0
+					
+		if (self.startx != -1 and self.starty != -1) :
+			screen.blit(self.startblock,
+				(self.startx * (screen.get_width() / self.smallsurf.get_width()), 
+				self.starty * (screen.get_width() / self.smallsurf.get_width())));
+		
+		if (self.endx != -1 and self.endy != -1) :
+		
+			screen.blit(self.endblock,
+				(self.endx * (screen.get_width() / self.smallsurf.get_width()),
+				self.endy * (screen.get_width() / self.smallsurf.get_width())))
+		
 
 	def show_maze(self, maze = [], width = 10, height = 10):
 		
