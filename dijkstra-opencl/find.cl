@@ -44,25 +44,25 @@
 			}
             
 			if ( (ii + 1 < dim ) && get_y(width,ii) == get_y(width,ii + 1)   ) {
-				//if (dist[ii+1] != UNDEFINED ) return TRUE;
+
 				if  ( visited[ii+1] !=   FREE && maze[ii+1] != WALL ){
 					return TRUE;
 				}
 			}
 			if( (ii >= 1 ) && get_y(width, ii) == get_y(width, ii - 1)   )  {
-				//if (dist[ii-1] != UNDEFINED ) return TRUE;
+
 				if  ( visited[ii - 1] !=   FREE && maze[ii-1] != WALL){
 					return TRUE;
 				}
 			}
 			if  (ii +   width < dim) {
-				//if (dist[ii+width] != UNDEFINED ) return TRUE;
+
 				if   (visited[ii + width] !=   FREE && maze[ii+ width] != WALL  ) {
 					return TRUE;
 				}
 			}
 			if  (ii >= width ) {
-				//if (dist[ii-width] != UNDEFINED ) return TRUE;
+
 				if   (visited[ii - width] !=  FREE && maze[ii-width] != WALL  ) {
 					return TRUE;
 				}
