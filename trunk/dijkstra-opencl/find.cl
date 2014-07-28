@@ -155,7 +155,7 @@
        			i ++;
 		   		if ((visited[ii] ==  FREE &&  maze[ii] !=  WALL) ) {
 
-					
+					/////////////////////////////////////////////
 
 					if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1)  
 						&& near_visited(ii, maze, visited, width, height)) {
@@ -187,7 +187,7 @@
 						atom_xchg(&visited[ii], VISITED);
 						//UNLOCK(&mutex[ii]);
 					}
-					
+					////////////////////////////////////
 					
 				}
        		}
