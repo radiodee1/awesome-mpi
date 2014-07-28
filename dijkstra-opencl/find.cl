@@ -1,10 +1,13 @@
 		#pragma OPENCL EXTENSION cl_khr_int64_base_atomics : enable
+		#pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable
+		#pragma OPENCL EXTENSION cl_khr_local_int32_base_atomics : enable
 		
 		#define LOCKME 999
 		
-		#define LOCK(a) atom_cmpxchg(a, 0, 999)
-		#define UNLOCK(a) atom_xchg(a, 0)
+		//#define LOCK(a) atom_cmpxchg(a, 999)
+		//#define UNLOCK(a) atom_xchg(a, 0)
 		
+		//atom_cmpxchg(a, 0, 999)
 		#define FREE  0
     	#define OPEN  1
     	#define WALL  2
@@ -17,6 +20,21 @@
 		
 		#define FALSE 0
 		#define TRUE 1
+		
+		void GetSemaphor(__global int * semaphor) {
+   			int occupied = atom_xchg(semaphor, LOCKME);
+   			while(occupied > 0)
+   			{
+     			occupied = atom_xchg(semaphor, LOCKME);
+   			}
+		}
+
+ 
+
+		void ReleaseSemaphor(__global int * semaphor)
+		{
+   			int prevVal = atom_xchg(semaphor, 0);
+		}
 		
 		int get_x(int width,  int ii) {
  			return ii - (width * (ii / width));   
@@ -91,16 +109,17 @@
         		alt = dist[ii] + 1;
         		if (dist[ii] == UNDEFINED ) alt = 0;
         		
-				if  ( /*alt <= dist[ii] ||*/ dist[test] == UNDEFINED   ) {
+				if  (/* alt <= dist[ii] ||*/ dist[test] == UNDEFINED   ) {
 					//if   (maze[test] !=   START || (maze[ii] == START && test != ii)) {
-					
-						while(LOCK(&mutex[test]) != LOCKME);// spin
+						//GetSemaphor(&mutex[test]);
+						//while(LOCK(&mutex[test]) != LOCKME);// spin
 				  		prev[test] = ii; 
 				  		//atom_xchg(&prev[test], ii);
 				  		
 				  		dist[test] = alt;
 				  		//atom_add(&dist[test], alt);
-				  		UNLOCK(&mutex[test]);
+				  		//UNLOCK(&mutex[test]);
+				  		//ReleaseSemaphor(&mutex[test]);
 				  	//}
 				  	
 				  	
@@ -142,19 +161,40 @@
            		//return;
            }
 			else if (maze[ii] == START && visited[ii] != VISITED) {
-           		while(LOCK(&mutex[ii]) != LOCKME);// spin
+           		//while(LOCK(&mutex[ii]) != LOCKME);// spin
+       			GetSemaphor(&mutex[ii]);
            		visited[ii] = VISITED;
            		dist[ii] = 0;
            		prev[ii] = UNDEFINED;
-           		UNLOCK(&mutex[ii]);
+				ReleaseSemaphor(&mutex[ii]);
+           		//UNLOCK(&mutex[ii]);
            }
            //else {
        		
        		if (flag == 0) {
-       		
+       			//while(LOCK(&mutex[ii]) != LOCKME);// spin
+       			//GetSemaphor(&mutex[ii]);
        			i ++;
 		   		if ((visited[ii] ==  FREE &&  maze[ii] !=  WALL) ) {
 
+					//while(LOCK(&mutex[ii]) != LOCKME);// spin
+					/*
+					if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1) ) {
+						while(LOCK(&mutex[ii+1]) != LOCKME);// spin
+					}
+
+					if ( (ii >=1) && get_y(width,  ii) == get_y(width,  ii - 1) ) {
+						while(LOCK(&mutex[ii-1]) != LOCKME);// spin
+					}
+
+					if ( ii +  width < dim ) {
+						while(LOCK(&mutex[ii+width]) != LOCKME);// spin
+					}
+
+					if ( ii >=  width) {
+						while(LOCK(&mutex[ii-width]) != LOCKME);// spin
+					}
+					*/
 					/////////////////////////////////////////////
 
 					if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1)  
@@ -184,12 +224,31 @@
 					if (near_visited(ii, maze, visited, width, height)) {
 						// visited[ii] =  VISITED;
 						//while(LOCK(&mutex[ii]) != LOCKME);// spin
-						atom_xchg(&visited[ii], VISITED);
+						visited[ii]= VISITED;
 						//UNLOCK(&mutex[ii]);
 					}
 					////////////////////////////////////
-					
+					/*
+					if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1) ) {
+						UNLOCK(&mutex[ii+1]);
+					}
+
+					if ( (ii >=1) && get_y(width,  ii) == get_y(width,  ii - 1) ) {
+						UNLOCK(&mutex[ii-1]);
+					}
+
+					if ( ii +  width < dim ) {
+						UNLOCK(&mutex[ii+width]);
+					}
+
+					if ( ii >=  width) {
+						UNLOCK(&mutex[ii - width]);
+					}
+					*/
+					//UNLOCK(&mutex[ii]);
 				}
+				//UNLOCK(&mutex[ii]);
+				//ReleaseSemaphor(&mutex[ii]);
        		}
        		
            barrier(CLK_LOCAL_MEM_FENCE);
