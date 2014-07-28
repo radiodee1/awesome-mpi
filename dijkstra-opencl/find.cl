@@ -109,17 +109,17 @@
         		alt = dist[ii] + 1;
         		if (dist[ii] == UNDEFINED ) alt = 0;
         		
-				if  (/* alt <= dist[ii] ||*/ dist[test] == UNDEFINED   ) {
+				if  (/*alt <= dist[ii] ||*/ dist[test] == UNDEFINED  && prev[test] == UNDEFINED ) {
 					//if   (maze[test] !=   START || (maze[ii] == START && test != ii)) {
-						//GetSemaphor(&mutex[test]);
+						GetSemaphor(&mutex[test]);
 						//while(LOCK(&mutex[test]) != LOCKME);// spin
 				  		prev[test] = ii; 
-				  		//atom_xchg(&prev[test], ii);
 				  		
+				  		//prev[ii] = test;
 				  		dist[test] = alt;
 				  		//atom_add(&dist[test], alt);
 				  		//UNLOCK(&mutex[test]);
-				  		//ReleaseSemaphor(&mutex[test]);
+				  		ReleaseSemaphor(&mutex[test]);
 				  	//}
 				  	
 				  	
@@ -153,6 +153,12 @@
  			unsigned int localflag = 0;
  			unsigned int i = 0;
 			
+			int up, down, left, right;
+			up = 0;
+			down = 0;
+			left = 0;
+			right = 0;
+			
 			//while(LOCK(&mutex[ii]) != LOCKME);// spin
 			if (visited[ii] == VISITED && maze[ii] == END ){
            		flag = 1;
@@ -176,23 +182,35 @@
        			//GetSemaphor(&mutex[ii]);
        			i ++;
 		   		if ((visited[ii] ==  FREE &&  maze[ii] !=  WALL) ) {
-
+       				//GetSemaphor(&mutex[ii]);
 					//while(LOCK(&mutex[ii]) != LOCKME);// spin
 					/*
 					if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1) ) {
-						while(LOCK(&mutex[ii+1]) != LOCKME);// spin
+						if (visited[ii + 1] == 0) {
+							GetSemaphor(&mutex[ii+1]);// spin
+							right = 1;
+						}
 					}
 
 					if ( (ii >=1) && get_y(width,  ii) == get_y(width,  ii - 1) ) {
-						while(LOCK(&mutex[ii-1]) != LOCKME);// spin
+						if (visited[ii - 1] == 0) {
+							GetSemaphor(&mutex[ii-1]);;// spin
+							left = 1;
+						}
 					}
 
 					if ( ii +  width < dim ) {
-						while(LOCK(&mutex[ii+width]) != LOCKME);// spin
+						if (visited[ii + width] == 0) {
+							GetSemaphor(&mutex[ii+width]);// spin
+							down = 1;
+						}
 					}
 
 					if ( ii >=  width) {
-						while(LOCK(&mutex[ii-width]) != LOCKME);// spin
+						if (visited[ii - width] == 0) {
+							GetSemaphor(&mutex[ii-width]);;// spin
+							up = 1;
+						}
 					}
 					*/
 					/////////////////////////////////////////////
@@ -221,31 +239,33 @@
 						//must_check(ii,maze, visited, dist, prev, mutex, ii);						
 					}
 
-					if (near_visited(ii, maze, visited, width, height)) {
+					if (near_visited(ii, maze, visited, width, height) == TRUE) {
 						// visited[ii] =  VISITED;
 						//while(LOCK(&mutex[ii]) != LOCKME);// spin
+						//GetSemaphor(&mutex[ii]);
 						visited[ii]= VISITED;
 						//UNLOCK(&mutex[ii]);
 					}
 					////////////////////////////////////
-					/*
-					if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1) ) {
-						UNLOCK(&mutex[ii+1]);
+					
+					if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1) && right == 1 ) {
+						ReleaseSemaphor(&mutex[ii+1]);
 					}
 
-					if ( (ii >=1) && get_y(width,  ii) == get_y(width,  ii - 1) ) {
-						UNLOCK(&mutex[ii-1]);
+					if ( (ii >=1) && get_y(width,  ii) == get_y(width,  ii - 1) && left == 1 ) {
+						ReleaseSemaphor(&mutex[ii-1]);
 					}
 
-					if ( ii +  width < dim ) {
-						UNLOCK(&mutex[ii+width]);
+					if ( ii +  width < dim && down == 1) {
+						ReleaseSemaphor(&mutex[ii+width]);
 					}
 
-					if ( ii >=  width) {
-						UNLOCK(&mutex[ii - width]);
+					if ( ii >=  width && up == 1) {
+						ReleaseSemaphor(&mutex[ii-width]);
 					}
-					*/
+					
 					//UNLOCK(&mutex[ii]);
+					//ReleaseSemaphor(&mutex[ii]);
 				}
 				//UNLOCK(&mutex[ii]);
 				//ReleaseSemaphor(&mutex[ii]);
