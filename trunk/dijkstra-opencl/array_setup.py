@@ -74,10 +74,7 @@ UNDEFINED = -1
 
 
 maze = [0] * (width * height) 
-#visited = [0] * (width * height)
-#prev = [-1] * (width * height)
 dist = [UNDEFINED] * (width * height)
-#found = []
 
 
 for y in range (0 , height):
@@ -90,7 +87,6 @@ for y in range (0 , height):
 			
 
 dist[(starty * width) + startx] = 0
-#prev[(starty * width) + startx] = -1
 
 maze[(starty * width) + startx] = START
 

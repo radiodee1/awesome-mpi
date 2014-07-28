@@ -197,12 +197,27 @@ class Interface(object) :
 		h = 480
 		
 		surface = pg.image.load(self.mapname)
-		#pgd.rectangle(surface, ((0,0),(cl.width,cl.height)), (255,0,0))
-		#string = pg.image.tostring(surface, 'RGB')
-		#print string
-
-		print x,y, cl.width, cl.height
-		#screensurf = pg.transform.scale(smallsurf, (w,h))
+		
+		## initialize components ##
+		gray = (16,16,16)
+		red =(255,0,0)
+		green = (0,255,0)
+		blue = (0,0,255)
+		self.boxwidth = 48
+		self.boxheight = 16
+		self.box = pg.Surface((self.boxwidth, self.boxheight))
+		self.box.fill(gray)
+		#screen.blit(box ,( w-boxwidth , h - boxheight) )
+		boxred = pg.Surface((16,16))
+		boxred.fill(red)
+		boxgreen = pg.Surface((16,16))
+		boxgreen.fill(green)
+		boxblue = pg.Surface((16,16))
+		boxblue.fill(blue)
+		self.box.blit(boxgreen, (0,0))
+		self.box.blit(boxred, (16,0))
+		self.box.blit(boxblue, (32, 0))
+		#
 		screensurf = surface
 		screen = pg.display.set_mode((w, h))
 		screen.fill((white))
@@ -261,6 +276,7 @@ class Interface(object) :
 			
 			screen.fill((white))
 			screen.blit(screensurf,(0,0))
+			self.gui_controls(screen, event, w,h)
 			pg.display.flip()
 		
 		sa = [0] * cl.width * cl.height
@@ -277,6 +293,27 @@ class Interface(object) :
 		
 		cl.set_map(sa, cl.width, cl.height)
 
+	def gui_controls(self, screen, event,w,h):
+		# this helper function puts controls on the screen
+		'''
+		gray = (16,16,16)
+		red =(255,0,0)
+		green = (0,255,0)
+		blue = (0,0,255)
+		boxwidth = 48
+		boxheight = 16
+		box = pg.Surface((boxwidth, boxheight))
+		box.fill(gray)
+		screen.blit(box ,( w-boxwidth , h - boxheight) )
+		boxred = pg.Surface((16,16))
+		boxred.fill(red)
+		boxgreen = pg.Surface((16,16))
+		boxgreen.fill(green)
+		boxblue = pg.Surface((16,16))
+		boxblue.fill(blue)
+		#print 'loop',
+		'''
+		screen.blit(self.box ,( w- self.boxwidth , h - self.boxheight) )
 
 	def show_maze(self, maze = [], width = 10, height = 10):
 		
