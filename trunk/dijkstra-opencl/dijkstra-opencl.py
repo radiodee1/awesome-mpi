@@ -52,11 +52,18 @@ class CL(object):
 		#
 		mf = cl.mem_flags
 
-	
+		startvisited = [mz.FREE] * self.size
+		startdist = [self.size *2] * self.size
+		startprev = [mz.UNDEFINED] * self.size
+		
+		startvisited[(mz.starty * self.width) + mz.startx] = mz.VISITED 
+		startdist[(mz.starty * self.width) + mz.startx] = 0
+		self.maze[(mz.starty * self.width) + mz.startx] = mz.START 
+		
 		self.maze = numpy.array(self.maze, dtype=numpy.int32)
-		self.visited = numpy.array(([mz.FREE] * self.size), dtype=numpy.int32)
-		self.dist = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.int32)
-		self.prev = numpy.array(([mz.UNDEFINED] * self.size), dtype=numpy.int32)
+		self.visited = numpy.array((startvisited), dtype=numpy.int32)
+		self.dist = numpy.array((startdist), dtype=numpy.uint32)
+		self.prev = numpy.array((startprev), dtype=numpy.int32)
 		self.mutex = numpy.array(([mz.FREE] * self.size), dtype=numpy.int32)
 		
 		prepdim = [0] * 3#self.size
@@ -90,9 +97,9 @@ class CL(object):
 		dimension = numpy.empty_like(self.dimension)
 		loop = 0
 		
-		print self.maze.shape, 'shape'
+		#print self.maze.shape, 'shape'
 		
-		#for i in range(0,1): #self.size*5 ):
+		#for i in range(0,2): #self.size*5 ):
 		while loop == 0:
 			#print 'here',
 			self.program.find(self.queue, self.maze.shape,self.maze.shape, 
@@ -112,8 +119,8 @@ class CL(object):
 			at some point may remove 'wait' on visited_buf and dist_buf!!
 		'''
 		#print 'loop end'
-		#cl.enqueue_read_buffer(self.queue, self.visited_buf, visited).wait()
-		#cl.enqueue_read_buffer(self.queue, self.dist_buf, dist).wait()
+		cl.enqueue_read_buffer(self.queue, self.visited_buf, visited).wait()
+		cl.enqueue_read_buffer(self.queue, self.dist_buf, dist).wait()
 		cl.enqueue_read_buffer(self.queue, self.prev_buf, prev).wait()        
 
 		self.prev = prev
@@ -139,7 +146,7 @@ class CL(object):
 					print int( found / width), found - (int(found / width) * width), 'y,x'
 				found = self.prev[found]
 				i += 1
-			#print self.found, 'found', len(self.found)
+			print self.found, 'found', len(self.found)
 			
 			i = 0
 			while (i < dim) :
@@ -387,7 +394,7 @@ class Interface(object) :
 				self.endy * (screen.get_width() / self.smallsurf.get_width())))
 		
 
-	def show_maze(self, maze = [], width = 10, height = 10):
+	def show_maze(self, maze = [], width = 10, height = 10, symbols=True):
 		
 		if len(maze) != height * width:
 			#
@@ -405,19 +412,19 @@ class Interface(object) :
 			for y in range (0 , height):
 				print '#',
 				for x in range (0, width):
-				
-					if maze[ (y * width) + x] == mz.FREE :
-						print ' ',
-					elif maze[ (y * width) + x] == mz.START :
-						print 'S',
-					elif maze[ (y * width) + x] == mz.END :
-						print 'X',
-					elif maze[ (y * width) + x] == mz.WALL :
-						print '#',
-					elif maze[ (y * width) + x] == mz.PATH :
-						print 'O',
-					elif maze[ (y * width) + x] == mz.UNDEFINED :
-						print 'U',
+					if symbols == True:
+						if maze[ (y * width) + x] == mz.FREE :
+							print ' ',
+						elif maze[ (y * width) + x] == mz.START :
+							print 'S',
+						elif maze[ (y * width) + x] == mz.END :
+							print 'X',
+						elif maze[ (y * width) + x] == mz.WALL :
+							print '#',
+						elif maze[ (y * width) + x] == mz.PATH :
+							print 'O',
+						elif maze[ (y * width) + x] == mz.UNDEFINED :
+							print 'U',
 					else:
 						print maze[ (y * width) + x] ,
 				
@@ -452,7 +459,12 @@ if __name__ == '__main__':
 		matrixd.follow_path()
 		
 		a = matrixd.get_prev()
-		i.show_maze(a, matrixd.get_width(), matrixd.get_height())
+		b = matrixd.get_dist()
+		i.show_maze(a, matrixd.get_width(), matrixd.get_height(), False)
+		print 'prev'
+		
+		i.show_maze(b, matrixd.get_width(), matrixd.get_height(), False)
+		print 'dist'
 	#print a, 'get dist'
 	
 	print 'last printout'
