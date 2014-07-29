@@ -257,6 +257,7 @@ class Interface(object) :
 		self.endblock.fill(red)
 		self.pathblock = pg.Surface((10,10))
 		self.pathblock.fill(blue)
+		self.blockoffset = 5
 		
 		## display first screen ##
 		screensurf = surface
@@ -305,7 +306,7 @@ class Interface(object) :
 		
 		
 		pg.transform.threshold(bwsurf, self.smallsurf,
-			(0,0,0,0),(100,100,100,0), (255,255,255,0), 1)	
+			(0,0,0,0),(20,20,20,0), (255,255,255,0), 1)	
 		screensurf = pg.transform.scale(bwsurf, (w,h))
 		
 		self.gui_state = 0
@@ -335,7 +336,7 @@ class Interface(object) :
 		for yy in range (0, cl.width):
 			for xx in range (0, cl.height):
 				p =  pxarray[xx,yy]
-				#print p
+
 				if p == 0 : p = mz.WALL
 				else : p = 0
 				sa[(yy * cl.width) + xx] = p
@@ -352,16 +353,17 @@ class Interface(object) :
 		mz.startx = self.startx
 		mz.starty = self.starty
 		
-		sa[(self.starty * cl.width) + self.startx] = mz.START
-		sa[(self.endy * cl.width) + self.endx] = mz.END
-		cl.set_map(sa, cl.width, cl.height)
-		starttime = time.clock()
-		cl.load_kernel()
-		cl.set_buffers()
-		cl.execute()
-		endtime = time.clock()
-		print  endtime - starttime 
-		cl.follow_path()
+		if quit != 1:
+			sa[(self.starty * cl.width) + self.startx] = mz.START
+			sa[(self.endy * cl.width) + self.endx] = mz.END
+			cl.set_map(sa, cl.width, cl.height)
+			starttime = time.clock()
+			cl.load_kernel()
+			cl.set_buffers()
+			cl.execute()
+			endtime = time.clock()
+			print  endtime - starttime 
+			cl.follow_path()
 		
 		## print screen with solution ##
 		self.running = 1
@@ -379,14 +381,14 @@ class Interface(object) :
 				yy = i / cl.get_width()
 			
 				screen.blit(self.pathblock,
-					(xx * (screen.get_width() / self.smallsurf.get_width()),
-					yy * (screen.get_width() / self.smallsurf.get_width())))
+					(xx * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset,
+					yy * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset))
 				screen.blit(self.startblock,
-					(self.startx * (screen.get_width() / self.smallsurf.get_width()), 
-					self.starty * (screen.get_width() / self.smallsurf.get_width())))
+					(self.startx * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset, 
+					self.starty * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset))
 				screen.blit(self.endblock,
-					(self.endx * (screen.get_width() / self.smallsurf.get_width()),
-					self.endy * (screen.get_width() / self.smallsurf.get_width())))
+					(self.endx * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset,
+					self.endy * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset))
 			pg.display.flip()
 
 	def gui_controls(self, screen, event,w,h):
@@ -442,14 +444,14 @@ class Interface(object) :
 		if (self.startx != -1 and self.starty != -1) :
 		
 			screen.blit(self.startblock,
-				(self.startx * (screen.get_width() / self.smallsurf.get_width()), 
-				self.starty * (screen.get_width() / self.smallsurf.get_width())))
+				(self.startx * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset, 
+				self.starty * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset))
 		
 		if (self.endx != -1 and self.endy != -1) :
 			
 			screen.blit(self.endblock,
-				(self.endx * (screen.get_width() / self.smallsurf.get_width()),
-				self.endy * (screen.get_width() / self.smallsurf.get_width())))
+				(self.endx * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset,
+				self.endy * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset))
 		
 
 	def show_maze(self, maze = [], width = 10, height = 10, symbols=True):
