@@ -60,7 +60,8 @@ class CL(object):
 		startdist[(mz.starty * self.width) + mz.startx] = 0
 		self.maze[(mz.starty * self.width) + mz.startx] = mz.START 
 		
-		mz.set_startvars(startdist)
+		mz.set_startvars(startdist, 1)
+		mz.set_startvars(startprev,(mz.starty * self.width) + mz.startx )
 		
 		self.maze = numpy.array(self.maze, dtype=numpy.int32)
 		self.visited = numpy.array((startvisited), dtype=numpy.int32)
@@ -98,11 +99,14 @@ class CL(object):
 		prev = numpy.empty_like(self.maze)
 		dimension = numpy.empty_like(self.dimension)
 		loop = 0
+		j = 0
 		
 		#print self.maze.shape, 'shape'
 		
-		#for i in range(0,2): #self.size*5 ):
+		#for i in range(0,42): #self.size*5 ):
 		while loop == 0:
+			j += 1
+			print j,
 			#print 'here',
 			self.program.find(self.queue, self.maze.shape,self.maze.shape, 
 				self.maze_buf, 
@@ -120,12 +124,11 @@ class CL(object):
 		'''
 			at some point may remove 'wait' on visited_buf and dist_buf!!
 		'''
-		#print 'loop end'
+		print 'loop end'
 		cl.enqueue_read_buffer(self.queue, self.visited_buf, visited).wait()
 		cl.enqueue_read_buffer(self.queue, self.dist_buf, dist).wait()
 		cl.enqueue_read_buffer(self.queue, self.prev_buf, prev).wait()        
 
-		print visited, 'visited'
 
 		self.prev = prev
 		self.visited = visited
@@ -143,8 +146,8 @@ class CL(object):
 		
 			found = self.prev[(mz.endy * self.width) + mz.endx]
 
-			while (found != -1) and i < self.width * self.height :
-				if found != -1:
+			while (found != mz.UNDEFINED) and i < self.width * self.height :
+				if found != mz.UNDEFINED:
 					self.found.append(int(found))
 				else :
 					print int( found / width), found - (int(found / width) * width), 'y,x'

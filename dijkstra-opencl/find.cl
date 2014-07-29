@@ -14,7 +14,7 @@
     	#define PATH  5
 
 		#define VISITED  1
-		#define UNDEFINED  30000000
+		#define UNDEFINED  1600
 		
 		#define FALSE 0
 		#define TRUE 1
@@ -107,9 +107,9 @@
         			&& maze[test] != WALL && maze[ii] != WALL) {
         			
         		alt = dist[ii] + 1;
-        		if (dist[ii] >= dim  ) alt = 0;
+        		if (dist[ii] == UNDEFINED  ) alt = 0;
         		if (maze[ii] == START) {
-        			alt = 0;
+        			//alt = 0;
         		}
         		
 				if  (alt < dist[ii] || dist[test] >= dim ){// || maze[test] == START ){
