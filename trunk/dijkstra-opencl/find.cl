@@ -112,7 +112,7 @@
         			//alt = 0;
         		}
         		
-				if  (alt < dist[ii] || dist[test] >= dim ){// || maze[test] == START ){
+				if  (alt < dist[ii] || dist[test] == UNDEFINED ){//dim ){// || maze[test] == START ){
 					//if   (maze[test] !=   START || (maze[ii] == START && test != ii)) {
 						GetSemaphor(&mutex[test]);
 						//while(LOCK(&mutex[test]) != LOCKME);// spin
