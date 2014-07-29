@@ -37,9 +37,12 @@ class CL(object):
 		print 'estimated:' , int(math.sqrt(cl.device_info.MAX_WORK_GROUP_SIZE / 5))
 		
 		self.ctx = cl.create_some_context()
-		self.queue = cl.CommandQueue(self.ctx,
-			properties = 0)#cl.command_queue_properties.OUT_OF_ORDER_EXEC_MODE_ENABLE)
-
+		
+		try: 
+			self.queue = cl.CommandQueue(self.ctx,
+				properties = cl.command_queue_properties.OUT_OF_ORDER_EXEC_MODE_ENABLE)
+		except:
+			self.queue = cl.CommandQueue(self.ctx, properties = 0)#
 
 	def load_kernel(self):
 		fstr = ''
@@ -293,7 +296,7 @@ class Interface(object) :
 			screen.blit(screensurf,(0,0))
 			pg.display.flip()
 			
-			
+		## display second screen ##
 		screen.fill((white))
 		self.smallsurf = pg.Surface((cl.width, cl.height))
 		bwsurf = pg.Surface((cl.width, cl.height))
@@ -325,6 +328,7 @@ class Interface(object) :
 			self.gui_controls(screen, event, w,h)
 			pg.display.flip()
 		
+		## convert to array representation ##
 		sa = [0] * cl.width * cl.height
 		pxarray = pygame.PixelArray(self.smallsurf)
 		for yy in range (0, cl.width):
@@ -338,7 +342,7 @@ class Interface(object) :
 					
 		
 		#print sa, 'load info'
-		self.show_maze(sa, cl.width, cl.height)
+		#self.show_maze(sa, cl.width, cl.height)
 		
 		mz.endx = self.endx
 		mz.endy = self.endy
@@ -356,6 +360,20 @@ class Interface(object) :
 		endtime = time.clock()
 		print  endtime - starttime 
 		cl.follow_path()
+		
+		## print screen with solution ##
+		self.running = 1
+		while self.running == 1 and quit == 0:
+			
+			for event in pg.event.get():
+				if event.type == pg.QUIT:
+					self.running = 0
+					quit = 1	
+			
+			screen.fill((white))
+			screen.blit(screensurf,(0,0))
+			
+			pg.display.flip()
 
 	def gui_controls(self, screen, event,w,h):
 		# this helper function puts controls on the screen
