@@ -77,7 +77,7 @@ VISITED = 1
 FREE = 0
 
 #enum for distance
-UNDEFINED = -1
+UNDEFINED = 1600#-1
 
 
 maze = [0] * (width * height) 
@@ -120,17 +120,17 @@ if csv == False:
 	#for i in range (0, width) :
 	#	maze[ (twothirds * width) + i] = WALL
 
-def set_startvars(dist1):
+def set_startvars(dist1, val):
 	test = (starty * width) + startx
 	if test >= 0 and test < width * height:
 		if test + 1 < width * height and get_y(test) == get_y(test + 1):
-			dist1[test + 1] = 1
+			dist1[test + 1] = val
 		if test - 1 >= 0 and get_y(test) == get_y(test - 1):
-			dist1[test -1 ] = 1
+			dist1[test -1 ] = val
 		if test + width < width * height:
-			dist1 [test + width] = 1
+			dist1 [test + width] = val
 		if test - width >= 0 :
-			dist1 [test - width] = 1
+			dist1 [test - width] = val
 
 def get_y(ii):
 	return int (ii / width)
