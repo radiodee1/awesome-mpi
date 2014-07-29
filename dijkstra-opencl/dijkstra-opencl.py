@@ -255,7 +255,8 @@ class Interface(object) :
 		self.startblock.fill(green)
 		self.endblock = pg.Surface((10,10))
 		self.endblock.fill(red)
-		
+		self.pathblock = pg.Surface((10,10))
+		self.pathblock.fill(blue)
 		
 		## display first screen ##
 		screensurf = surface
@@ -334,6 +335,7 @@ class Interface(object) :
 		for yy in range (0, cl.width):
 			for xx in range (0, cl.height):
 				p =  pxarray[xx,yy]
+				#print p
 				if p == 0 : p = mz.WALL
 				else : p = 0
 				sa[(yy * cl.width) + xx] = p
@@ -372,7 +374,19 @@ class Interface(object) :
 			
 			screen.fill((white))
 			screen.blit(screensurf,(0,0))
+			for i in cl.found :
+				xx = i - ( cl.get_width() * (int(i / cl.get_width() )))
+				yy = i / cl.get_width()
 			
+				screen.blit(self.pathblock,
+					(xx * (screen.get_width() / self.smallsurf.get_width()),
+					yy * (screen.get_width() / self.smallsurf.get_width())))
+				screen.blit(self.startblock,
+					(self.startx * (screen.get_width() / self.smallsurf.get_width()), 
+					self.starty * (screen.get_width() / self.smallsurf.get_width())))
+				screen.blit(self.endblock,
+					(self.endx * (screen.get_width() / self.smallsurf.get_width()),
+					self.endy * (screen.get_width() / self.smallsurf.get_width())))
 			pg.display.flip()
 
 	def gui_controls(self, screen, event,w,h):
