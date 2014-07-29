@@ -120,3 +120,17 @@ if csv == False:
 	#for i in range (0, width) :
 	#	maze[ (twothirds * width) + i] = WALL
 
+def set_startvars(dist1):
+	test = (starty * width) + startx
+	if test >= 0 and test < width * height:
+		if test + 1 < width * height and get_y(test) == get_y(test + 1):
+			dist1[test + 1] = 1
+		if test - 1 >= 0 and get_y(test) == get_y(test - 1):
+			dist1[test -1 ] = 1
+		if test + width < width * height:
+			dist1 [test + width] = 1
+		if test - width >= 0 :
+			dist1 [test - width] = 1
+
+def get_y(ii):
+	return int (ii / width)
