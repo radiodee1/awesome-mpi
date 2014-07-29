@@ -60,6 +60,8 @@ class CL(object):
 		startdist[(mz.starty * self.width) + mz.startx] = 0
 		self.maze[(mz.starty * self.width) + mz.startx] = mz.START 
 		
+		mz.set_startvars(startdist)
+		
 		self.maze = numpy.array(self.maze, dtype=numpy.int32)
 		self.visited = numpy.array((startvisited), dtype=numpy.int32)
 		self.dist = numpy.array((startdist), dtype=numpy.uint32)
@@ -122,6 +124,8 @@ class CL(object):
 		cl.enqueue_read_buffer(self.queue, self.visited_buf, visited).wait()
 		cl.enqueue_read_buffer(self.queue, self.dist_buf, dist).wait()
 		cl.enqueue_read_buffer(self.queue, self.prev_buf, prev).wait()        
+
+		print visited, 'visited'
 
 		self.prev = prev
 		self.visited = visited

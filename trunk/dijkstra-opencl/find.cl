@@ -4,8 +4,6 @@
 		
 		#define LOCKME 999
 		
-		//#define LOCK(a) atom_cmpxchg(a, 999)
-		//#define UNLOCK(a) atom_xchg(a, 0)
 		
 		//atom_cmpxchg(a, 0, 999)
 		#define FREE  0
@@ -171,17 +169,7 @@
            		dimension[2] = 1;
            		//return;
            }
-           /*
-			else if (maze[ii] == START && visited[ii] != VISITED) {
-           		//while(LOCK(&mutex[ii]) != LOCKME);// spin
-       			//GetSemaphor(&mutex[ii]);
-           		visited[ii] = VISITED;
-           		dist[ii] = 0;
-           		prev[ii] = UNDEFINED;
-				//ReleaseSemaphor(&mutex[ii]);
-           		//UNLOCK(&mutex[ii]);
-           }
-           */
+           
            //else {
        		
        		if (flag == 0) {
@@ -191,35 +179,7 @@
 		   		if ((visited[ii] ==  FREE &&  maze[ii] !=  WALL) ) {
        				//GetSemaphor(&mutex[ii]);
 					//while(LOCK(&mutex[ii]) != LOCKME);// spin
-					/*
-					if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1) ) {
-						if (visited[ii + 1] == 0) {
-							GetSemaphor(&mutex[ii+1]);// spin
-							right = 1;
-						}
-					}
-
-					if ( (ii >=1) && get_y(width,  ii) == get_y(width,  ii - 1) ) {
-						if (visited[ii - 1] == 0) {
-							GetSemaphor(&mutex[ii-1]);;// spin
-							left = 1;
-						}
-					}
-
-					if ( ii +  width < dim ) {
-						if (visited[ii + width] == 0) {
-							GetSemaphor(&mutex[ii+width]);// spin
-							down = 1;
-						}
-					}
-
-					if ( ii >=  width) {
-						if (visited[ii - width] == 0) {
-							GetSemaphor(&mutex[ii-width]);;// spin
-							up = 1;
-						}
-					}
-					*/
+					
 					/////////////////////////////////////////////
 
 					if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1)  
@@ -254,23 +214,7 @@
 						//UNLOCK(&mutex[ii]);
 					}
 					////////////////////////////////////
-					/*
-					if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1) && right == 1 ) {
-						ReleaseSemaphor(&mutex[ii+1]);
-					}
-
-					if ( (ii >=1) && get_y(width,  ii) == get_y(width,  ii - 1) && left == 1 ) {
-						ReleaseSemaphor(&mutex[ii-1]);
-					}
-
-					if ( ii +  width < dim && down == 1) {
-						ReleaseSemaphor(&mutex[ii+width]);
-					}
-
-					if ( ii >=  width && up == 1) {
-						ReleaseSemaphor(&mutex[ii-width]);
-					}
-					*/
+					
 					//UNLOCK(&mutex[ii]);
 					//ReleaseSemaphor(&mutex[ii]);
 				}
