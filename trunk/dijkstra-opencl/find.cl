@@ -254,7 +254,7 @@
 						//UNLOCK(&mutex[ii]);
 					}
 					////////////////////////////////////
-					
+					/*
 					if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1) && right == 1 ) {
 						ReleaseSemaphor(&mutex[ii+1]);
 					}
@@ -270,7 +270,7 @@
 					if ( ii >=  width && up == 1) {
 						ReleaseSemaphor(&mutex[ii-width]);
 					}
-					
+					*/
 					//UNLOCK(&mutex[ii]);
 					//ReleaseSemaphor(&mutex[ii]);
 				}
