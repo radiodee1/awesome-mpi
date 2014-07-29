@@ -53,7 +53,7 @@ class CL(object):
 		mf = cl.mem_flags
 
 		startvisited = [mz.FREE] * self.size
-		startdist = [self.size *2] * self.size
+		startdist = [mz.UNDEFINED] * self.size
 		startprev = [mz.UNDEFINED] * self.size
 		
 		startvisited[(mz.starty * self.width) + mz.startx] = mz.VISITED 
