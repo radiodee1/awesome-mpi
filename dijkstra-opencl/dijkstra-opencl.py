@@ -309,6 +309,8 @@ class Interface(object) :
 		self.PLACE_START = 1
 		self.PLACE_END = 2
 		self.FIND_PATH = 3
+		self.HOLD_START = 4
+		self.HOLD_END = 5
 		
 		self.running = 1
 		while self.running == 1 and quit == 0:
@@ -341,6 +343,9 @@ class Interface(object) :
 		mz.endx = self.endx
 		mz.endy = self.endy
 		
+		mz.startx = self.startx
+		mz.starty = self.starty
+		
 		sa[(self.starty * cl.width) + self.startx] = mz.START
 		sa[(self.endy * cl.width) + self.endx] = mz.END
 		cl.set_map(sa, cl.width, cl.height)
@@ -357,20 +362,25 @@ class Interface(object) :
 		screen.blit(self.box ,( w- (self.box.get_width()), 
 			h - (self.box.get_height())) )
 		# detect mouse
+		self.mousex , self.mousey = pg.mouse.get_pos()
 		if event.type == pg.MOUSEBUTTONDOWN:
 			#print 'here mouse'
 			left , middle, right = pg.mouse.get_pressed() 
 			if left == True:
-				self.mousex , self.mousey = pg.mouse.get_pos()
 				
-				if self.gui_state == 0 and self.mousey > self.boundtop \
+				
+				if self.mousey > self.boundtop \
 						and self.mousey < self.boundbottom :
 					if self.mousex > self.boundredleft and self.mousex < self.boundredright:
 						#print 'red'
-						self.gui_state = self.PLACE_END
+						self.gui_state = self.HOLD_END
+						self.endx = -1
+						self.endy = -1
 					if self.mousex > self.boundgreenleft and self.mousex < self.boundgreenright:
 						#print 'green'
-						self.gui_state = self.PLACE_START
+						self.gui_state = self.HOLD_START
+						self.startx = -1
+						self.starty = -1
 					if self.mousex > self.boundblueleft and self.mousex < self.boundblueright:
 						#print 'blue'
 						self.running = 0
@@ -387,15 +397,25 @@ class Interface(object) :
 					self.endy = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
 
 					self.gui_state = 0
+				elif self.gui_state == self.HOLD_START:
+					self.gui_state = self.PLACE_START
+				elif self.gui_state == self.HOLD_END:
+					self.gui_state = self.PLACE_END
 					
 		if (self.startx != -1 and self.starty != -1) :
 		
+			if self.gui_state == self.HOLD_START:
+				screen.blit(self.startblock,(self.mousex , self.mousey ))
+			
 			screen.blit(self.startblock,
 				(self.startx * (screen.get_width() / self.smallsurf.get_width()), 
 				self.starty * (screen.get_width() / self.smallsurf.get_width())))
 		
 		if (self.endx != -1 and self.endy != -1) :
-		
+			
+			if self.gui_state == self.HOLD_END:
+				screen.blit(self.endblock,(self.mousex, self.mousey))
+			
 			screen.blit(self.endblock,
 				(self.endx * (screen.get_width() / self.smallsurf.get_width()),
 				self.endy * (screen.get_width() / self.smallsurf.get_width())))
