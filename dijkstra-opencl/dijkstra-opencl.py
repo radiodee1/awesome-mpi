@@ -368,7 +368,6 @@ class Interface(object) :
 			left , middle, right = pg.mouse.get_pressed() 
 			if left == True:
 				
-				
 				if self.mousey > self.boundtop \
 						and self.mousey < self.boundbottom :
 					if self.mousex > self.boundredleft and self.mousex < self.boundredright:
@@ -401,20 +400,20 @@ class Interface(object) :
 					self.gui_state = self.PLACE_START
 				elif self.gui_state == self.HOLD_END:
 					self.gui_state = self.PLACE_END
+		
+		if self.gui_state == self.HOLD_START:
+			screen.blit(self.startblock,(self.mousex , self.mousey ))
+					
+		if self.gui_state == self.HOLD_END:
+			screen.blit(self.endblock,(self.mousex, self.mousey))
 					
 		if (self.startx != -1 and self.starty != -1) :
 		
-			if self.gui_state == self.HOLD_START:
-				screen.blit(self.startblock,(self.mousex , self.mousey ))
-			
 			screen.blit(self.startblock,
 				(self.startx * (screen.get_width() / self.smallsurf.get_width()), 
 				self.starty * (screen.get_width() / self.smallsurf.get_width())))
 		
 		if (self.endx != -1 and self.endy != -1) :
-			
-			if self.gui_state == self.HOLD_END:
-				screen.blit(self.endblock,(self.mousex, self.mousey))
 			
 			screen.blit(self.endblock,
 				(self.endx * (screen.get_width() / self.smallsurf.get_width()),
