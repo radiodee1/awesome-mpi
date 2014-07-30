@@ -107,7 +107,7 @@ class CL(object):
 		#print self.maze.shape, 'shape'
 		
 		#for i in range(0,42): #self.size*5 ):
-		while loop == 0:
+		while loop == 0 and j < self.size :
 			j += 1
 			print j,
 			#print 'here',
