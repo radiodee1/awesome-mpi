@@ -107,10 +107,11 @@ class CL(object):
 		#print self.maze.shape, 'shape'
 		
 		#for i in range(0,42): #self.size*5 ):
-		while loop == 0 and j < self.size :
+		while loop == 0 and j < self.size * 15:
 			j += 1
 			print j,
 			#print 'here',
+			'''
 			self.program.find(self.queue, self.maze.shape,self.maze.shape, 
 				self.maze_buf, 
 				self.visited_buf, 
@@ -118,7 +119,22 @@ class CL(object):
 				self.prev_buf, 
 				self.mutex_buf,
 				self.dimension_buf)
+			'''	
+			self.program.part0(self.queue, self.maze.shape,self.maze.shape, 
+				self.maze_buf, 
+				self.visited_buf, 
+				self.dist_buf, 
+				self.prev_buf, 
+				self.mutex_buf,
+				self.dimension_buf)
 				
+			self.program.part1(self.queue, self.maze.shape,self.maze.shape, 
+				self.maze_buf, 
+				self.visited_buf, 
+				self.dist_buf, 
+				self.prev_buf, 
+				self.mutex_buf,
+				self.dimension_buf)
 			
 			cl.enqueue_read_buffer(self.queue, self.dimension_buf, dimension).wait()        
 			#print dimension[2],
