@@ -112,7 +112,7 @@
         			//alt = 0;
         		}
         		
-				if  (/*alt < dist[ii] ||*/ dist[test] == UNDEFINED ){
+				if  (/*alt <= dist[ii] || */ dist[test] == UNDEFINED ){
 					
 						GetSemaphor(&mutex[test]);
 
@@ -233,6 +233,13 @@
          		
         {
         	unsigned int ii = get_global_id(0);
+        	
+        	if (visited[ii] == VISITED && maze[ii] == END ){
+           		//flag = 1;
+           		//localflag = 1;
+           		dimension[2] = 1;
+           		//return;
+           }
         	if ((ii % 2) == 0) //even
 	        	sub (maze, visited, dist, prev, mutex, dimension, ii);        
         }
@@ -247,6 +254,13 @@
          		
         {
         	unsigned int ii = get_global_id(0);
+        	if (visited[ii] == VISITED && maze[ii] == END ){
+           		//flag = 1;
+           		//localflag = 1;
+           		dimension[2] = 1;
+           		//return;
+           }
+        	
         	if ((ii % 2) == 1) // odd
 	        	sub (maze, visited, dist, prev, mutex, dimension, ii);        
         }
