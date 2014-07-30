@@ -204,7 +204,7 @@ class Interface(object) :
 		self.map  =[]
 		self.quit = 0	
 		
-	def show_png(self , cl):
+	def solve_png(self , cl):
 	
 		if mz.gui == False:
 			cl.set_map(mz.maze, mz.width, mz.height)
@@ -519,7 +519,7 @@ if __name__ == '__main__':
 
 	if mz.gui == True:
 		while i.quit == 0:
-			i.show_png(matrixd)
+			i.solve_png(matrixd)
 	
 
 	
