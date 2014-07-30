@@ -375,6 +375,16 @@ class Interface(object) :
 					self.running = 0
 					self.quit = 1	
 			
+				if event.type == pg.KEYUP:
+					if event.key == pg.K_RETURN:
+						self.running = 0
+			
+				if event.type == pg.MOUSEBUTTONDOWN:
+			
+					left , middle, right = pg.mouse.get_pressed() 
+					if left == True:
+						self.running = 0
+			
 			screen.fill((white))
 			screen.blit(screensurf,(0,0))
 			for i in cl.found :
@@ -435,6 +445,8 @@ class Interface(object) :
 					self.gui_state = self.PLACE_START
 				elif self.gui_state == self.HOLD_END:
 					self.gui_state = self.PLACE_END
+		
+		
 		
 		if self.gui_state == self.HOLD_START:
 			screen.blit(self.startblock,(self.mousex , self.mousey ))
