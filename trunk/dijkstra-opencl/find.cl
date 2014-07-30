@@ -112,7 +112,7 @@
         			//alt = 0;
         		}
         		
-				if  (alt < dist[ii] || dist[test] == UNDEFINED ){
+				if  (/*alt < dist[ii] ||*/ dist[test] == UNDEFINED ){
 					
 						GetSemaphor(&mutex[test]);
 
@@ -131,18 +131,19 @@
         
         }
         
-         __kernel void find(
+         void sub(
          		__global int* maze, 
          		__global int* visited, 
          		__global int* dist, 
          		__global int* prev,
          		__global int* mutex,
-         		__global int* dimension)
+         		__global int* dimension,
+         		int ii)
          		
         {
         	
 			
-            unsigned int ii = get_global_id(0);
+            
             
  			unsigned int width = dimension[0];
  			unsigned int height = dimension[1];
@@ -152,11 +153,7 @@
  			unsigned int localflag = 0;
  			unsigned int i = 0;
 			
-			int up, down, left, right;
-			up = 0;
-			down = 0;
-			left = 0;
-			right = 0;
+			
 			
 			//while(LOCK(&mutex[ii]) != LOCKME);// spin
 			if (visited[ii] == VISITED && maze[ii] == END ){
@@ -173,7 +170,7 @@
        			
        			i ++;
 		   		if ((visited[ii] ==  FREE &&  maze[ii] !=  WALL) ) {
-       				//GetSemaphor(&mutex[ii]);
+       				GetSemaphor(&mutex[ii]);
 
 					
 					/////////////////////////////////////////////
@@ -212,7 +209,7 @@
 					////////////////////////////////////
 					
 					
-					//ReleaseSemaphor(&mutex[ii]);
+					ReleaseSemaphor(&mutex[ii]);
 				}
 				
        		}
@@ -224,4 +221,45 @@
 			//	
 			
            
+        }
+        
+         __kernel void part0(
+         		__global int* maze, 
+         		__global int* visited, 
+         		__global int* dist, 
+         		__global int* prev,
+         		__global int* mutex,
+         		__global int* dimension)
+         		
+        {
+        	unsigned int ii = get_global_id(0);
+        	if ((ii % 2) == 0) //even
+	        	sub (maze, visited, dist, prev, mutex, dimension, ii);        
+        }
+        
+         __kernel void part1(
+         		__global int* maze, 
+         		__global int* visited, 
+         		__global int* dist, 
+         		__global int* prev,
+         		__global int* mutex,
+         		__global int* dimension)
+         		
+        {
+        	unsigned int ii = get_global_id(0);
+        	if ((ii % 2) == 1) // odd
+	        	sub (maze, visited, dist, prev, mutex, dimension, ii);        
+        }
+        
+         __kernel void find(
+         		__global int* maze, 
+         		__global int* visited, 
+         		__global int* dist, 
+         		__global int* prev,
+         		__global int* mutex,
+         		__global int* dimension)
+         		
+        {
+			unsigned int ii = get_global_id(0);
+        	sub (maze, visited, dist, prev, mutex, dimension, ii);
         }
