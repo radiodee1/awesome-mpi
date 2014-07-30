@@ -112,26 +112,22 @@
         			//alt = 0;
         		}
         		
-				if  (alt < dist[ii] || dist[test] == UNDEFINED ){//dim ){// || maze[test] == START ){
-					//if   (maze[test] !=   START || (maze[ii] == START && test != ii)) {
+				if  (alt < dist[ii] || dist[test] == UNDEFINED ){
+					
 						GetSemaphor(&mutex[test]);
-						//while(LOCK(&mutex[test]) != LOCKME);// spin
+
 				  		prev[test] = ii; 
 				  		
 				  		//prev[ii] = test;
 				  		dist[test] = alt;
-				  		//atom_add(&dist[test], alt);
-				  		//UNLOCK(&mutex[test]);
+				  		
 				  		ReleaseSemaphor(&mutex[test]);
-				  	//}
 				  	
-				  	
-				  	//dist[test] =  alt;// dist[ii] + 1;
 				}
 
 			}
 	
-            //barrier(CLK_LOCAL_MEM_FENCE);
+
         
         }
         
@@ -173,12 +169,12 @@
            //else {
        		
        		if (flag == 0) {
-       			//while(LOCK(&mutex[ii]) != LOCKME);// spin
-       			//GetSemaphor(&mutex[ii]);
+
+       			
        			i ++;
 		   		if ((visited[ii] ==  FREE &&  maze[ii] !=  WALL) ) {
        				//GetSemaphor(&mutex[ii]);
-					//while(LOCK(&mutex[ii]) != LOCKME);// spin
+
 					
 					/////////////////////////////////////////////
 
@@ -205,25 +201,20 @@
 
 					//barrier(CLK_LOCAL_MEM_FENCE);
 					if  ( maze[ii] ==  START) {
-						//dist[ii] = 0;
-						//atom_xchg(&visited[ii], VISITED);
-						//must_check(ii,maze, visited, dist, prev, mutex, ii);						
+										
 					}
 
 					if (near_visited(ii, maze, visited, width, height) == TRUE) {
-						// visited[ii] =  VISITED;
-						//while(LOCK(&mutex[ii]) != LOCKME);// spin
-						//GetSemaphor(&mutex[ii]);
+						
 						visited[ii]= VISITED;
 						//UNLOCK(&mutex[ii]);
 					}
 					////////////////////////////////////
 					
-					//UNLOCK(&mutex[ii]);
+					
 					//ReleaseSemaphor(&mutex[ii]);
 				}
-				//UNLOCK(&mutex[ii]);
-				//ReleaseSemaphor(&mutex[ii]);
+				
        		}
        		
            barrier(CLK_LOCAL_MEM_FENCE);
