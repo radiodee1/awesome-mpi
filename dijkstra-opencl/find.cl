@@ -186,20 +186,24 @@
 						&& near_visited(ii, maze, visited, width, height)) {
 						must_check(ii,maze, visited, dist, prev, mutex,dim,ii + 1);
 					}
+					//barrier(CLK_LOCAL_MEM_FENCE);
 
+					if ( ii +  width < dim  && near_visited(ii, maze, visited, width, height)) {
+						must_check(ii,maze, visited, dist, prev, mutex,dim, ii +  width);
+					}
+					
+					
+           			//barrier(CLK_LOCAL_MEM_FENCE);
+					if (( ii >=  width)   && near_visited(ii, maze, visited, width, height)) {
+						must_check(ii,maze, visited, dist, prev, mutex,dim, ii -  width);
+					}
+					//barrier(CLK_LOCAL_MEM_FENCE);
 					if ( (ii >=1) && get_y(width,  ii) == get_y(width,  ii - 1)  
 						&& near_visited(ii, maze, visited, width, height)) {
 						must_check(ii,maze, visited, dist, prev, mutex,dim, ii - 1);
 					}
 
-					if ( ii +  width < dim  && near_visited(ii, maze, visited, width, height)) {
-						must_check(ii,maze, visited, dist, prev, mutex,dim, ii +  width);
-					}
-
-					if (( ii >=  width)   && near_visited(ii, maze, visited, width, height)) {
-						must_check(ii,maze, visited, dist, prev, mutex,dim, ii -  width);
-					}
-
+					//barrier(CLK_LOCAL_MEM_FENCE);
 					if  ( maze[ii] ==  START) {
 						//dist[ii] = 0;
 						//atom_xchg(&visited[ii], VISITED);
