@@ -130,9 +130,7 @@ class CL(object):
 					self.prev_buf, 
 					self.mutex_buf,
 					self.dimension_buf)
-				#cl.enqueue_read_buffer(self.queue, self.dimension_buf, dimension).wait()        
-				#if dimension[2] != 0:
-				#	loop = 1
+				
 				
 				self.program.part1(self.queue, self.maze.shape,self.maze.shape, 
 					self.maze_buf, 
@@ -141,9 +139,7 @@ class CL(object):
 					self.prev_buf, 
 					self.mutex_buf,
 					self.dimension_buf)
-				#cl.enqueue_read_buffer(self.queue, self.dimension_buf, dimension).wait()        
-				#if dimension[2] != 0:
-				#	loop = 1
+				
 			
 			
 			cl.enqueue_read_buffer(self.queue, self.dimension_buf, dimension).wait()        
