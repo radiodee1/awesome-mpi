@@ -201,7 +201,8 @@ class Interface(object) :
 
 	def __init__(self):
 		self.mapname = 'map.png'
-		self.map  =[]	
+		self.map  =[]
+		self.quit = 0	
 		
 	def show_png(self , cl):
 	
@@ -264,14 +265,14 @@ class Interface(object) :
 		screen = pg.display.set_mode((w, h))
 		screen.fill((white))
 		
-		quit = 0
+		self.quit = 0
 		running = 1
 		while running:
 
 			for event in pg.event.get():
 				if event.type == pg.QUIT:
 					running = 0
-					quit = 1	
+					self.quit = 1	
 				if event.type == pg.KEYUP:
 					if event.key == pg.K_RETURN:
 						running = 0
@@ -318,12 +319,12 @@ class Interface(object) :
 		self.HOLD_END = 5
 		
 		self.running = 1
-		while self.running == 1 and quit == 0:
+		while self.running == 1 and self.quit == 0:
 			#screen.blit(screensurf,(0,0))
 			for event in pg.event.get():
 				if event.type == pg.QUIT:
 					self.running = 0
-					quit = 1	
+					self.quit = 1	
 			
 			screen.fill((white))
 			screen.blit(screensurf,(0,0))
@@ -353,7 +354,7 @@ class Interface(object) :
 		mz.startx = self.startx
 		mz.starty = self.starty
 		
-		if quit != 1:
+		if self.quit != 1:
 			sa[(self.starty * cl.width) + self.startx] = mz.START
 			sa[(self.endy * cl.width) + self.endx] = mz.END
 			cl.set_map(sa, cl.width, cl.height)
@@ -367,12 +368,12 @@ class Interface(object) :
 		
 		## print screen with solution ##
 		self.running = 1
-		while self.running == 1 and quit == 0:
+		while self.running == 1 and self.quit == 0:
 			
 			for event in pg.event.get():
 				if event.type == pg.QUIT:
 					self.running = 0
-					quit = 1	
+					self.quit = 1	
 			
 			screen.fill((white))
 			screen.blit(screensurf,(0,0))
@@ -505,7 +506,8 @@ if __name__ == '__main__':
 	i = Interface()
 
 	if mz.gui == True:
-		i.show_png(matrixd)
+		while i.quit == 0:
+			i.show_png(matrixd)
 	
 
 	
