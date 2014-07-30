@@ -25,6 +25,7 @@ class CL(object):
 		self.prev = []
 		self.maze = mz.maze
 		self.found = []
+		self.oo_ex = False
 		
 		#print cl.device_info.LOCAL_MEM_SIZE, 'local mem size'
 		print cl.device_info.MAX_WORK_GROUP_SIZE, 'max work group size'
@@ -41,8 +42,10 @@ class CL(object):
 		try: 
 			self.queue = cl.CommandQueue(self.ctx,
 				properties = cl.command_queue_properties.OUT_OF_ORDER_EXEC_MODE_ENABLE)
+			self.oo_ex = True
 		except:
 			self.queue = cl.CommandQueue(self.ctx, properties = 0)#
+			self.oo_ex = False
 
 	def load_kernel(self):
 		fstr = ''
@@ -111,30 +114,30 @@ class CL(object):
 			j += 1
 			print j,
 			#print 'here',
-			'''
-			self.program.find(self.queue, self.maze.shape,self.maze.shape, 
-				self.maze_buf, 
-				self.visited_buf, 
-				self.dist_buf, 
-				self.prev_buf, 
-				self.mutex_buf,
-				self.dimension_buf)
-			'''	
-			self.program.part0(self.queue, self.maze.shape,self.maze.shape, 
-				self.maze_buf, 
-				self.visited_buf, 
-				self.dist_buf, 
-				self.prev_buf, 
-				self.mutex_buf,
-				self.dimension_buf)
+			if self.oo_ex: ## out-of-order execution
+				self.program.find(self.queue, self.maze.shape,self.maze.shape, 
+					self.maze_buf, 
+					self.visited_buf, 
+					self.dist_buf, 
+					self.prev_buf, 
+					self.mutex_buf,
+					self.dimension_buf)
+			else:
+				self.program.part0(self.queue, self.maze.shape,self.maze.shape, 
+					self.maze_buf, 
+					self.visited_buf, 
+					self.dist_buf, 
+					self.prev_buf, 
+					self.mutex_buf,
+					self.dimension_buf)
 				
-			self.program.part1(self.queue, self.maze.shape,self.maze.shape, 
-				self.maze_buf, 
-				self.visited_buf, 
-				self.dist_buf, 
-				self.prev_buf, 
-				self.mutex_buf,
-				self.dimension_buf)
+				self.program.part1(self.queue, self.maze.shape,self.maze.shape, 
+					self.maze_buf, 
+					self.visited_buf, 
+					self.dist_buf, 
+					self.prev_buf, 
+					self.mutex_buf,
+					self.dimension_buf)
 			
 			cl.enqueue_read_buffer(self.queue, self.dimension_buf, dimension).wait()        
 			#print dimension[2],
