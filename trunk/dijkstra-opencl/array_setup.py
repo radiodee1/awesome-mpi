@@ -120,6 +120,7 @@ if csv == False:
 	#for i in range (0, width) :
 	#	maze[ (twothirds * width) + i] = WALL
 
+## this doesn't take into account walls. ##
 def set_startvars(dist1, val):
 	test = (starty * width) + startx
 	if test >= 0 and test < width * height:
