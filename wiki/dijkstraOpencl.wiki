@@ -1,4 +1,4 @@
-#Simple Path Finding
+# Simple Path Finding
 
 =dijkstra-opencl.py=
 
