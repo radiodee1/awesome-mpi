@@ -97,11 +97,11 @@
          		int dim,
         		int  test) {
         		
-            //ii = get_global_id(0);
+            
         	int alt = 0;
         	
         
-        	if   ((visited[test] !=   VISITED )// && visited[ii] != VISITED
+        	if   ((visited[test] !=   VISITED )
         			&& maze[test] != WALL && maze[ii] != WALL) {
         			
         		alt = dist[ii] + 1;
@@ -115,8 +115,6 @@
 						GetSemaphor(&mutex[test]);
 
 				  		prev[test] = ii; 
-				  		
-				  		//prev[ii] = test;
 				  		dist[test] = alt;
 				  		
 				  		ReleaseSemaphor(&mutex[test]);
@@ -153,7 +151,7 @@
 			
 			
 			
-			//while(LOCK(&mutex[ii]) != LOCKME);// spin
+			
 			if (visited[ii] == VISITED && maze[ii] == END ){
            		flag = 1;
            		localflag = 1;
@@ -161,7 +159,7 @@
            		//return;
            }
            
-           //else {
+           
        		
        		if (flag == 0) {
 
@@ -177,18 +175,18 @@
 						&& near_visited(ii, maze, visited, width, height)) {
 						must_check(ii,maze, visited, dist, prev, mutex,dim,ii + 1);
 					}
-					//barrier(CLK_LOCAL_MEM_FENCE);
+					
 
 					if ( ii +  width < dim  && near_visited(ii, maze, visited, width, height)) {
 						must_check(ii,maze, visited, dist, prev, mutex,dim, ii +  width);
 					}
 					
 					
-           			//barrier(CLK_LOCAL_MEM_FENCE);
+           			
 					if (( ii >=  width)   && near_visited(ii, maze, visited, width, height)) {
 						must_check(ii,maze, visited, dist, prev, mutex,dim, ii -  width);
 					}
-					//barrier(CLK_LOCAL_MEM_FENCE);
+					
 					if ( (ii >=1) && get_y(width,  ii) == get_y(width,  ii - 1)  
 						&& near_visited(ii, maze, visited, width, height)) {
 						must_check(ii,maze, visited, dist, prev, mutex,dim, ii - 1);
@@ -202,7 +200,7 @@
 					if (near_visited(ii, maze, visited, width, height) == TRUE) {
 						
 						visited[ii]= VISITED;
-						//UNLOCK(&mutex[ii]);
+						
 					}
 					////////////////////////////////////
 					
@@ -214,9 +212,6 @@
        		
            barrier(CLK_LOCAL_MEM_FENCE);
            
-           
-           //UNLOCK(&mutex[ii]);
-			//	
 			
            
         }
@@ -233,14 +228,14 @@
         	unsigned int ii = get_global_id(0);
         	
         	if (visited[ii] == VISITED && maze[ii] == END ){
-           		//flag = 1;
-           		//localflag = 1;
+           		
            		dimension[2] = 1;
            		//return;
            }
           	unsigned int width = dimension[0];
  			unsigned int height = dimension[1];
  			
+ 			//checkerboard
  			int evenrow = (get_y(width, ii) % 2) ;
  			
         	if ((ii % 2) == 0 && evenrow == 0) //
@@ -260,14 +255,14 @@
         {
         	unsigned int ii = get_global_id(0);
         	if (visited[ii] == VISITED && maze[ii] == END ){
-           		//flag = 1;
-           		//localflag = 1;
+           		
            		dimension[2] = 1;
            		//return;
            }
         	unsigned int width = dimension[0];
  			unsigned int height = dimension[1];
  			
+ 			//checkerboard
  			int evenrow = (get_y(width, ii) % 2) ;
  			
         	if ((ii % 2) == 1 && evenrow == 0) //
