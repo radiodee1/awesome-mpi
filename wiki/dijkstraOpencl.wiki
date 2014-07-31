@@ -1,0 +1,54 @@
+#Simple Path Finding
+
+=dijkstra-opencl.py=
+
+This is a description of the 'dijkstra-opencl.py' program. It also includes some info on command-line options. The program itself uses dijkstra's algorithm to navigate a simple maze. The navigation itself is done by OpenCL on a GPU. There is a graphical user interface that allows the user to specify a graph for the algorithm to search. This graph is chosen at runtime and can be almost completely different from run to run. The program can also be used in a non-graphical setting, where graphs can be loaded from text files and then tested. The program can also measure the time that a given computation took to complete.
+
+==INSTALLATION:==
+
+This program uses python. It was installed on a laptop with Fedora 20 on it. It also uses OpenCl and Beigenet. Standard packages for both OpenCl and Beignet exist in the Fedora repository. 'opencl-devel' and 'beignet-devel' were also installed, along with 'ocl-icd', which allowed pyopencl to be compiled and installed on the computer.
+
+==RUNNING:==
+
+These are examples of program execution:
+{{{
+./dijkstra-opencl.py 
+./dijkstra-opencl.py -nogui
+./dijkstra-opencl.py -nogui wallfile.txt
+./dijkstra-opencl.py -output
+}}}
+This is an explanation of the examples:
+{{{
+./dijkstra-opencl.py
+}}}
+This starts the program in full gui mode. In this mode the map window pops up and you select a portion of the map that you select a small area from. Then this area is magnified. You select start and end positions on the map and the gui shows in blue a path or solution.
+{{{
+./dijkstra-opencl.py -nogui
+}}}
+The program starts in text-only mode. Then it finds it's way through a simple pre-defined maze. There is no interaction and the maze is diminutive. 
+{{{
+./dijkstra-opencl.py -nogui wallfile.txt
+}}}
+The program starts in text-only mode. Then it loads the information from the 'wallfile' which describes certian parts of the maze. Then it finds it's way through the maze. There is no interaction, but the maze can be any size. There can only be one 'wallfile' specified on the command line.
+{{{
+./dijkstra-opencl.py -output
+}}}
+This starts the program in full gui mode. When the session is completed the program saves information on the last selected maze as a 'wallfile' which can be used in later testing without the gui. This makes testing on a reasonably complex maze possible at the command line for later execution. This option does not work with the '-nogui' option. 
+
+==NOTES ON THE GUI:==
+
+A typical session with the gui might go as follows.
+
+  # Start the gui from the command line. A simple map will open in a window on the screen.
+  # Use the arrow keys to select a part of the map.
+  # Press the return key to designate your selection.
+  # The screen changes to show the selected part of the map close up.
+  # Click on the green box once with the mouse pointer to indicate you want to place the 'start' location on the map.
+  # Move the mouse to the part of the map where you want the 'start' location to be. Click once to place the green box.
+  # Do the same as 5 and 6 for the red box to indicate where the 'end' location should be.
+  # Click on the blue box to indicate that you are done placing markers and that you would like the path to be shown.
+  # Blue boxes appear on the screen showing the path that the program has found.
+  # Click with the mouse on the map, or press 'return' on the keyboard to return to the larger map.
+  # Use the program again by returning to step 2.
+
+----
