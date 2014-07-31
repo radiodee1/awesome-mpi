@@ -4,8 +4,6 @@
 		
 		#define LOCKME 999
 		
-		
-		//atom_cmpxchg(a, 0, 999)
 		#define FREE  0
     	#define OPEN  1
     	#define WALL  2
@@ -240,7 +238,14 @@
            		dimension[2] = 1;
            		//return;
            }
-        	if ((ii % 2) == 0) //even
+          	unsigned int width = dimension[0];
+ 			unsigned int height = dimension[1];
+ 			
+ 			int evenrow = (get_y(width, ii) % 2) ;
+ 			
+        	if ((ii % 2) == 0 && evenrow == 0) //
+	        	sub (maze, visited, dist, prev, mutex, dimension, ii);    
+	        if ((ii % 2) == 1 && evenrow == 1) //
 	        	sub (maze, visited, dist, prev, mutex, dimension, ii);        
         }
         
@@ -260,9 +265,15 @@
            		dimension[2] = 1;
            		//return;
            }
-        	
-        	if ((ii % 2) == 1) // odd
-	        	sub (maze, visited, dist, prev, mutex, dimension, ii);        
+        	unsigned int width = dimension[0];
+ 			unsigned int height = dimension[1];
+ 			
+ 			int evenrow = (get_y(width, ii) % 2) ;
+ 			
+        	if ((ii % 2) == 1 && evenrow == 0) //
+	        	sub (maze, visited, dist, prev, mutex, dimension, ii);    
+	        if ((ii % 2) == 0 && evenrow == 1) //
+	        	sub (maze, visited, dist, prev, mutex, dimension, ii);  
         }
         
          __kernel void find(
