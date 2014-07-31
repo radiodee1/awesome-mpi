@@ -1,4 +1,4 @@
-# Simple Path Finding
+ # Simple Path Finding
 
 =dijkstra-opencl.py=
 
@@ -6,7 +6,7 @@ This is a description of the 'dijkstra-opencl.py' program. It also includes some
 
 ==INSTALLATION:==
 
-This program uses python. It was installed on a laptop with Fedora 20 on it. It also uses OpenCl and Beigenet. Standard packages for both OpenCl and Beignet exist in the Fedora repository. 'opencl-devel' and 'beignet-devel' were also installed, along with 'ocl-icd', which allowed pyopencl to be compiled and installed on the computer.
+This program uses python. It was installed on a laptop with Fedora 20 on it. It also uses OpenCL and Beigenet. Standard packages for both OpenCL and Beignet exist in the Fedora repository. 'opencl-devel' and 'beignet-devel' were also installed, along with 'ocl-icd', which allowed pyopencl to be compiled and installed on the computer.
 
 ==RUNNING:==
 
