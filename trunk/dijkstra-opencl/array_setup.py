@@ -17,6 +17,12 @@ csv = False
 gui = True
 output = False
 dim_input = 0
+single_kernel = False
+
+if len(sys.argv) > 1:
+	for j in range(0, len(sys.argv)):
+		if sys.argv[j] == '-single-kernel':
+			single_kernel = True
 
 if len(sys.argv) > 1:
 	for j in range(0, len(sys.argv)):
