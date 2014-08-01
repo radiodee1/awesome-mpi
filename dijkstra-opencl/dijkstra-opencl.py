@@ -216,12 +216,13 @@ class CL(object):
 			self.width = mz.width
 		else:
 			self.width = width
+			mz.width = width
 			
 		if height == -1:
 			self.height = mz.height
 		else:
 			self.height = height
-		
+			mz.width = width
 		
 
 class Interface(object) :
@@ -288,8 +289,12 @@ class Interface(object) :
 		self.pathblock.fill(blue)
 		self.blockoffset = 0#blocksize / 2 
 		
-		self.wallbox = pg.Surface((w/cl.width, h/cl.height))
+		self.fixscale = ( float  ( w - (int ( w/ cl.width  ) * cl.width ))/cl.width *2 ) + 1
+		print self.fixscale, 'fixme'
+		self.wallbox = pg.Surface( (math.ceil(w/cl.width),# * self.fixscale) , 
+			math.ceil(h/cl.height )))#* self.fixscale)))
 		self.wallbox.fill((0,0,0))
+		
 		
 		## display first screen ##
 		screensurf = surface
@@ -355,10 +360,13 @@ class Interface(object) :
 				sa[(yy * cl.width) + xx] = p
 				if p == mz.WALL:
 					mz.wallout.append((yy * cl.width) + xx)
+					
 					## print walls to screen ! ##
+					#xxx = float(xx * ( self.fixscale)) 
+					#yyy = float(yy * ( self.fixscale)) 
 					screensurf.blit(self.wallbox, 
-						(xx * (screensurf.get_width()/ cl.get_width()) ,
-						yy *(screensurf.get_height() / cl.get_height())))
+						(int(xx * (screensurf.get_width()  / cl.width))   ,
+						int(yy * (screensurf.get_height()  / cl.height))   ))
 		
 		self.gui_state = 0
 		
@@ -381,10 +389,7 @@ class Interface(object) :
 			self.gui_controls(screen, event, w,h)
 			pg.display.flip()
 		
-		
-		
-		#print sa, 'load info'
-		#self.show_maze(sa, cl.width, cl.height)
+	
 		
 		mz.endx = self.endx
 		mz.endy = self.endy
@@ -430,15 +435,17 @@ class Interface(object) :
 				xx = i - ( cl.get_width() * (int(i / cl.get_width() )))
 				yy = int(i / cl.get_width())
 			
+				#xxx = float(xx * ( self.fixscale)) #/ cl.width
+				#yyy = float(yy * ( self.fixscale)) #/ cl.width
 				screen.blit(self.pathblock,
-					(xx * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset,
-					yy * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset))
+					(xx * (screen.get_width() / cl.width) + self.blockoffset,
+					yy * (screen.get_width() / cl.width) + self.blockoffset))
 				screen.blit(self.startblock,
-					(self.startx * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset, 
-					self.starty * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset))
+					(self.startx * (screen.get_width() / cl.width) + self.blockoffset, 
+					self.starty * (screen.get_width() / cl.width) + self.blockoffset))
 				screen.blit(self.endblock,
-					(self.endx * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset,
-					self.endy * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset))
+					(self.endx * (screen.get_width() / cl.width) + self.blockoffset,
+					self.endy * (screen.get_width() / cl.width) + self.blockoffset))
 			pg.display.flip()
 
 	def gui_controls(self, screen, event,w,h):
@@ -470,16 +477,18 @@ class Interface(object) :
 						self.gui_state = self.FIND_PATH
 
 				elif self.gui_state == self.PLACE_START:
-					self.startx = self.mousex / (screen.get_width() / self.smallsurf.get_width())
-					self.starty = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
-
-					self.gui_state = 0
+					if self.mousex < self.wallbox.get_width() * mz.width and \
+							self.mousey < self.wallbox.get_height() * mz.height :
+						self.startx = self.mousex / (screen.get_width() / self.smallsurf.get_width())
+						self.starty = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
+						self.gui_state = 0
 					
 				elif self.gui_state == self.PLACE_END:
-					self.endx = self.mousex / (screen.get_width() / self.smallsurf.get_width())
-					self.endy = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
-
-					self.gui_state = 0
+					if self.mousex < self.wallbox.get_width() * mz.width and \
+							self.mousey < self.wallbox.get_height() * mz.height :
+						self.endx = self.mousex / (screen.get_width() / self.smallsurf.get_width())
+						self.endy = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
+						self.gui_state = 0
 				elif self.gui_state == self.HOLD_START:
 					self.gui_state = self.PLACE_START
 				elif self.gui_state == self.HOLD_END:
