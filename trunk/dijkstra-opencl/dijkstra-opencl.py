@@ -124,7 +124,7 @@ class CL(object):
 					self.mutex_buf,
 					self.dimension_buf)
 			else:
-				self.program.part0(self.queue, self.maze.shape,self.maze.shape, 
+				self.program.part0(self.queue, self.maze.shape,None,#self.maze.shape, 
 					self.maze_buf, 
 					self.visited_buf, 
 					self.dist_buf, 
@@ -133,7 +133,7 @@ class CL(object):
 					self.dimension_buf)
 				
 				
-				self.program.part1(self.queue, self.maze.shape,self.maze.shape, 
+				self.program.part1(self.queue, self.maze.shape,None,#self.maze.shape, 
 					self.maze_buf, 
 					self.visited_buf, 
 					self.dist_buf, 
@@ -275,13 +275,17 @@ class Interface(object) :
 		self.boundredright = w - (self.box.get_width() -  self.boxborder) + 32
 		self.boundblueleft = w - (self.box.get_width() -  self.boxborder) + 32
 		self.boundblueright = w - (self.box.get_width() -  self.boxborder) + 48
-		self.startblock = pg.Surface((10,10))
+		blocksize = (w /cl.width) -2
+		self.startblock = pg.Surface((blocksize,blocksize))
 		self.startblock.fill(green)
-		self.endblock = pg.Surface((10,10))
+		self.endblock = pg.Surface((blocksize,blocksize))
 		self.endblock.fill(red)
-		self.pathblock = pg.Surface((10,10))
+		self.pathblock = pg.Surface((blocksize,blocksize))
 		self.pathblock.fill(blue)
-		self.blockoffset = 5
+		self.blockoffset = 0#blocksize / 2 
+		
+		self.wallbox = pg.Surface((w/cl.width, h/cl.height))
+		self.wallbox.fill((0,0,0))
 		
 		## display first screen ##
 		screensurf = surface
@@ -331,7 +335,26 @@ class Interface(object) :
 		
 		pg.transform.threshold(bwsurf, self.smallsurf,
 			(0,0,0,0),(20,20,20,0), (255,255,255,0), 1)	
-		screensurf = pg.transform.scale(bwsurf, (w,h))
+		#screensurf = pg.transform.scale(bwsurf, (w,h))
+		screensurf = pg.Surface((w,h))
+		screensurf.fill((255,255,255))
+		
+		## convert to array representation ##
+		sa = [0] * cl.width * cl.height
+		pxarray = pygame.PixelArray(self.smallsurf)
+		for yy in range (0, cl.width):
+			for xx in range (0, cl.height):
+				p =  pxarray[xx,yy]
+
+				if p == 0 : p = mz.WALL
+				else : p = 0
+				sa[(yy * cl.width) + xx] = p
+				if p == mz.WALL:
+					mz.wallout.append((yy * cl.width) + xx)
+					## print walls to screen ! ##
+					screensurf.blit(self.wallbox, 
+						(xx * (screensurf.get_width()/ cl.get_width()) ,
+						yy *(screensurf.get_height() / cl.get_height())))
 		
 		self.gui_state = 0
 		
@@ -354,19 +377,7 @@ class Interface(object) :
 			self.gui_controls(screen, event, w,h)
 			pg.display.flip()
 		
-		## convert to array representation ##
-		sa = [0] * cl.width * cl.height
-		pxarray = pygame.PixelArray(self.smallsurf)
-		for yy in range (0, cl.width):
-			for xx in range (0, cl.height):
-				p =  pxarray[xx,yy]
-
-				if p == 0 : p = mz.WALL
-				else : p = 0
-				sa[(yy * cl.width) + xx] = p
-				if p == mz.WALL:
-					mz.wallout.append((yy * cl.width) + xx)
-					
+		
 		
 		#print sa, 'load info'
 		#self.show_maze(sa, cl.width, cl.height)
@@ -378,6 +389,7 @@ class Interface(object) :
 		mz.starty = self.starty
 		
 		if self.quit != 1:
+			#print len(sa)
 			sa[(self.starty * cl.width) + self.startx] = mz.START
 			sa[(self.endy * cl.width) + self.endx] = mz.END
 			cl.set_map(sa, cl.width, cl.height)
@@ -412,7 +424,7 @@ class Interface(object) :
 			screen.blit(screensurf,(0,0))
 			for i in cl.found :
 				xx = i - ( cl.get_width() * (int(i / cl.get_width() )))
-				yy = i / cl.get_width()
+				yy = int(i / cl.get_width())
 			
 				screen.blit(self.pathblock,
 					(xx * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset,
