@@ -16,7 +16,12 @@ wallout = []
 csv = False
 gui = True
 output = False
+dim_input = 0
 
+if len(sys.argv) > 1:
+	for j in range(0, len(sys.argv)):
+		if sys.argv[j] == '-size':
+			dim_input = int(sys.argv[j+1])
 
 if len(sys.argv) > 1:
 	for j in range(0, len(sys.argv)):
@@ -32,6 +37,7 @@ if len(sys.argv) > 1:
 if gui == True:
 	# 5 is the number of buffers (maze, dist, prev, visited, mutex)
 	dimension = int(math.sqrt(cl.device_info.MAX_WORK_GROUP_SIZE / 5))
+	if dim_input != 0 : dimension = dim_input
 	width = dimension
 	height = dimension
 
