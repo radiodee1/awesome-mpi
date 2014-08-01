@@ -40,9 +40,13 @@ class CL(object):
 		self.ctx = cl.create_some_context()
 		
 		try: 
-			self.queue = cl.CommandQueue(self.ctx,
-				properties = cl.command_queue_properties.OUT_OF_ORDER_EXEC_MODE_ENABLE)
-			self.oo_ex = True
+			if mz.single_kernel == True :
+				self.queue = cl.CommandQueue(self.ctx,
+					properties = cl.command_queue_properties.OUT_OF_ORDER_EXEC_MODE_ENABLE)
+				self.oo_ex = True
+			else :
+				self.queue = cl.CommandQueue(self.ctx, properties = 0)#
+				self.oo_ex = False
 		except:
 			self.queue = cl.CommandQueue(self.ctx, properties = 0)#
 			self.oo_ex = False
@@ -115,8 +119,8 @@ class CL(object):
 			j += 1
 			print j,
 			#print 'here',
-			if self.oo_ex: ## out-of-order execution
-				self.program.find(self.queue, self.maze.shape,self.maze.shape, 
+			if self.oo_ex: ## out-of-order execution -- single kernel
+				self.program.find(self.queue, self.maze.shape,None,#self.maze.shape, 
 					self.maze_buf, 
 					self.visited_buf, 
 					self.dist_buf, 
