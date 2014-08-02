@@ -229,6 +229,7 @@ class Interface(object) :
 
 	def __init__(self):
 		self.mapname = 'map.png'
+		self.iconname = 'icon.png'
 		self.map  =[]
 		self.quit = 0	
 		
@@ -249,6 +250,9 @@ class Interface(object) :
 		self.endy = -1
 		
 		surface = pg.image.load(self.mapname)
+		icon = pg.image.load(self.iconname)
+		
+		pg.display.set_icon(icon)
 		
 		## initialize control components ##
 		gray = (16,16,16)
