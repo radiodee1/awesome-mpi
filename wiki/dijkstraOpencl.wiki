@@ -16,6 +16,8 @@ These are examples of program execution:
 ./dijkstra-opencl.py -nogui
 ./dijkstra-opencl.py -nogui wallfile.txt
 ./dijkstra-opencl.py -output
+./dijkstra-opencl.py -single-kernel
+./dijkstra-opencl.py -size 100
 }}}
 This is an explanation of the examples:
 {{{
@@ -34,6 +36,14 @@ The program starts in text-only mode. Then it loads the information from the 'wa
 ./dijkstra-opencl.py -output
 }}}
 This starts the program in full gui mode. When the session is completed the program saves information on the last selected maze as a 'wallfile' which can be used in later testing without the gui. This makes testing on a reasonably complex maze possible at the command line for later execution. This option does not work with the '-nogui' option. 
+{{{
+./dijkstra-opencl.py -single-kernel
+}}}
+When the program starts with this option it attempts to use a 'single kernel' execution scheme. This can be used with other options. If the GPU doesn't support out-of-order execution the program reverts to a 'two kernel' execution scheme automatically.
+{{{
+./dijkstra-opencl.py -size 100
+}}}
+Here it is possible to specify the width and height of the area of the map that will be considered by the program. In this example '100' is used but other values can be specified. The invocation above would set the square to 100 width times 100 height. Values as small as 6 or 8 are possible, as are values as high as 100 or 150. At some point it is difficult to see the solution that the program finds for a given map because the pixels are so small. The window that the program uses is 480 by 480. This option can be used with others.
 
 ==NOTES ON THE GUI:==
 
