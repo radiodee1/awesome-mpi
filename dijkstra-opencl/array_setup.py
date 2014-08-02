@@ -22,6 +22,7 @@ single_kernel = False
 if len(sys.argv) > 1:
 	for j in range(0, len(sys.argv)):
 		if sys.argv[j] == '-single-kernel':
+			print 'must try single kernel!'
 			single_kernel = True
 
 if len(sys.argv) > 1:

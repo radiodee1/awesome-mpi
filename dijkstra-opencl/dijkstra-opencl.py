@@ -35,7 +35,7 @@ class CL(object):
 		
 		print mz.width * mz.height * 5 , 'calculated use'# 5 is num of full buffers!
 		
-		print 'estimated:' , int(math.sqrt(cl.device_info.MAX_WORK_GROUP_SIZE / 5))
+		#print 'estimated:' , int(math.sqrt(cl.device_info.MAX_WORK_GROUP_SIZE / 5))
 		
 		self.ctx = cl.create_some_context()
 		
@@ -281,6 +281,7 @@ class Interface(object) :
 		self.boundblueleft = w - (self.box.get_width() -  self.boxborder) + 32
 		self.boundblueright = w - (self.box.get_width() -  self.boxborder) + 48
 		blocksize = (w /cl.width) -2
+		if blocksize <= 2 : blocksize = 4
 		self.startblock = pg.Surface((blocksize,blocksize))
 		self.startblock.fill(green)
 		self.endblock = pg.Surface((blocksize,blocksize))
@@ -290,9 +291,9 @@ class Interface(object) :
 		self.blockoffset = 0#blocksize / 2 
 		
 		self.fixscale = ( float  ( w - (int ( w/ cl.width  ) * cl.width ))/cl.width *2 ) + 1
-		print self.fixscale, 'fixme'
-		self.wallbox = pg.Surface( (math.ceil(w/cl.width),# * self.fixscale) , 
-			math.ceil(h/cl.height )))#* self.fixscale)))
+		#print self.fixscale, 'fixme'
+		self.wallbox = pg.Surface( (math.ceil(w/cl.width), 
+			math.ceil(h/cl.height )))
 		self.wallbox.fill((0,0,0))
 		
 		
@@ -344,9 +345,10 @@ class Interface(object) :
 		
 		pg.transform.threshold(bwsurf, self.smallsurf,
 			(0,0,0,0),(20,20,20,0), (255,255,255,0), 1)	
-		#screensurf = pg.transform.scale(bwsurf, (w,h))
+		
 		screensurf = pg.Surface((w,h))
 		screensurf.fill((255,255,255))
+		screen.fill((255,255,255))
 		
 		## convert to array representation ##
 		sa = [0] * cl.width * cl.height
@@ -365,8 +367,8 @@ class Interface(object) :
 					#xxx = float(xx * ( self.fixscale)) 
 					#yyy = float(yy * ( self.fixscale)) 
 					screensurf.blit(self.wallbox, 
-						(int(xx * (screensurf.get_width()  / cl.width))   ,
-						int(yy * (screensurf.get_height()  / cl.height))   ))
+						(float(xx * float (w  / cl.width))   ,
+						float(yy * float (h  / cl.height))   ))
 		
 		self.gui_state = 0
 		
@@ -378,7 +380,7 @@ class Interface(object) :
 		
 		self.running = 1
 		while self.running == 1 and self.quit == 0:
-			#screen.blit(screensurf,(0,0))
+			
 			for event in pg.event.get():
 				if event.type == pg.QUIT:
 					self.running = 0
@@ -407,7 +409,7 @@ class Interface(object) :
 			cl.set_buffers()
 			cl.execute()
 			endtime = time.clock()
-			print  endtime - starttime 
+			print  endtime - starttime , 'time on gpu'
 			cl.follow_path()
 		
 		## print screen with solution ##
@@ -438,8 +440,8 @@ class Interface(object) :
 				#xxx = float(xx * ( self.fixscale)) #/ cl.width
 				#yyy = float(yy * ( self.fixscale)) #/ cl.width
 				screen.blit(self.pathblock,
-					(xx * (screen.get_width() / cl.width) + self.blockoffset,
-					yy * (screen.get_width() / cl.width) + self.blockoffset))
+					(float(xx * float(screen.get_width() / cl.width)) + self.blockoffset,
+					float(yy * float(screen.get_width() / cl.width)) + self.blockoffset))
 				screen.blit(self.startblock,
 					(self.startx * (screen.get_width() / cl.width) + self.blockoffset, 
 					self.starty * (screen.get_width() / cl.width) + self.blockoffset))
@@ -462,17 +464,14 @@ class Interface(object) :
 				if self.mousey > self.boundtop \
 						and self.mousey < self.boundbottom :
 					if self.mousex > self.boundredleft and self.mousex < self.boundredright:
-						#print 'red'
 						self.gui_state = self.HOLD_END
 						self.endx = -1
 						self.endy = -1
 					if self.mousex > self.boundgreenleft and self.mousex < self.boundgreenright:
-						#print 'green'
 						self.gui_state = self.HOLD_START
 						self.startx = -1
 						self.starty = -1
 					if self.mousex > self.boundblueleft and self.mousex < self.boundblueright:
-						#print 'blue'
 						self.running = 0
 						self.gui_state = self.FIND_PATH
 
@@ -587,10 +586,12 @@ if __name__ == '__main__':
 		
 		i.show_maze(b, matrixd.get_width(), matrixd.get_height(), False)
 		print 'dist'
-	#print a, 'get dist'
 	
-	print 'last printout'
-	i.show_maze(matrixd.get_maze() , matrixd.get_width(), matrixd.get_height())
+	
+	
+	if matrixd.get_width() <= 80 :
+		print 'last printout'
+		i.show_maze(matrixd.get_maze() , matrixd.get_width(), matrixd.get_height())
 	
 	if mz.gui == True and mz.output == True :
 		f = open('outifle.txt','w')
