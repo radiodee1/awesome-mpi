@@ -27,42 +27,12 @@ class CL(object):
 		self.found = []
 		self.oo_ex = False
 		
-		'''
-		#print cl.device_info.LOCAL_MEM_SIZE, 'local mem size'
-		print cl.device_info.MAX_WORK_GROUP_SIZE, 'max work group size'
-		#print cl.device_info.QUEUE_PROPERTIES, 'queue properties'
-		#print cl.kernel_work_group_info.WORK_GROUP_SIZE, 'work group size'
-		#print cl.kernel_work_group_info.PREFERRED_WORK_GROUP_SIZE_MULTIPLE , 'preferred size'
 		
-		print mz.width * mz.height * 5 , 'calculated use'# 5 is num of full buffers!
-		
-		#print 'estimated:' , int(math.sqrt(cl.device_info.MAX_WORK_GROUP_SIZE / 5))
-		
-		self.ctx = cl.create_some_context()
-		
-		try: 
-			if mz.single_kernel == True :
-				self.queue = cl.CommandQueue(self.ctx,
-					properties = cl.command_queue_properties.OUT_OF_ORDER_EXEC_MODE_ENABLE)
-				self.oo_ex = True
-			else :
-				self.queue = cl.CommandQueue(self.ctx, properties = 0)#
-				self.oo_ex = False
-		except:
-			self.queue = cl.CommandQueue(self.ctx, properties = 0)#
-			self.oo_ex = False
-
-		'''
 
 	def load_kernel(self):
 		print 'load kernel' 
-		'''
-		fstr = ''
-		for line in fileinput.input('find.cl'):
-			fstr += line
-
-		self.program = cl.Program(self.ctx, fstr).build()
-		'''
+		
+		
 	def set_buffers(self):
 		#
 		#mf = cl.mem_flags
@@ -75,9 +45,6 @@ class CL(object):
 		startdist[(mz.starty * self.width) + mz.startx] = 0
 		self.maze[(mz.starty * self.width) + mz.startx] = mz.START 
 		
-		## this doesn't take into account walls ##
-		#mz.set_startvars(startdist, 1)
-		#mz.set_startvars(startprev,(mz.starty * self.width) + mz.startx )
 		
 		self.maze = numpy.array(self.maze, dtype=numpy.int32)
 		self.visited = numpy.array((startvisited), dtype=numpy.int32)
@@ -91,23 +58,7 @@ class CL(object):
 		
 		self.dimension = numpy.array((prepdim), dtype=numpy.int32)
 			
-		'''           
-		self.maze_buf = cl.Buffer(self.ctx, mf.READ_WRITE | mf.COPY_HOST_PTR,
-					           hostbuf=self.maze)   
-					                               
-	
-		self.visited_buf = cl.Buffer(self.ctx, mf.READ_WRITE | mf.COPY_HOST_PTR, 
-								hostbuf=self.visited)
-		self.dist_buf = cl.Buffer(self.ctx, mf.READ_WRITE | mf.COPY_HOST_PTR, 
-								hostbuf=self.dist)
-		self.prev_buf = cl.Buffer(self.ctx, mf.READ_WRITE | mf.COPY_HOST_PTR, 
-								hostbuf=self.prev)
-		self.dimension_buf = cl.Buffer(self.ctx, mf.READ_WRITE | mf.COPY_HOST_PTR, 
-								hostbuf=self.dimension)
-
-		self.mutex_buf = cl.Buffer(self.ctx, mf.READ_WRITE | mf.COPY_HOST_PTR, 
-								hostbuf=self.mutex)
-		'''
+		
 
 	def execute(self):
 	
@@ -126,52 +77,85 @@ class CL(object):
 			print j,
 			#print 'here',
 			
-			'''
-			if self.oo_ex: ## out-of-order execution -- single kernel
-				self.program.find(self.queue, self.maze.shape,None,#self.maze.shape, 
-					self.maze_buf, 
-					self.visited_buf, 
-					self.dist_buf, 
-					self.prev_buf, 
-					self.mutex_buf,
-					self.dimension_buf)
-			else:
-				self.program.part0(self.queue, self.maze.shape,None,#self.maze.shape, 
-					self.maze_buf, 
-					self.visited_buf, 
-					self.dist_buf, 
-					self.prev_buf, 
-					self.mutex_buf,
-					self.dimension_buf)
-				
-				
-				self.program.part1(self.queue, self.maze.shape,None,#self.maze.shape, 
-					self.maze_buf, 
-					self.visited_buf, 
-					self.dist_buf, 
-					self.prev_buf, 
-					self.mutex_buf,
-					self.dimension_buf)
-				
-			'''
+			
 			
 			#cl.enqueue_read_buffer(self.queue, self.dimension_buf, dimension).wait()        
 			#print dimension[2],
 			loop = dimension[2]
 		
 		'''
-			at some point may remove 'wait' on visited_buf and dist_buf!!
-		
-		print 'loop end'
-		cl.enqueue_read_buffer(self.queue, self.visited_buf, visited).wait()
-		cl.enqueue_read_buffer(self.queue, self.dist_buf, dist).wait()
-		cl.enqueue_read_buffer(self.queue, self.prev_buf, prev).wait()        
-		'''
 
 		self.prev = prev
 		self.visited = visited
 		self.dist = dist
+		'''
+	
+	def must_check(self, test, direction):
+	
+		if mz.visited[direction] != mz.VISITED and mz.main[rank] != mz.WALL:
+			if mz.dist[rank] + 1 <= mz.dist[test] :
+				if mz.main[test] != mz.START  :
+					mz.prev[test] = rank 
+					mz.dist[test] = mz.dist[rank] + 1
+	
+	def find(self) :
+
 		
+	
+		if flag == 0 and ii < mz.width * mz.height:
+	
+			#if rank == 0:
+			#	print ii
+		
+		
+			if mz.visited[mz.CENTER] == mz.FREE and mz.main[rank] != mz.WALL :
+						
+				if get_y(rank) == get_y(rank + 1) and rank + 1 < dim and near_visited() :
+					must_check(rank + 1, mz.RIGHT)
+
+				if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0 and near_visited() :
+					must_check(rank - 1, mz.LEFT)
+
+				if rank + mz.width < dim and near_visited() :
+					must_check(rank + mz.width, mz.DOWN)
+
+				if rank - mz.width >= 0 and near_visited() :
+					must_check(rank - mz.width, mz.UP)
+
+				if mz.main[rank] == mz.START :
+					must_check(rank, mz.CENTER)
+				
+
+				if near_visited() :
+					mz.visited[mz.CENTER] = mz.VISITED
+	
+	def near_visited(self) :
+	
+		if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
+			if mz.visited[mz.RIGHT] == mz.VISITED:
+				return True
+		if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0 :
+			if mz.visited[mz.LEFT] == mz.VISITED:
+				return True
+		if rank + mz.width < dim:
+			if mz.visited[mz.DOWN] == mz.VISITED:
+				return True
+		if rank - mz.width >= 0:
+			if mz.visited[mz.UP] == mz.VISITED:
+				return True
+		if rank == get_rank(mz.startx, mz.starty)  :
+			return True
+		return False
+		
+	def get_x(self,rank) :
+		return rank - (mz.width * int(rank / mz.width))
+	
+	def get_y(self, rank) :
+		return int(rank / mz.width)
+	
+	def get_rank(self, x,y) :
+		return (y * mz.width) + x
+
 	
 	def follow_path(self) :
 		
