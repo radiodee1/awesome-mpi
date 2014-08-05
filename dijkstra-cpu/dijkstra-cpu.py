@@ -71,13 +71,15 @@ class CL(object):
 		
 		#print self.maze.shape, 'shape'
 		
+		
+		
 		#for i in range(0,42): #self.size*5 ):
 		while loop == 0 and j < self.size * 15:
 			j += 1
 			print j,
 			#print 'here',
-			
-			
+			for i in range (0, self.size):
+				self.find(i)	
 			
 			#cl.enqueue_read_buffer(self.queue, self.dimension_buf, dimension).wait()        
 			#print dimension[2],
@@ -90,60 +92,64 @@ class CL(object):
 		self.dist = dist
 		'''
 	
-	def must_check(self, test, direction):
+	def must_check(self, test, rank):
 	
-		if mz.visited[direction] != mz.VISITED and mz.main[rank] != mz.WALL:
+		if mz.visited[rank] != mz.VISITED and mz.maze[rank] != mz.WALL:
 			if mz.dist[rank] + 1 <= mz.dist[test] :
-				if mz.main[test] != mz.START  :
+				if mz.maze[test] != mz.START  :
 					mz.prev[test] = rank 
 					mz.dist[test] = mz.dist[rank] + 1
 	
-	def find(self) :
+	def find(self, rank ) :
 
-		
+		flag = 0;
 	
-		if flag == 0 and ii < mz.width * mz.height:
+		if flag == 0 and rank < mz.width * mz.height:
 	
 			#if rank == 0:
 			#	print ii
+			
 		
-		
-			if mz.visited[mz.CENTER] == mz.FREE and mz.main[rank] != mz.WALL :
+			if mz.visited[rank] == mz.FREE and mz.maze[rank] != mz.WALL :
 						
-				if get_y(rank) == get_y(rank + 1) and rank + 1 < dim and near_visited() :
-					must_check(rank + 1, mz.RIGHT)
+				if self.get_y(rank) == self.get_y(rank + 1) and \
+						rank+1 < self.size and self.near_visited(rank) :
+					self.must_check(rank + 1, rank)
 
-				if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0 and near_visited() :
-					must_check(rank - 1, mz.LEFT)
+				if self.get_y(rank) == self.get_y(rank - 1) and \
+						rank - 1 >= 0 and self.near_visited(rank) :
+					self.must_check(rank - 1, rank)
 
-				if rank + mz.width < dim and near_visited() :
-					must_check(rank + mz.width, mz.DOWN)
+				if rank + mz.width < self.size and self.near_visited(rank) :
+					self.must_check(rank + mz.width, rank)
 
-				if rank - mz.width >= 0 and near_visited() :
-					must_check(rank - mz.width, mz.UP)
+				if rank - mz.width >= 0 and self.near_visited(rank) :
+					self.must_check(rank - mz.width, rank)
 
-				if mz.main[rank] == mz.START :
-					must_check(rank, mz.CENTER)
+				if mz.maze[rank] == mz.START :
+					self.must_check(rank, rank)
 				
 
-				if near_visited() :
-					mz.visited[mz.CENTER] = mz.VISITED
+				if self.near_visited(rank) :
+					mz.visited[rank] = mz.VISITED
+					
+				
 	
-	def near_visited(self) :
+	def near_visited(self, rank) :
 	
-		if get_y(rank) == get_y(rank + 1) and rank + 1 < dim :
-			if mz.visited[mz.RIGHT] == mz.VISITED:
+		if self.get_y(rank) == self.get_y(rank + 1) and rank + 1 < self.size :
+			if mz.visited[rank + 1] == mz.VISITED:
 				return True
-		if get_y(rank) == get_y(rank - 1) and rank - 1 >= 0 :
-			if mz.visited[mz.LEFT] == mz.VISITED:
+		if self.get_y(rank) == self.get_y(rank - 1) and rank - 1 >= 0 :
+			if mz.visited[rank - 1] == mz.VISITED:
 				return True
-		if rank + mz.width < dim:
-			if mz.visited[mz.DOWN] == mz.VISITED:
+		if rank + mz.width < self.size:
+			if mz.visited[rank + mz.width] == mz.VISITED:
 				return True
 		if rank - mz.width >= 0:
-			if mz.visited[mz.UP] == mz.VISITED:
+			if mz.visited[rank - mz.width] == mz.VISITED:
 				return True
-		if rank == get_rank(mz.startx, mz.starty)  :
+		if rank == self.get_rank(mz.startx, mz.starty)  :
 			return True
 		return False
 		
