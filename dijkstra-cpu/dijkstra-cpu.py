@@ -71,10 +71,10 @@ class CL(object):
 		
 		#print self.maze.shape, 'shape'
 		
-		
+		self.found = 0
 		
 		#for i in range(0,42): #self.size*5 ):
-		while loop == 0 and j < self.size * 15:
+		while self.found == 0 and j < self.size * 15:
 			j += 1
 			print j,
 			#print 'here',
@@ -85,12 +85,12 @@ class CL(object):
 			#print dimension[2],
 			loop = dimension[2]
 		
-		'''
+		
 
-		self.prev = prev
+		self.prev = mz.prev
 		self.visited = visited
 		self.dist = dist
-		'''
+		
 	
 	def must_check(self, test, rank):
 	
@@ -133,6 +133,9 @@ class CL(object):
 				if self.near_visited(rank) :
 					mz.visited[rank] = mz.VISITED
 					
+				if mz.maze[rank] == mz.END and mz.visited[rank] == mz.VISITED:
+					self.found = 1
+				
 				
 	
 	def near_visited(self, rank) :
