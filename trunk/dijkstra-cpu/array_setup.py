@@ -97,7 +97,8 @@ UNDEFINED = 1600#-1
 
 maze = [0] * (width * height) 
 dist = [UNDEFINED] * (width * height)
-
+prev = [UNDEFINED] * (width * height)
+visited = [0] * (width * height)
 
 for y in range (0 , height):
 	for x in range (0, width):
