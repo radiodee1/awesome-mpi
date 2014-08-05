@@ -33,63 +33,33 @@ class CL(object):
 		print 'load kernel' 
 		
 		
-	def set_buffers(self):
-		#
-		#mf = cl.mem_flags
-
-		startvisited = [mz.FREE] * self.size
-		startdist = [mz.UNDEFINED] * self.size
-		startprev = [mz.UNDEFINED] * self.size
-		
-		startvisited[(mz.starty * self.width) + mz.startx] = mz.VISITED 
-		startdist[(mz.starty * self.width) + mz.startx] = 0
-		self.maze[(mz.starty * self.width) + mz.startx] = mz.START 
-		
-		
-		self.maze = numpy.array(self.maze, dtype=numpy.int32)
-		self.visited = numpy.array((startvisited), dtype=numpy.int32)
-		self.dist = numpy.array((startdist), dtype=numpy.uint32)
-		self.prev = numpy.array((startprev), dtype=numpy.int32)
-		self.mutex = numpy.array(([mz.FREE] * self.size), dtype=numpy.int32)
-		
-		prepdim = [0] * 3#self.size
-		prepdim[0] = self.width
-		prepdim[1] = self.height
-		
-		self.dimension = numpy.array((prepdim), dtype=numpy.int32)
-			
-		
+	
 
 	def execute(self):
-	
+		'''
 		visited = numpy.empty_like(self.maze)
 		dist = numpy.empty_like(self.maze)
 		prev = numpy.empty_like(self.maze)
 		dimension = numpy.empty_like(self.dimension)
 		loop = 0
 		j = 0
-		
+		'''
 		#print self.maze.shape, 'shape'
-		
+		j = 0
 		self.found = 0
 		
 		#for i in range(0,42): #self.size*5 ):
 		while self.found == 0 and j < self.size * 15:
 			j += 1
-			print j,
+			
 			#print 'here',
 			for i in range (0, self.size):
 				self.find(i)	
 			
-			#cl.enqueue_read_buffer(self.queue, self.dimension_buf, dimension).wait()        
-			#print dimension[2],
-			loop = dimension[2]
-		
-		
 
 		self.prev = mz.prev
-		self.visited = visited
-		self.dist = dist
+		#self.visited = visited
+		#self.dist = dist
 		
 	
 	def must_check(self, test, rank):
@@ -213,6 +183,7 @@ class CL(object):
 			
 	def set_map(self, maze, width=-1, height=-1):
 		self.maze = maze
+		mz.maze = maze
 		if width == -1:
 			self.width = mz.width
 		else:
@@ -223,7 +194,7 @@ class CL(object):
 			self.height = mz.height
 		else:
 			self.height = height
-			mz.width = width
+			mz.height = height
 		
 
 class Interface(object) :
@@ -410,11 +381,11 @@ class Interface(object) :
 			sa[(self.endy * cl.width) + self.endx] = mz.END
 			cl.set_map(sa, cl.width, cl.height)
 			starttime = time.clock()
-			cl.load_kernel()
-			cl.set_buffers()
+			#cl.load_kernel()
+			#cl.set_buffers()
 			cl.execute()
 			endtime = time.clock()
-			print  endtime - starttime , 'time on gpu'
+			print  endtime - starttime , 'time on cpu'
 			cl.follow_path()
 		
 		## print screen with solution ##
@@ -577,13 +548,13 @@ if __name__ == '__main__':
 	
 	if mz.gui == False:
 		matrixd.set_map(mz.maze, mz.width, mz.height)	
-		matrixd.load_kernel()
-		matrixd.set_buffers()
+		#matrixd.load_kernel()
+		#matrixd.set_buffers()
 		matrixd.execute()
 		endtime = time.clock()
 		
 		matrixd.follow_path()
-		
+		'''
 		a = matrixd.get_prev()
 		b = matrixd.get_dist()
 		i.show_maze(a, matrixd.get_width(), matrixd.get_height(), False)
@@ -593,7 +564,7 @@ if __name__ == '__main__':
 		print 'dist'
 	
 	
-	
+		'''
 	if matrixd.get_width() <= 80 :
 		print 'last printout'
 		i.show_maze(matrixd.get_maze() , matrixd.get_width(), matrixd.get_height())
