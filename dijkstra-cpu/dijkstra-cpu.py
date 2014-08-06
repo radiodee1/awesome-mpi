@@ -47,7 +47,7 @@ class CPU(object):
 	def must_check(self, test, rank):
 		## part of each node !! ##
 		if self.visited[rank] != mz.VISITED and self.maze[rank] != mz.WALL:
-			if self.dist[rank] + 1 <= self.dist[test] :
+			if self.dist[rank] + 1 <= self.dist[test] or self.dist[test] == mz.UNDEFINED :
 				if self.maze[test] != mz.START  :
 					self.prev[test] = rank 
 					self.dist[test] = self.dist[rank] + 1
