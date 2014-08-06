@@ -594,7 +594,7 @@ if __name__ == '__main__':
 	
 	
 	
-	if matrixd.get_width() <= 80 :
+	if matrixd.get_width() <= 40 :
 		print 'last printout'
 		i.show_maze(matrixd.get_maze() , matrixd.get_width(), matrixd.get_height())
 	
