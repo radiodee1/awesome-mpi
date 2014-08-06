@@ -304,6 +304,7 @@ class Interface(object) :
 		## display first screen ##
 		screensurf = surface
 		screen = pg.display.set_mode((w, h))
+		pg.display.set_caption('dijkstra-opencl', 'dijkstra-opencl')
 		screen.fill((white))
 		
 		self.quit = 0
