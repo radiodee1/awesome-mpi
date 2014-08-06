@@ -94,7 +94,7 @@ VISITED = 1
 FREE = 0
 
 #enum for distance
-UNDEFINED = 1600#-1
+UNDEFINED =  -1 #1600#-1
 
 
 maze = [0] * (width * height) 
