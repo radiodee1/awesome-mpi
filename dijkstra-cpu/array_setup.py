@@ -1,10 +1,8 @@
 #!/usr/bin/python
 
-
-# comment in for csv file
 import sys, math
 import fileinput
-#import pyopencl as cl
+
 
 width = 8#30
 height = 8#30
