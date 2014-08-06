@@ -22,46 +22,30 @@ class CPU(object):
 		self.width = mz.width
 		self.height = mz.height
 		self.size = mz.width * mz.height
-		self.prev = []
+
 		self.maze = mz.maze
 		self.found = []
 		self.oo_ex = False
 		
 		self.visited = [0] * self.size
-		self.dist = mz.dist #[mz.UNDEFINED] * self.size
-		self.prev = mz.prev #[mz.UNDEFINED] * self.size
+		self.dist = mz.dist 
+		self.prev = mz.prev 
 
 	
 	def execute(self):
-		'''
-		visited = numpy.empty_like(self.maze)
-		dist = numpy.empty_like(self.maze)
-		prev = numpy.empty_like(self.maze)
-		dimension = numpy.empty_like(self.dimension)
-		loop = 0
-		j = 0
-		'''
-		#print self.maze.shape, 'shape'
+		## control loop for each node !! ##
 		j = 0
 		self.found = 0
 		
-		#for i in range(0,42): #self.size*5 ):
 		while self.found == 0 and j < self.size * 15:
 			j += 1
-			print j, 
-			print 'here',
+			
 			for i in range (0, self.size):
 				self.find(i)	
-			
-		print 'execute'
-		#self.prev = mz.prev
-		#self.maze = mz.maze
-		#self.visited = visited
-		#self.dist = dist
 		
 	
 	def must_check(self, test, rank):
-	
+		## part of each node !! ##
 		if self.visited[rank] != mz.VISITED and self.maze[rank] != mz.WALL:
 			if self.dist[rank] + 1 <= self.dist[test] :
 				if self.maze[test] != mz.START  :
@@ -69,15 +53,11 @@ class CPU(object):
 					self.dist[test] = self.dist[rank] + 1
 	
 	def find(self, rank ) :
-
+		## central part of node !! ##
 		flag = 0;
 	
 		if flag == 0 and rank < self.width * self.height:
 	
-			#if rank == 0:
-			#	print ii
-			
-		
 			if self.visited[rank] == mz.FREE and self.maze[rank] != mz.WALL :
 						
 				if self.get_y(rank) == self.get_y(rank + 1) and \
@@ -107,7 +87,7 @@ class CPU(object):
 				
 	
 	def near_visited(self, rank) :
-	
+		## part of each node !! ##
 		if self.get_y(rank) == self.get_y(rank + 1) and rank + 1 < self.size :
 			if self.visited[rank + 1] == mz.VISITED:
 				return True
@@ -125,18 +105,21 @@ class CPU(object):
 		return False
 		
 	def get_x(self,rank) :
+		## node helper ##
 		return rank - (self.width * int(rank / self.width))
 	
 	def get_y(self, rank) :
+		## node helpre ##
 		return int(rank / self.width)
 	
 	def get_rank(self, x,y) :
+		## node helper ##
 		return (y * self.width) + x
 
 	
 	def follow_path(self) :
-		
-		dim = self.size #self.width * self.height
+		## call this after end is found!! ##
+		dim = self.size 
 		if True: 
 			if mz.gui == False:
 				print self.prev, 'prev'
@@ -162,27 +145,35 @@ class CPU(object):
 				i += 1	
 		
 	def get_prev(self):
+		## class helper ##
 		return self.prev
 
 	def get_visited(self):
+		## class helper ##
 		return self.visited
 
 	def get_dist(self):
+		## class helper ##
 		return self.dist
 
 	def get_width(self):
+		## class helper ##
 		return self.width
 	
 	def get_height(self):
+		## class helper ##
 		return self.height
 		
 	def get_maze(self):
+		## class helper ##
 		return self.maze	
 			
 	def set_dist_start(self, x, y):
+		## class helper, use before 'execute' ##
 		self.dist[(y * self.width) + x] = 0
 	
 	def set_map(self, maze, width=-1, height=-1):
+		## class helper ##
 		self.maze = maze
 		mz.maze = maze
 		if width == -1:
@@ -203,7 +194,7 @@ class Interface(object) :
 	def __init__(self):
 		self.mapname = 'map.png'
 		self.iconname = 'icon.png'
-		self.map  =[]
+		self.map  = []
 		self.quit = 0	
 		
 	def solve_png(self , cpu):
@@ -267,8 +258,10 @@ class Interface(object) :
 		self.pathblock.fill(blue)
 		self.blockoffset = 0#blocksize / 2 
 		
+		## fixscale not used ##
 		self.fixscale = ( float  ( w - (int ( w/ cpu.width  ) * cpu.width ))/cpu.width *2 ) + 1
-		#print self.fixscale, 'fixme'
+		
+		## all walls ##
 		self.wallbox = pg.Surface( (math.ceil(w/cpu.width), 
 			math.ceil(h/cpu.height )))
 		self.wallbox.fill((0,0,0))
@@ -377,17 +370,15 @@ class Interface(object) :
 		mz.starty = self.starty
 		
 		if self.quit != 1:
-			#print len(sa)
+			## run cpu calculation ##
 			sa[(self.starty * cpu.width) + self.startx] = mz.START
 			sa[(self.endy * cpu.width) + self.endx] = mz.END
 			
-			#cpu.dist[(self.starty * cpu.width) + self.startx] = 0
 			cpu.set_dist_start(self.startx, self.starty)
 			
 			cpu.set_map(sa, cpu.width, cpu.height)
 			starttime = time.clock()
-			#cpu.load_kernel()
-			#cpu.set_buffers()
+			
 			cpu.execute()
 			endtime = time.clock()
 			print  endtime - starttime , 'time on cpu'
