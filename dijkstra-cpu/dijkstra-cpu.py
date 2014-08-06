@@ -214,7 +214,7 @@ class Interface(object) :
 		
 		surface = pg.image.load(self.mapname)
 		icon = pg.image.load(self.iconname)
-		
+
 		pg.display.set_icon(icon)
 		
 		## initialize control components ##
@@ -269,6 +269,7 @@ class Interface(object) :
 		## display first screen ##
 		screensurf = surface
 		screen = pg.display.set_mode((w, h))
+		pg.display.set_caption('dijkstra-cpu', 'dijkstra-cpu')
 		screen.fill((white))
 		
 		self.quit = 0
@@ -558,7 +559,7 @@ if __name__ == '__main__':
 		i.show_maze(b, matrixd.get_width(), matrixd.get_height(), False)
 		print 'dist'
 	
-	if matrixd.get_width() <= 80 :
+	if matrixd.get_width() <= 30 :
 		print 'last printout'
 		i.show_maze(matrixd.get_maze() , matrixd.get_width(), matrixd.get_height())
 	
