@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-#import pyopencl as cl
 import numpy
 import time, math
 
