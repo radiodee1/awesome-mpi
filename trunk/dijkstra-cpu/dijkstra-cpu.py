@@ -15,7 +15,7 @@ import sys
 
 import array_setup as mz
 
-class CL(object):
+class CPU(object):
 
 
 	def __init__(self):
@@ -27,14 +27,11 @@ class CL(object):
 		self.found = []
 		self.oo_ex = False
 		
-		
+		self.visited = [0] * self.size
+		self.dist = mz.dist #[mz.UNDEFINED] * self.size
+		self.prev = mz.prev #[mz.UNDEFINED] * self.size
 
-	def load_kernel(self):
-		print 'load kernel' 
-		
-		
 	
-
 	def execute(self):
 		'''
 		visited = numpy.empty_like(self.maze)
@@ -51,36 +48,37 @@ class CL(object):
 		#for i in range(0,42): #self.size*5 ):
 		while self.found == 0 and j < self.size * 15:
 			j += 1
-			
-			#print 'here',
+			print j, 
+			print 'here',
 			for i in range (0, self.size):
 				self.find(i)	
 			
-
-		self.prev = mz.prev
+		print 'execute'
+		#self.prev = mz.prev
+		#self.maze = mz.maze
 		#self.visited = visited
 		#self.dist = dist
 		
 	
 	def must_check(self, test, rank):
 	
-		if mz.visited[rank] != mz.VISITED and mz.maze[rank] != mz.WALL:
-			if mz.dist[rank] + 1 <= mz.dist[test] :
-				if mz.maze[test] != mz.START  :
-					mz.prev[test] = rank 
-					mz.dist[test] = mz.dist[rank] + 1
+		if self.visited[rank] != mz.VISITED and self.maze[rank] != mz.WALL:
+			if self.dist[rank] + 1 <= self.dist[test] :
+				if self.maze[test] != mz.START  :
+					self.prev[test] = rank 
+					self.dist[test] = self.dist[rank] + 1
 	
 	def find(self, rank ) :
 
 		flag = 0;
 	
-		if flag == 0 and rank < mz.width * mz.height:
+		if flag == 0 and rank < self.width * self.height:
 	
 			#if rank == 0:
 			#	print ii
 			
 		
-			if mz.visited[rank] == mz.FREE and mz.maze[rank] != mz.WALL :
+			if self.visited[rank] == mz.FREE and self.maze[rank] != mz.WALL :
 						
 				if self.get_y(rank) == self.get_y(rank + 1) and \
 						rank+1 < self.size and self.near_visited(rank) :
@@ -90,20 +88,20 @@ class CL(object):
 						rank - 1 >= 0 and self.near_visited(rank) :
 					self.must_check(rank - 1, rank)
 
-				if rank + mz.width < self.size and self.near_visited(rank) :
-					self.must_check(rank + mz.width, rank)
+				if rank + self.width < self.size and self.near_visited(rank) :
+					self.must_check(rank + self.width, rank)
 
-				if rank - mz.width >= 0 and self.near_visited(rank) :
-					self.must_check(rank - mz.width, rank)
+				if rank - self.width >= 0 and self.near_visited(rank) :
+					self.must_check(rank - self.width, rank)
 
-				if mz.maze[rank] == mz.START :
+				if self.maze[rank] == mz.START :
 					self.must_check(rank, rank)
 				
 
 				if self.near_visited(rank) :
-					mz.visited[rank] = mz.VISITED
+					self.visited[rank] = mz.VISITED
 					
-				if mz.maze[rank] == mz.END and mz.visited[rank] == mz.VISITED:
+				if self.maze[rank] == mz.END and self.visited[rank] == mz.VISITED:
 					self.found = 1
 				
 				
@@ -111,34 +109,34 @@ class CL(object):
 	def near_visited(self, rank) :
 	
 		if self.get_y(rank) == self.get_y(rank + 1) and rank + 1 < self.size :
-			if mz.visited[rank + 1] == mz.VISITED:
+			if self.visited[rank + 1] == mz.VISITED:
 				return True
 		if self.get_y(rank) == self.get_y(rank - 1) and rank - 1 >= 0 :
-			if mz.visited[rank - 1] == mz.VISITED:
+			if self.visited[rank - 1] == mz.VISITED:
 				return True
-		if rank + mz.width < self.size:
-			if mz.visited[rank + mz.width] == mz.VISITED:
+		if rank + self.width < self.size:
+			if self.visited[rank + self.width] == mz.VISITED:
 				return True
-		if rank - mz.width >= 0:
-			if mz.visited[rank - mz.width] == mz.VISITED:
+		if rank - self.width >= 0:
+			if self.visited[rank - self.width] == mz.VISITED:
 				return True
 		if rank == self.get_rank(mz.startx, mz.starty)  :
 			return True
 		return False
 		
 	def get_x(self,rank) :
-		return rank - (mz.width * int(rank / mz.width))
+		return rank - (self.width * int(rank / self.width))
 	
 	def get_y(self, rank) :
-		return int(rank / mz.width)
+		return int(rank / self.width)
 	
 	def get_rank(self, x,y) :
-		return (y * mz.width) + x
+		return (y * self.width) + x
 
 	
 	def follow_path(self) :
 		
-		dim = self.width * self.height
+		dim = self.size #self.width * self.height
 		if True: 
 			if mz.gui == False:
 				print self.prev, 'prev'
@@ -181,6 +179,9 @@ class CL(object):
 	def get_maze(self):
 		return self.maze	
 			
+	def set_dist_start(self, x, y):
+		self.dist[(y * self.width) + x] = 0
+	
 	def set_map(self, maze, width=-1, height=-1):
 		self.maze = maze
 		mz.maze = maze
@@ -205,10 +206,10 @@ class Interface(object) :
 		self.map  =[]
 		self.quit = 0	
 		
-	def solve_png(self , cl):
+	def solve_png(self , cpu):
 	
 		if mz.gui == False:
-			cl.set_map(mz.maze, mz.width, mz.height)
+			cpu.set_map(mz.maze, mz.width, mz.height)
 			return
 	
 		x = 0
@@ -256,7 +257,7 @@ class Interface(object) :
 		self.boundredright = w - (self.box.get_width() -  self.boxborder) + 32
 		self.boundblueleft = w - (self.box.get_width() -  self.boxborder) + 32
 		self.boundblueright = w - (self.box.get_width() -  self.boxborder) + 48
-		blocksize = (w /cl.width) -2
+		blocksize = (w /cpu.width) -2
 		if blocksize <= 2 : blocksize = 4
 		self.startblock = pg.Surface((blocksize,blocksize))
 		self.startblock.fill(green)
@@ -266,10 +267,10 @@ class Interface(object) :
 		self.pathblock.fill(blue)
 		self.blockoffset = 0#blocksize / 2 
 		
-		self.fixscale = ( float  ( w - (int ( w/ cl.width  ) * cl.width ))/cl.width *2 ) + 1
+		self.fixscale = ( float  ( w - (int ( w/ cpu.width  ) * cpu.width ))/cpu.width *2 ) + 1
 		#print self.fixscale, 'fixme'
-		self.wallbox = pg.Surface( (math.ceil(w/cl.width), 
-			math.ceil(h/cl.height )))
+		self.wallbox = pg.Surface( (math.ceil(w/cpu.width), 
+			math.ceil(h/cpu.height )))
 		self.wallbox.fill((0,0,0))
 		
 		
@@ -295,8 +296,8 @@ class Interface(object) :
 							y = 0
 					if event.key == pg.K_DOWN:
 						y += 5
-						if y + cl.height > screensurf.get_height() : 
-							y = screensurf.get_height() - cl.height 
+						if y + cpu.height > screensurf.get_height() : 
+							y = screensurf.get_height() - cpu.height 
 							
 					if event.key == pg.K_LEFT:
 						x -= 5
@@ -304,19 +305,19 @@ class Interface(object) :
 							x = 0
 					if event.key == pg.K_RIGHT:
 						x += 5
-						if x + cl.width > screensurf.get_width() : 
-							x = screensurf.get_width() - cl.width 			
+						if x + cpu.width > screensurf.get_width() : 
+							x = screensurf.get_width() - cpu.width 			
 			
 			screensurf = surface.copy()
-			pgd.rectangle(screensurf, ((x,y),(cl.width,cl.height)), (255,0,0))
+			pgd.rectangle(screensurf, ((x,y),(cpu.width,cpu.height)), (255,0,0))
 			screen.blit(screensurf,(0,0))
 			pg.display.flip()
 			
 		## display second screen ##
 		screen.fill((white))
-		self.smallsurf = pg.Surface((cl.width, cl.height))
-		bwsurf = pg.Surface((cl.width, cl.height))
-		self.smallsurf.blit(surface,(0,0),((x,y), (cl.width, cl.height)))
+		self.smallsurf = pg.Surface((cpu.width, cpu.height))
+		bwsurf = pg.Surface((cpu.width, cpu.height))
+		self.smallsurf.blit(surface,(0,0),((x,y), (cpu.width, cpu.height)))
 		
 		
 		pg.transform.threshold(bwsurf, self.smallsurf,
@@ -327,24 +328,24 @@ class Interface(object) :
 		screen.fill((255,255,255))
 		
 		## convert to array representation ##
-		sa = [0] * cl.width * cl.height
+		sa = [0] * cpu.width * cpu.height
 		pxarray = pygame.PixelArray(self.smallsurf)
-		for yy in range (0, cl.width):
-			for xx in range (0, cl.height):
+		for yy in range (0, cpu.width):
+			for xx in range (0, cpu.height):
 				p =  pxarray[xx,yy]
 
 				if p == 0 : p = mz.WALL
 				else : p = 0
-				sa[(yy * cl.width) + xx] = p
+				sa[(yy * cpu.width) + xx] = p
 				if p == mz.WALL:
-					mz.wallout.append((yy * cl.width) + xx)
+					mz.wallout.append((yy * cpu.width) + xx)
 					
 					## print walls to screen ! ##
 					#xxx = float(xx * ( self.fixscale)) 
 					#yyy = float(yy * ( self.fixscale)) 
 					screensurf.blit(self.wallbox, 
-						(float(xx * float (w  / cl.width))   ,
-						float(yy * float (h  / cl.height))   ))
+						(float(xx * float (w  / cpu.width))   ,
+						float(yy * float (h  / cpu.height))   ))
 		
 		self.gui_state = 0
 		
@@ -377,16 +378,20 @@ class Interface(object) :
 		
 		if self.quit != 1:
 			#print len(sa)
-			sa[(self.starty * cl.width) + self.startx] = mz.START
-			sa[(self.endy * cl.width) + self.endx] = mz.END
-			cl.set_map(sa, cl.width, cl.height)
+			sa[(self.starty * cpu.width) + self.startx] = mz.START
+			sa[(self.endy * cpu.width) + self.endx] = mz.END
+			
+			#cpu.dist[(self.starty * cpu.width) + self.startx] = 0
+			cpu.set_dist_start(self.startx, self.starty)
+			
+			cpu.set_map(sa, cpu.width, cpu.height)
 			starttime = time.clock()
-			#cl.load_kernel()
-			#cl.set_buffers()
-			cl.execute()
+			#cpu.load_kernel()
+			#cpu.set_buffers()
+			cpu.execute()
 			endtime = time.clock()
 			print  endtime - starttime , 'time on cpu'
-			cl.follow_path()
+			cpu.follow_path()
 		
 		## print screen with solution ##
 		self.running = 1
@@ -409,21 +414,21 @@ class Interface(object) :
 			
 			screen.fill((white))
 			screen.blit(screensurf,(0,0))
-			for i in cl.found :
-				xx = i - ( cl.get_width() * (int(i / cl.get_width() )))
-				yy = int(i / cl.get_width())
+			for i in cpu.found :
+				xx = i - ( cpu.get_width() * (int(i / cpu.get_width() )))
+				yy = int(i / cpu.get_width())
 			
-				#xxx = float(xx * ( self.fixscale)) #/ cl.width
-				#yyy = float(yy * ( self.fixscale)) #/ cl.width
+				#xxx = float(xx * ( self.fixscale)) #/ cpu.width
+				#yyy = float(yy * ( self.fixscale)) #/ cpu.width
 				screen.blit(self.pathblock,
-					(float(xx * float(screen.get_width() / cl.width)) + self.blockoffset,
-					float(yy * float(screen.get_width() / cl.width)) + self.blockoffset))
+					(float(xx * float(screen.get_width() / cpu.width)) + self.blockoffset,
+					float(yy * float(screen.get_width() / cpu.width)) + self.blockoffset))
 				screen.blit(self.startblock,
-					(self.startx * (screen.get_width() / cl.width) + self.blockoffset, 
-					self.starty * (screen.get_width() / cl.width) + self.blockoffset))
+					(self.startx * (screen.get_width() / cpu.width) + self.blockoffset, 
+					self.starty * (screen.get_width() / cpu.width) + self.blockoffset))
 				screen.blit(self.endblock,
-					(self.endx * (screen.get_width() / cl.width) + self.blockoffset,
-					self.endy * (screen.get_width() / cl.width) + self.blockoffset))
+					(self.endx * (screen.get_width() / cpu.width) + self.blockoffset,
+					self.endy * (screen.get_width() / cpu.width) + self.blockoffset))
 			pg.display.flip()
 
 	def gui_controls(self, screen, event,w,h):
@@ -536,7 +541,7 @@ class Interface(object) :
 
 if __name__ == '__main__': 
 
-	matrixd = CL()
+	matrixd = CPU()
 	
 	i = Interface()
 
@@ -554,7 +559,7 @@ if __name__ == '__main__':
 		endtime = time.clock()
 		
 		matrixd.follow_path()
-		'''
+		
 		a = matrixd.get_prev()
 		b = matrixd.get_dist()
 		i.show_maze(a, matrixd.get_width(), matrixd.get_height(), False)
@@ -563,8 +568,6 @@ if __name__ == '__main__':
 		i.show_maze(b, matrixd.get_width(), matrixd.get_height(), False)
 		print 'dist'
 	
-	
-		'''
 	if matrixd.get_width() <= 80 :
 		print 'last printout'
 		i.show_maze(matrixd.get_maze() , matrixd.get_width(), matrixd.get_height())
