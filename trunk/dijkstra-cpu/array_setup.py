@@ -4,7 +4,7 @@
 # comment in for csv file
 import sys, math
 import fileinput
-import pyopencl as cl
+#import pyopencl as cl
 
 width = 8#30
 height = 8#30
@@ -45,7 +45,7 @@ if len(sys.argv) > 1:
 		
 if gui == True:
 	## 5 is the number of buffers (maze, dist, prev, visited, mutex) ##
-	dimension = int(math.sqrt(cl.device_info.MAX_WORK_GROUP_SIZE / 5))
+	#dimension = int(math.sqrt(cl.device_info.MAX_WORK_GROUP_SIZE / 5))
 	## if double kernel is used, 'dimension' is less important!! ##
 	dimension = 60
 	if dim_input != 0 : dimension = dim_input
