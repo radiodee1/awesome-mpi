@@ -29,6 +29,7 @@ if len(sys.argv) > 1:
 	for j in range(0, len(sys.argv)):
 		if sys.argv[j] == '-size':
 			dim_input = int(sys.argv[j+1])
+			if dim_input > 480 : dim_input = 480
 
 if len(sys.argv) > 1:
 	for j in range(0, len(sys.argv)):
