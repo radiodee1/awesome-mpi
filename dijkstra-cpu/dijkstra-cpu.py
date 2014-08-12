@@ -261,11 +261,11 @@ class Interface(object) :
 		self.blockoffset = 0#blocksize / 2 
 		
 		## fixscale not used ##
-		self.fixscale = ( float  ( w - (int ( w/ cpu.width  ) * cpu.width ))/cpu.width *2 ) + 1
+		self.fixscale = ( float  ( w - (int ( w/ cpu.width  ) * cpu.width ))/w ) + 1
 		
 		## all walls ##
-		self.wallbox = pg.Surface( (math.ceil(w/cpu.width), 
-			math.ceil(h/cpu.height )))
+		self.wallbox = pg.Surface( (math.ceil((w/cpu.width)* self.fixscale), 
+			math.ceil((h/cpu.height) * self.fixscale )))
 		self.wallbox.fill((0,0,0))
 		
 		
@@ -338,11 +338,11 @@ class Interface(object) :
 					mz.wallout.append((yy * cpu.width) + xx)
 					
 					## print walls to screen ! ##
-					#xxx = float(xx * ( self.fixscale)) 
-					#yyy = float(yy * ( self.fixscale)) 
+					xxx = float(xx * ( self.fixscale)) 
+					yyy = float(yy * ( self.fixscale)) 
 					screensurf.blit(self.wallbox, 
-						(float(xx * float (w  / cpu.width))   ,
-						float(yy * float (h  / cpu.height))   ))
+						(float(xxx * float (w  / cpu.width))   ,
+						float(yyy * float (h  / cpu.height))   ))
 		
 		self.gui_state = 0
 		
@@ -413,17 +413,18 @@ class Interface(object) :
 				xx = i - ( cpu.get_width() * (int(i / cpu.get_width() )))
 				yy = int(i / cpu.get_width())
 			
-				#xxx = float(xx * ( self.fixscale)) #/ cpu.width
-				#yyy = float(yy * ( self.fixscale)) #/ cpu.width
+				xxx = float(xx * ( self.fixscale)) 
+				yyy = float(yy * ( self.fixscale)) 
+				
 				screen.blit(self.pathblock,
-					(float(xx * float(screen.get_width() / cpu.width)) + self.blockoffset,
-					float(yy * float(screen.get_width() / cpu.width)) + self.blockoffset))
+					(float(xxx * float(screen.get_width() / cpu.width)) + self.blockoffset,
+					float(yyy * float(screen.get_width() / cpu.width)) + self.blockoffset))
 				screen.blit(self.startblock,
-					(self.startx * (screen.get_width() / cpu.width) + self.blockoffset, 
-					self.starty * (screen.get_width() / cpu.width) + self.blockoffset))
+					(self.startx * (screen.get_width() / cpu.width) * self.fixscale, 
+					self.starty * (screen.get_width() / cpu.width) * self.fixscale))
 				screen.blit(self.endblock,
-					(self.endx * (screen.get_width() / cpu.width) + self.blockoffset,
-					self.endy * (screen.get_width() / cpu.width) + self.blockoffset))
+					(self.endx * (screen.get_width() / cpu.width) * self.fixscale,
+					self.endy * (screen.get_width() / cpu.width) * self.fixscale))
 			pg.display.flip()
 
 	def gui_controls(self, screen, event,w,h):
@@ -483,18 +484,20 @@ class Interface(object) :
 		if (self.startx != -1 and self.starty != -1) :
 		
 			screen.blit(self.startblock,
-				(self.startx * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset, 
-				self.starty * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset))
+				(self.startx * (screen.get_width() / self.smallsurf.get_width()) * self.fixscale, 
+				self.starty * (screen.get_width() / self.smallsurf.get_width()) * self.fixscale))
 		
 		if (self.endx != -1 and self.endy != -1) :
 			
 			screen.blit(self.endblock,
-				(self.endx * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset,
-				self.endy * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset))
+				(self.endx * (screen.get_width() / self.smallsurf.get_width()) * self.fixscale,
+				self.endy * (screen.get_width() / self.smallsurf.get_width()) * self.fixscale))
 		
 	def dot_not_on_wall(self, x, y) :
 		xx = -1
 		yy = -1
+		x = int(x / self.fixscale)
+		y = int(y / self.fixscale)
 		if self.sa[(y * self.guiwidth) + x ] != mz.WALL : 
 			xx = x
 			yy = y  
