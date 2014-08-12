@@ -9,7 +9,6 @@ import pyopencl as cl
 width = 8#30
 height = 8#30
 
-## make csv file import-able ##
 dim = []
 wall = []
 wallout = []

@@ -212,6 +212,9 @@ class Interface(object) :
 		self.endx = -1
 		self.endy = -1
 		
+		self.guiwidth = cpu.width
+		self.guiheight = cpu.height
+		
 		surface = pg.image.load(self.mapname)
 		icon = pg.image.load(self.iconname)
 
@@ -322,7 +325,7 @@ class Interface(object) :
 		screen.fill((255,255,255))
 		
 		## convert to array representation ##
-		sa = [0] * cpu.width * cpu.height
+		self.sa = [0] * cpu.width * cpu.height
 		pxarray = pygame.PixelArray(self.smallsurf)
 		for yy in range (0, cpu.width):
 			for xx in range (0, cpu.height):
@@ -330,7 +333,7 @@ class Interface(object) :
 
 				if p == 0 : p = mz.WALL
 				else : p = 0
-				sa[(yy * cpu.width) + xx] = p
+				self.sa[(yy * cpu.width) + xx] = p
 				if p == mz.WALL:
 					mz.wallout.append((yy * cpu.width) + xx)
 					
@@ -372,12 +375,12 @@ class Interface(object) :
 		
 		if self.quit != 1:
 			## run cpu calculation ##
-			sa[(self.starty * cpu.width) + self.startx] = mz.START
-			sa[(self.endy * cpu.width) + self.endx] = mz.END
+			self.sa[(self.starty * cpu.width) + self.startx] = mz.START
+			self.sa[(self.endy * cpu.width) + self.endx] = mz.END
 			
 			cpu.set_dist_start(self.startx, self.starty)
 			
-			cpu.set_map(sa, cpu.width, cpu.height)
+			cpu.set_map(self.sa, cpu.width, cpu.height)
 			starttime = time.clock()
 			
 			cpu.execute()
@@ -453,14 +456,17 @@ class Interface(object) :
 							self.mousey < self.wallbox.get_height() * mz.height :
 						self.startx = self.mousex / (screen.get_width() / self.smallsurf.get_width())
 						self.starty = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
-						self.gui_state = 0
+						#self.gui_state = 0
+						self.startx, self.starty = self.dot_not_on_wall(self.startx, self.starty)
 					
 				elif self.gui_state == self.PLACE_END:
 					if self.mousex < self.wallbox.get_width() * mz.width and \
 							self.mousey < self.wallbox.get_height() * mz.height :
 						self.endx = self.mousex / (screen.get_width() / self.smallsurf.get_width())
 						self.endy = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
-						self.gui_state = 0
+						#self.gui_state = 0
+						self.endx, self.endy = self.dot_not_on_wall(self.endx, self.endy)
+						
 				elif self.gui_state == self.HOLD_START:
 					self.gui_state = self.PLACE_START
 				elif self.gui_state == self.HOLD_END:
@@ -486,6 +492,14 @@ class Interface(object) :
 				(self.endx * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset,
 				self.endy * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset))
 		
+	def dot_not_on_wall(self, x, y) :
+		xx = -1
+		yy = -1
+		if self.sa[(y * self.guiwidth) + x ] != mz.WALL : 
+			xx = x
+			yy = y  
+			self.gui_state = 0
+		return (xx,yy)
 
 	def show_maze(self, maze = [], width = 10, height = 10, symbols=True):
 		
