@@ -324,8 +324,8 @@ class Interface(object) :
 							y = 0
 					if event.key == pg.K_DOWN:
 						y += 5
-						if y + cl.height > screensurf.get_height() : 
-							y = screensurf.get_height() - cl.height 
+						if y + cl.height > screen.get_height() : 
+							y = screen.get_height() - cl.height 
 							
 					if event.key == pg.K_LEFT:
 						x -= 5
@@ -333,12 +333,13 @@ class Interface(object) :
 							x = 0
 					if event.key == pg.K_RIGHT:
 						x += 5
-						if x + cl.width > screensurf.get_width() : 
-							x = screensurf.get_width() - cl.width 			
+						if x + cl.width > screen.get_width() : 
+							x = screen.get_width() - cl.width 			
 			
 			screensurf = surface.copy()
-			pgd.rectangle(screensurf, ((x,y),(cl.width,cl.height)), (255,0,0))
+			screen.fill(white)
 			screen.blit(screensurf,(0,0))
+			pgd.rectangle(screen, ((x,y),(cl.width,cl.height)), (255,0,0))
 			pg.display.flip()
 			
 		## display second screen ##
