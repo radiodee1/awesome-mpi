@@ -577,7 +577,8 @@ if __name__ == '__main__':
 
 	
 	if mz.gui == False:
-		matrixd.set_map(mz.maze, mz.width, mz.height)	
+		matrixd.set_map(mz.maze, mz.width, mz.height)
+		starttime = time.clock()	
 		matrixd.load_kernel()
 		matrixd.set_buffers()
 		matrixd.execute()
@@ -592,7 +593,7 @@ if __name__ == '__main__':
 		
 		i.show_maze(b, matrixd.get_width(), matrixd.get_height(), False)
 		print 'dist'
-	
+		print endtime - starttime, 'time on gpu'
 	
 	
 	if matrixd.get_width() <= 40 :
