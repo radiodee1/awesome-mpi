@@ -448,15 +448,16 @@ class Interface(object) :
 			
 				xxx = float(xx * ( self.fixscale)) #/ cl.width
 				yyy = float(yy * ( self.fixscale)) #/ cl.width
+				## not used
 				screen.blit(self.pathblock,
-					(float(xx * float(screen.get_width() / cl.width)) + self.blockoffset,
-					float(yy * float(screen.get_width() / cl.width)) + self.blockoffset))
+					(float(xxx * float(screen.get_width() / cl.width)) + self.blockoffset,
+					float(yyy * float(screen.get_width() / cl.width)) + self.blockoffset))
 				screen.blit(self.startblock,
-					(self.startx * (screen.get_width() / cl.width) + self.blockoffset, 
-					self.starty * (screen.get_width() / cl.width) + self.blockoffset))
+					(self.startx * (screen.get_width() / cl.width) * self.fixscale, 
+					self.starty * (screen.get_width() / cl.width) * self.fixscale))
 				screen.blit(self.endblock,
-					(self.endx * (screen.get_width() / cl.width) + self.blockoffset,
-					self.endy * (screen.get_width() / cl.width) + self.blockoffset))
+					(self.endx * (screen.get_width() / cl.width) * self.fixscale,
+					self.endy * (screen.get_width() / cl.width) * self.fixscale))
 			pg.display.flip()
 
 	def gui_controls(self, screen, event,w,h):
@@ -487,17 +488,17 @@ class Interface(object) :
 				elif self.gui_state == self.PLACE_START:
 					if self.mousex < self.wallbox.get_width() * mz.width and \
 							self.mousey < self.wallbox.get_height() * mz.height :
-						startx = self.mousex / (screen.get_width() / self.smallsurf.get_width())# * self.fixscale
+						startx = self.mousex / (screen.get_width() / self.smallsurf.get_width()) # * self.fixscale
 						starty = self.mousey / (screen.get_height()/ self.smallsurf.get_height())# * self.fixscale
-						#self.gui_state = 0
+						
 						self.startx, self.starty = self.dot_not_on_wall(startx, starty)
 						
 				elif self.gui_state == self.PLACE_END:
 					if self.mousex < self.wallbox.get_width() * mz.width and \
 							self.mousey < self.wallbox.get_height() * mz.height :
-						endx = self.mousex / (screen.get_width() / self.smallsurf.get_width())# * self.fixscale
+						endx = self.mousex / (screen.get_width() / self.smallsurf.get_width()) # * self.fixscale
 						endy = self.mousey / (screen.get_height()/ self.smallsurf.get_height())# * self.fixscale
-						#self.gui_state = 0
+						
 						self.endx, self.endy = self.dot_not_on_wall(endx, endy)
 						
 				elif self.gui_state == self.HOLD_START:
@@ -516,20 +517,20 @@ class Interface(object) :
 		if (self.startx != -1 and self.starty != -1) :
 		
 			screen.blit(self.startblock,
-				(self.startx * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset, 
-				self.starty * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset))
+				(self.startx * (screen.get_width() / self.smallsurf.get_width()) * self.fixscale, 
+				self.starty * (screen.get_width() / self.smallsurf.get_width()) * self.fixscale))
 		
 		if (self.endx != -1 and self.endy != -1) :
 			
 			screen.blit(self.endblock,
-				(self.endx * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset,
-				self.endy * (screen.get_width() / self.smallsurf.get_width()) + self.blockoffset))
+				(self.endx * (screen.get_width() / self.smallsurf.get_width()) * self.fixscale,
+				self.endy * (screen.get_width() / self.smallsurf.get_width())  * self.fixscale))
 		
 	def dot_not_on_wall(self, x, y) :
 		xx = -1
 		yy = -1
-		x = int(x)
-		y = int(y)
+		x = int(x / self.fixscale)
+		y = int(y / self.fixscale)
 		if self.sa[int((y * self.guiwidth) + x) ] != mz.WALL : 
 			xx = x #* self.fixscale
 			yy = y #* self.fixscale
