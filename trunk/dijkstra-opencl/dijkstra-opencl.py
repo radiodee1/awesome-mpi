@@ -491,6 +491,7 @@ class Interface(object) :
 						self.starty = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
 						#self.gui_state = 0
 						self.startx, self.starty = self.dot_not_on_wall(self.startx, self.starty)
+						
 				elif self.gui_state == self.PLACE_END:
 					if self.mousex < self.wallbox.get_width() * mz.width and \
 							self.mousey < self.wallbox.get_height() * mz.height :
@@ -498,6 +499,7 @@ class Interface(object) :
 						self.endy = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
 						#self.gui_state = 0
 						self.endx, self.endy = self.dot_not_on_wall(self.endx, self.endy)
+						
 				elif self.gui_state == self.HOLD_START:
 					self.gui_state = self.PLACE_START
 				elif self.gui_state == self.HOLD_END:
