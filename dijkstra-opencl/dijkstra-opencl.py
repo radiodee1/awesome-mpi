@@ -446,9 +446,9 @@ class Interface(object) :
 				xx = i - ( cl.get_width() * (int(i / cl.get_width() )))
 				yy = int(i / cl.get_width())
 			
-				xxx = float(xx * ( self.fixscale)) #/ cl.width
-				yyy = float(yy * ( self.fixscale)) #/ cl.width
-				## not used
+				xxx = float(xx * ( self.fixscale)) 
+				yyy = float(yy * ( self.fixscale)) 
+				
 				screen.blit(self.pathblock,
 					(float(xxx * float(screen.get_width() / cl.width)) + self.blockoffset,
 					float(yyy * float(screen.get_width() / cl.width)) + self.blockoffset))
@@ -488,16 +488,16 @@ class Interface(object) :
 				elif self.gui_state == self.PLACE_START:
 					if self.mousex < self.wallbox.get_width() * mz.width and \
 							self.mousey < self.wallbox.get_height() * mz.height :
-						startx = self.mousex / (screen.get_width() / self.smallsurf.get_width()) # * self.fixscale
-						starty = self.mousey / (screen.get_height()/ self.smallsurf.get_height())# * self.fixscale
+						startx = self.mousex / (screen.get_width() / self.smallsurf.get_width()) 
+						starty = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
 						
 						self.startx, self.starty = self.dot_not_on_wall(startx, starty)
 						
 				elif self.gui_state == self.PLACE_END:
 					if self.mousex < self.wallbox.get_width() * mz.width and \
 							self.mousey < self.wallbox.get_height() * mz.height :
-						endx = self.mousex / (screen.get_width() / self.smallsurf.get_width()) # * self.fixscale
-						endy = self.mousey / (screen.get_height()/ self.smallsurf.get_height())# * self.fixscale
+						endx = self.mousex / (screen.get_width() / self.smallsurf.get_width()) 
+						endy = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
 						
 						self.endx, self.endy = self.dot_not_on_wall(endx, endy)
 						
@@ -532,8 +532,8 @@ class Interface(object) :
 		x = int(x / self.fixscale)
 		y = int(y / self.fixscale)
 		if self.sa[int((y * self.guiwidth) + x) ] != mz.WALL : 
-			xx = x #* self.fixscale
-			yy = y #* self.fixscale
+			xx = x 
+			yy = y 
 			self.gui_state = 0
 		return (xx, yy)
 
