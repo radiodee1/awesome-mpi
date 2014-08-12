@@ -466,6 +466,8 @@ class Interface(object) :
 			h - (self.box.get_height())) )
 		# detect mouse
 		self.mousex , self.mousey = pg.mouse.get_pos()
+		self.mousex = self.mousex - (self.wallbox.get_width() / 2)
+		self.mousey = self.mousey - (self.wallbox.get_height() / 2)
 		if event.type == pg.MOUSEBUTTONDOWN:
 			#print 'here mouse'
 			left , middle, right = pg.mouse.get_pressed() 
