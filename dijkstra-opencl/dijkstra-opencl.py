@@ -242,8 +242,8 @@ class Interface(object) :
 		x = 0
 		y = 0
 		white = (64, 64, 64)
-		w = 480
-		h = 480
+		w = 480 
+		h = 480 
 		self.startx = -1
 		self.starty = -1
 		self.endx = -1
@@ -297,16 +297,16 @@ class Interface(object) :
 		self.pathblock.fill(blue)
 		self.blockoffset = 0#blocksize / 2 
 		
-		self.fixscale = ( float  ( w - (int ( w/ cl.width  ) * cl.width ))/cl.width *2 ) + 1
-		#print self.fixscale, 'fixme'
-		self.wallbox = pg.Surface( (math.ceil(w/cl.width), 
-			math.ceil(h/cl.height )))
+		self.fixscale = (float  ( w - (int ( w/ cl.width  ) * cl.width ))/w) + 1
+		print self.fixscale, 'fixme'
+		self.wallbox = pg.Surface( (  math.ceil((w/cl.width) * self.fixscale), 
+			math.ceil((h/cl.height ) * self.fixscale)))
 		self.wallbox.fill((0,0,0))
 		
 		
 		## display first screen ##
 		screensurf = surface
-		screen = pg.display.set_mode((w, h))
+		screen = pg.display.set_mode((w , h ))
 		pg.display.set_caption('dijkstra-opencl', 'dijkstra-opencl')
 		screen.fill((white))
 		
@@ -373,11 +373,11 @@ class Interface(object) :
 					mz.wallout.append((yy * cl.width) + xx)
 					
 					## print walls to screen ! ##
-					#xxx = float(xx * ( self.fixscale)) 
-					#yyy = float(yy * ( self.fixscale)) 
+					xxx = float(xx * ( self.fixscale)) 
+					yyy = float(yy * ( self.fixscale)) 
 					screensurf.blit(self.wallbox, 
-						(float(xx * float (w  / cl.width))   ,
-						float(yy * float (h  / cl.height))   ))
+						(float(xxx * float (w  / cl.width))   ,
+						float(yyy * float (h  / cl.height))   ))
 		
 		self.gui_state = 0
 		
@@ -410,8 +410,8 @@ class Interface(object) :
 		
 		if self.quit != 1:
 			#print len(sa)
-			self.sa[(self.starty * cl.width) + self.startx] = mz.START
-			self.sa[(self.endy * cl.width) + self.endx] = mz.END
+			self.sa[int((self.starty * cl.width) + self.startx)] = mz.START
+			self.sa[int((self.endy * cl.width) + self.endx)] = mz.END
 			cl.set_map(self.sa, cl.width, cl.height)
 			starttime = time.clock()
 			cl.load_kernel()
@@ -446,8 +446,8 @@ class Interface(object) :
 				xx = i - ( cl.get_width() * (int(i / cl.get_width() )))
 				yy = int(i / cl.get_width())
 			
-				#xxx = float(xx * ( self.fixscale)) #/ cl.width
-				#yyy = float(yy * ( self.fixscale)) #/ cl.width
+				xxx = float(xx * ( self.fixscale)) #/ cl.width
+				yyy = float(yy * ( self.fixscale)) #/ cl.width
 				screen.blit(self.pathblock,
 					(float(xx * float(screen.get_width() / cl.width)) + self.blockoffset,
 					float(yy * float(screen.get_width() / cl.width)) + self.blockoffset))
@@ -487,18 +487,18 @@ class Interface(object) :
 				elif self.gui_state == self.PLACE_START:
 					if self.mousex < self.wallbox.get_width() * mz.width and \
 							self.mousey < self.wallbox.get_height() * mz.height :
-						self.startx = self.mousex / (screen.get_width() / self.smallsurf.get_width())
-						self.starty = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
+						startx = self.mousex / (screen.get_width() / self.smallsurf.get_width())# * self.fixscale
+						starty = self.mousey / (screen.get_height()/ self.smallsurf.get_height())# * self.fixscale
 						#self.gui_state = 0
-						self.startx, self.starty = self.dot_not_on_wall(self.startx, self.starty)
+						self.startx, self.starty = self.dot_not_on_wall(startx, starty)
 						
 				elif self.gui_state == self.PLACE_END:
 					if self.mousex < self.wallbox.get_width() * mz.width and \
 							self.mousey < self.wallbox.get_height() * mz.height :
-						self.endx = self.mousex / (screen.get_width() / self.smallsurf.get_width())
-						self.endy = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
+						endx = self.mousex / (screen.get_width() / self.smallsurf.get_width())# * self.fixscale
+						endy = self.mousey / (screen.get_height()/ self.smallsurf.get_height())# * self.fixscale
 						#self.gui_state = 0
-						self.endx, self.endy = self.dot_not_on_wall(self.endx, self.endy)
+						self.endx, self.endy = self.dot_not_on_wall(endx, endy)
 						
 				elif self.gui_state == self.HOLD_START:
 					self.gui_state = self.PLACE_START
@@ -528,11 +528,13 @@ class Interface(object) :
 	def dot_not_on_wall(self, x, y) :
 		xx = -1
 		yy = -1
-		if self.sa[(y * self.guiwidth) + x ] != mz.WALL : 
-			xx = x
-			yy = y  
+		x = int(x)
+		y = int(y)
+		if self.sa[int((y * self.guiwidth) + x) ] != mz.WALL : 
+			xx = x #* self.fixscale
+			yy = y #* self.fixscale
 			self.gui_state = 0
-		return (xx,yy)
+		return (xx, yy)
 
 	def show_maze(self, maze = [], width = 10, height = 10, symbols=True):
 		
