@@ -547,6 +547,7 @@ if __name__ == '__main__':
 		matrixd.set_map(mz.maze, mz.width, mz.height)	
 		#matrixd.load_kernel()
 		#matrixd.set_buffers()
+		starttime = time.clock()
 		matrixd.execute()
 		endtime = time.clock()
 		
@@ -559,6 +560,7 @@ if __name__ == '__main__':
 		
 		i.show_maze(b, matrixd.get_width(), matrixd.get_height(), False)
 		print 'dist'
+		print endtime - starttime, 'time on cpu'
 	
 	if matrixd.get_width() <= 30 :
 		print 'last printout'
