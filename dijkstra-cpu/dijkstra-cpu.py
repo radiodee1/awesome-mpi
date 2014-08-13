@@ -6,29 +6,29 @@ import time, math
 import fileinput
 from PIL import Image
 import pygame as pg
-#import pygame._view
 import pygame.gfxdraw as pgd
 import pygame
 
 import sys
-
-import array_setup as mz
+import setup as ar
 
 class CPU(object):
 
 
-	def __init__(self):
-		self.width = mz.width
-		self.height = mz.height
-		self.size = mz.width * mz.height
+	def __init__(self, array):
+		self.mz = array
+	
+		self.width = self.mz.width
+		self.height = self.mz.height
+		self.size = self.mz.width * self.mz.height
 
-		self.maze = mz.maze
+		self.maze = self.mz.maze
 		self.found = []
 		self.oo_ex = False
 		
 		self.visited = [0] * self.size
-		self.dist = mz.dist 
-		self.prev = mz.prev 
+		self.dist = self.mz.dist 
+		self.prev = self.mz.prev 
 
 	
 	def execute(self):
@@ -45,9 +45,9 @@ class CPU(object):
 	
 	def must_check(self, test, rank):
 		## part of each node !! ##
-		if self.visited[rank] != mz.VISITED and self.maze[rank] != mz.WALL:
-			if self.dist[rank] + 1 <= self.dist[test] or self.dist[test] == mz.UNDEFINED :
-				if self.maze[test] != mz.START  :
+		if self.visited[rank] != self.mz.VISITED and self.maze[rank] != self.mz.WALL:
+			if self.dist[rank] + 1 <= self.dist[test] or self.dist[test] == self.mz.UNDEFINED :
+				if self.maze[test] != self.mz.START  :
 					self.prev[test] = rank 
 					self.dist[test] = self.dist[rank] + 1
 	
@@ -57,7 +57,7 @@ class CPU(object):
 	
 		if flag == 0 and rank < self.width * self.height:
 	
-			if self.visited[rank] == mz.FREE and self.maze[rank] != mz.WALL :
+			if self.visited[rank] == self.mz.FREE and self.maze[rank] != self.mz.WALL :
 						
 				if self.get_y(rank) == self.get_y(rank + 1) and \
 						rank+1 < self.size and self.near_visited(rank) :
@@ -73,14 +73,14 @@ class CPU(object):
 				if rank - self.width >= 0 and self.near_visited(rank) :
 					self.must_check(rank - self.width, rank)
 
-				if self.maze[rank] == mz.START :
+				if self.maze[rank] == self.mz.START :
 					self.must_check(rank, rank)
 				
 
 				if self.near_visited(rank) :
-					self.visited[rank] = mz.VISITED
+					self.visited[rank] = self.mz.VISITED
 					
-				if self.maze[rank] == mz.END and self.visited[rank] == mz.VISITED:
+				if self.maze[rank] == self.mz.END and self.visited[rank] == self.mz.VISITED:
 					self.found = 1
 				
 				
@@ -88,18 +88,18 @@ class CPU(object):
 	def near_visited(self, rank) :
 		## part of each node !! ##
 		if self.get_y(rank) == self.get_y(rank + 1) and rank + 1 < self.size :
-			if self.visited[rank + 1] == mz.VISITED:
+			if self.visited[rank + 1] == self.mz.VISITED:
 				return True
 		if self.get_y(rank) == self.get_y(rank - 1) and rank - 1 >= 0 :
-			if self.visited[rank - 1] == mz.VISITED:
+			if self.visited[rank - 1] == self.mz.VISITED:
 				return True
 		if rank + self.width < self.size:
-			if self.visited[rank + self.width] == mz.VISITED:
+			if self.visited[rank + self.width] == self.mz.VISITED:
 				return True
 		if rank - self.width >= 0:
-			if self.visited[rank - self.width] == mz.VISITED:
+			if self.visited[rank - self.width] == self.mz.VISITED:
 				return True
-		if rank == self.get_rank(mz.startx, mz.starty)  :
+		if rank == self.get_rank(self.mz.startx, self.mz.starty)  :
 			return True
 		return False
 		
@@ -120,15 +120,15 @@ class CPU(object):
 		## call this after end is found!! ##
 		dim = self.size 
 		if True: 
-			if mz.gui == False:
+			if self.mz.gui == False:
 				print self.prev, 'prev'
 			i = 0 
 			self.found = []
 		
-			found = self.prev[(mz.endy * self.width) + mz.endx]
+			found = self.prev[(self.mz.endy * self.width) + self.mz.endx]
 
-			while (found != mz.UNDEFINED) and i < self.width * self.height :
-				if found != mz.UNDEFINED:
+			while (found != self.mz.UNDEFINED) and i < self.width * self.height :
+				if found != self.mz.UNDEFINED:
 					self.found.append(int(found))
 				else :
 					print int( found / width), found - (int(found / width) * width), 'y,x'
@@ -138,8 +138,8 @@ class CPU(object):
 			
 			i = 0
 			while (i < dim) :
-				if ( i in self.found) and self.maze[i] != mz.START:
-					self.maze[i] = mz.PATH
+				if ( i in self.found) and self.maze[i] != self.mz.START:
+					self.maze[i] = self.mz.PATH
 					
 				i += 1	
 		
@@ -174,23 +174,24 @@ class CPU(object):
 	def set_map(self, maze, width=-1, height=-1):
 		## class helper ##
 		self.maze = maze
-		mz.maze = maze
+		self.mz.maze = maze
 		if width == -1:
-			self.width = mz.width
+			self.width = self.mz.width
 		else:
 			self.width = width
-			mz.width = width
+			self.mz.width = width
 			
 		if height == -1:
-			self.height = mz.height
+			self.height = self.mz.height
 		else:
 			self.height = height
-			mz.height = height
+			self.mz.height = height
 		
 
 class Interface(object) :
 
-	def __init__(self):
+	def __init__(self, array):
+		self.mz = array
 		self.mapname = 'map.png'
 		self.iconname = 'icon.png'
 		self.map  = []
@@ -198,8 +199,8 @@ class Interface(object) :
 		
 	def solve_png(self , cpu):
 	
-		if mz.gui == False:
-			cpu.set_map(mz.maze, mz.width, mz.height)
+		if self.mz.gui == False:
+			cpu.set_map(self.mz.maze, self.mz.width, self.mz.height)
 			return
 	
 		x = 0
@@ -331,11 +332,11 @@ class Interface(object) :
 			for xx in range (0, cpu.height):
 				p =  pxarray[xx,yy]
 
-				if p == 0 : p = mz.WALL
+				if p == 0 : p = self.mz.WALL
 				else : p = 0
 				self.sa[(yy * cpu.width) + xx] = p
-				if p == mz.WALL:
-					mz.wallout.append((yy * cpu.width) + xx)
+				if p == self.mz.WALL:
+					self.mz.wallout.append((yy * cpu.width) + xx)
 					
 					## print walls to screen ! ##
 					xxx = float(xx * ( self.fixscale)) 
@@ -367,16 +368,16 @@ class Interface(object) :
 		
 	
 		
-		mz.endx = self.endx
-		mz.endy = self.endy
+		self.mz.endx = self.endx
+		self.mz.endy = self.endy
 		
-		mz.startx = self.startx
-		mz.starty = self.starty
+		self.mz.startx = self.startx
+		self.mz.starty = self.starty
 		
 		if self.quit != 1:
 			## run cpu calculation ##
-			self.sa[(self.starty * cpu.width) + self.startx] = mz.START
-			self.sa[(self.endy * cpu.width) + self.endx] = mz.END
+			self.sa[(self.starty * cpu.width) + self.startx] = self.mz.START
+			self.sa[(self.endy * cpu.width) + self.endx] = self.mz.END
 			
 			cpu.set_dist_start(self.startx, self.starty)
 			
@@ -455,16 +456,16 @@ class Interface(object) :
 						self.gui_state = self.FIND_PATH
 
 				elif self.gui_state == self.PLACE_START:
-					if self.mousex < self.wallbox.get_width() * mz.width and \
-							self.mousey < self.wallbox.get_height() * mz.height :
+					if self.mousex < self.wallbox.get_width() * self.mz.width and \
+							self.mousey < self.wallbox.get_height() * self.mz.height :
 						self.startx = self.mousex / (screen.get_width() / self.smallsurf.get_width())
 						self.starty = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
 						#self.gui_state = 0
 						self.startx, self.starty = self.dot_not_on_wall(self.startx, self.starty)
 					
 				elif self.gui_state == self.PLACE_END:
-					if self.mousex < self.wallbox.get_width() * mz.width and \
-							self.mousey < self.wallbox.get_height() * mz.height :
+					if self.mousex < self.wallbox.get_width() * self.mz.width and \
+							self.mousey < self.wallbox.get_height() * self.mz.height :
 						self.endx = self.mousex / (screen.get_width() / self.smallsurf.get_width())
 						self.endy = self.mousey / (screen.get_height()/ self.smallsurf.get_height())
 						#self.gui_state = 0
@@ -500,7 +501,7 @@ class Interface(object) :
 		yy = -1
 		x = int(x / self.fixscale)
 		y = int(y / self.fixscale)
-		if self.sa[(y * self.guiwidth) + x ] != mz.WALL : 
+		if self.sa[(y * self.guiwidth) + x ] != self.mz.WALL : 
 			xx = x
 			yy = y  
 			self.gui_state = 0
@@ -525,17 +526,17 @@ class Interface(object) :
 				print '#',
 				for x in range (0, width):
 					if symbols == True:
-						if maze[ (y * width) + x] == mz.FREE :
+						if maze[ (y * width) + x] == self.mz.FREE :
 							print ' ',
-						elif maze[ (y * width) + x] == mz.START :
+						elif maze[ (y * width) + x] == self.mz.START :
 							print 'S',
-						elif maze[ (y * width) + x] == mz.END :
+						elif maze[ (y * width) + x] == self.mz.END :
 							print 'X',
-						elif maze[ (y * width) + x] == mz.WALL :
+						elif maze[ (y * width) + x] == self.mz.WALL :
 							print '#',
-						elif maze[ (y * width) + x] == mz.PATH :
+						elif maze[ (y * width) + x] == self.mz.PATH :
 							print 'O',
-						elif maze[ (y * width) + x] == mz.UNDEFINED :
+						elif maze[ (y * width) + x] == self.mz.UNDEFINED :
 							print 'U',
 					else:
 						print maze[ (y * width) + x] ,
@@ -552,18 +553,20 @@ class Interface(object) :
 
 if __name__ == '__main__': 
 
-	matrixd = CPU()
-	
-	i = Interface()
+	setup = ar.SU()
 
-	if mz.gui == True:
+	matrixd = CPU(setup)
+	
+	i = Interface(setup)
+
+	if setup.gui == True:
 		while i.quit == 0:
 			i.solve_png(matrixd)
 	
 
 	
-	if mz.gui == False:
-		matrixd.set_map(mz.maze, mz.width, mz.height)	
+	if setup.gui == False:
+		matrixd.set_map(setup.maze, setup.width, setup.height)	
 		#matrixd.load_kernel()
 		#matrixd.set_buffers()
 		starttime = time.clock()
@@ -585,7 +588,7 @@ if __name__ == '__main__':
 		print 'last printout'
 		i.show_maze(matrixd.get_maze() , matrixd.get_width(), matrixd.get_height())
 	
-	if mz.gui == True and mz.output == True :
+	if setup.gui == True and setup.output == True :
 		f = open('outifle.txt','w')
 		f.close()
 		f = open('outifle.txt','a')
@@ -594,7 +597,7 @@ if __name__ == '__main__':
 		f.write(',')
 		f.write(str(matrixd.get_height()))
 		f.write( '\n')
-		for i in mz.wallout :
+		for i in setup.wallout :
 			f.write(str(i)+",")
 		f.close()
 	
