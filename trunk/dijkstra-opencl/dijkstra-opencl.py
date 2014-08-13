@@ -70,9 +70,6 @@ class CL(object):
 		startdist[(mz.starty * self.width) + mz.startx] = 0
 		self.maze[(mz.starty * self.width) + mz.startx] = mz.START 
 		
-		## this doesn't take into account walls ##
-		#mz.set_startvars(startdist, 1)
-		#mz.set_startvars(startprev,(mz.starty * self.width) + mz.startx )
 		
 		self.maze = numpy.array(self.maze, dtype=numpy.int32)
 		self.visited = numpy.array((startvisited), dtype=numpy.int32)

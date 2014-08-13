@@ -131,9 +131,6 @@ if csv == False:
 	for i in range (4, width) :
 		maze[ (twothirds * width) + i] = WALL
 	
-	# test for unreachable goal	
-	#for i in range (0, width) :
-	#	maze[ (twothirds * width) + i] = WALL
 
 ## this doesn't take into account walls. ##
 def set_startvars(dist1, val):
