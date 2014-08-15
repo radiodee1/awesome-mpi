@@ -5,15 +5,11 @@ import numpy
 import time, math
 
 import fileinput
-from PIL import Image
 import pygame as pg
-#import pygame._view
 import pygame.gfxdraw as pgd
 import pygame
-
 import sys
 
-#import array_setup as mz
 import setup as ar
 
 class CL(object):
