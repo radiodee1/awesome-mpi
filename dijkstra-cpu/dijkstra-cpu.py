@@ -2,14 +2,12 @@
 
 import numpy
 import time, math
-
 import fileinput
-#from PIL import Image
 import pygame as pg
 import pygame.gfxdraw as pgd
 import pygame
-
 import sys
+
 import setup as ar
 
 class CPU(object):
