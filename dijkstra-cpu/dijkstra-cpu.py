@@ -2,7 +2,7 @@
 
 import numpy
 import time, math
-import fileinput
+#import fileinput
 import pygame as pg
 import pygame.gfxdraw as pgd
 import pygame
