@@ -406,6 +406,10 @@ class Interface(object) :
 					self.running = 0
 					self.quit = 1	
 		
+			# skip input if text file is used
+			if self.mz.csv == True: 
+				self.running = 0
+		
 			screen.fill((white))
 			screen.blit(screensurf,(0,0))
 			self.gui_controls(screen, event, w,h)
@@ -459,8 +463,7 @@ class Interface(object) :
 						left , middle, right = pg.mouse.get_pressed() 
 						if left == True:
 							self.running = 0
-				else: 
-					self.running = 0
+				
 			
 			screen.fill((white))
 			screen.blit(screensurf,(0,0))
