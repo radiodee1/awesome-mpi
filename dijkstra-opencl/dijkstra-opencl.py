@@ -614,11 +614,11 @@ if __name__ == '__main__':
 	
 	matrixd = CL(setup)
 	
-	i = Interface(setup)
+	iface = Interface(setup)
 
 	if setup.gui == True:
-		while i.quit == 0:
-			i.solve_png(matrixd)
+		while iface.quit == 0:
+			iface.solve_png(matrixd)
 	
 
 	
@@ -634,17 +634,17 @@ if __name__ == '__main__':
 		
 		a = matrixd.get_prev()
 		b = matrixd.get_dist()
-		i.show_maze(a, matrixd.get_width(), matrixd.get_height(), False)
+		iface.show_maze(a, matrixd.get_width(), matrixd.get_height(), False)
 		print 'prev'
 		
-		i.show_maze(b, matrixd.get_width(), matrixd.get_height(), False)
+		iface.show_maze(b, matrixd.get_width(), matrixd.get_height(), False)
 		print 'dist'
 		print endtime - starttime, 'time on gpu'
 	
 	
 	if matrixd.get_width() <= 40 :
 		print 'last printout'
-		i.show_maze(matrixd.get_maze() , matrixd.get_width(), matrixd.get_height())
+		iface.show_maze(matrixd.get_maze() , matrixd.get_width(), matrixd.get_height())
 	
 	if setup.gui == True and setup.output == True :
 		f = open('outifle.txt','w')
@@ -654,8 +654,15 @@ if __name__ == '__main__':
 		f.write(str(matrixd.get_width()) )
 		f.write(',')
 		f.write(str(matrixd.get_height()))
-		f.write( '\n')
+		f.write('\n')
 		for i in setup.wallout :
 			f.write(str(i)+",")
+		f.write('\n')
+		f.write('#start and end follow...\n')
+		f.write(str(iface.mz.startx) + '\n')
+		f.write(str(iface.mz.starty) + '\n')
+		f.write(str(iface.mz.endx) + '\n')
+		f.write(str(iface.mz.endy) + '\n')
+		f.write('\n')
 		f.close()
 	
