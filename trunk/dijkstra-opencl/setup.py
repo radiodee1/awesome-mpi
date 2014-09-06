@@ -55,6 +55,11 @@ class SU(object):
 
 		i = 0
 		k = 0
+		m = 0
+		tstartx = 0
+		tstarty = 0
+		tendx = 0
+		tendy = 0
 		if len(sys.argv) > 1 : 
 			#csv = True
 	
@@ -73,15 +78,31 @@ class SU(object):
 							if i == 2:
 								#print 'wall-csv:', line
 								self.wall = line.split(',')
-		
+							if i > 2 and i < 7:
+								m += 1
+							if i == 3:
+								tstartx = int(line)
+							if i == 4:
+								tstarty = int(line)
+							if i == 5:
+								tendx = int(line)
+							if i == 6:
+								tendy = int(line)
+								
+					if m == 4 :
+						self.startx = tstartx
+						self.starty = tstarty
+						self.endx = tendx
+						self.endy = tendy
 
 		self.starttime = 0
 		self.endtime = 0
 
-		self.startx = 3
-		self.starty = 0# height - 1
-		self.endx = self.width - 3
-		self.endy =  self.height - 1
+		if self.csv == False :
+			self.startx = 3
+			self.starty = 0# height - 1
+			self.endx = self.width - 3
+			self.endy =  self.height - 1
 
 		#enum for maze
 		self.OPEN = 1
@@ -119,7 +140,8 @@ class SU(object):
 		if self.csv == True:
 			for i in self.wall :
 				#print int(i)
-				if i != '':
+				
+				if i != '' and i.isdigit() :
 					if int(i) < self.width * self.height:
 						#print 'add wall'
 						self.maze[int(i)] = self.WALL
