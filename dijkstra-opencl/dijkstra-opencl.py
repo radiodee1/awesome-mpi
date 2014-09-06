@@ -300,7 +300,6 @@ class Interface(object) :
 		self.wallbox.fill((0,0,0))
 		
 		
-		## display first screen ##
 		screensurf = surface
 		screen = pg.display.set_mode((w , h ))
 		pg.display.set_caption('dijkstra-opencl', 'dijkstra-opencl')
@@ -308,101 +307,124 @@ class Interface(object) :
 		
 		self.quit = 0
 		running = 1
-		while running:
+		
+		if self.mz.csv != True:
+			## display first screen ##
+			while running:
 
-			for event in pg.event.get():
-				if event.type == pg.QUIT:
-					running = 0
-					self.quit = 1	
-				if event.type == pg.KEYUP:
-					if event.key == pg.K_RETURN:
+				for event in pg.event.get():
+					if event.type == pg.QUIT:
 						running = 0
-					if event.key == pg.K_UP:
-						y -= 5
-						if y < 0 : 
-							y = 0
-					if event.key == pg.K_DOWN:
-						y += 5
-						if y + cl.height > screen.get_height() : 
-							y = screen.get_height() - cl.height 
+						self.quit = 1	
+					if event.type == pg.KEYUP:
+						if event.key == pg.K_RETURN:
+							running = 0
+						if event.key == pg.K_UP:
+							y -= 5
+							if y < 0 : 
+								y = 0
+						if event.key == pg.K_DOWN:
+							y += 5
+							if y + cl.height > screen.get_height() : 
+								y = screen.get_height() - cl.height 
 							
-					if event.key == pg.K_LEFT:
-						x -= 5
-						if x < 0 : 
-							x = 0
-					if event.key == pg.K_RIGHT:
-						x += 5
-						if x + cl.width > screen.get_width() : 
-							x = screen.get_width() - cl.width 			
+						if event.key == pg.K_LEFT:
+							x -= 5
+							if x < 0 : 
+								x = 0
+						if event.key == pg.K_RIGHT:
+							x += 5
+							if x + cl.width > screen.get_width() : 
+								x = screen.get_width() - cl.width 			
 			
-			screensurf = surface.copy()
-			screen.fill(white)
-			screen.blit(screensurf,(0,0))
-			pgd.rectangle(screen, ((x,y),(cl.width,cl.height)), (255,0,0))
-			pg.display.flip()
+				screensurf = surface.copy()
+				screen.fill(white)
+				screen.blit(screensurf,(0,0))
+				pgd.rectangle(screen, ((x,y),(cl.width,cl.height)), (255,0,0))
+				pg.display.flip()
 			
-		## display second screen ##
-		screen.fill((white))
-		self.smallsurf = pg.Surface((cl.width, cl.height))
-		bwsurf = pg.Surface((cl.width, cl.height))
-		self.smallsurf.blit(surface,(0,0),((x,y), (cl.width, cl.height)))
+			## display second screen ##
+			screen.fill((white))
+			self.smallsurf = pg.Surface((cl.width, cl.height))
+			bwsurf = pg.Surface((cl.width, cl.height))
+			self.smallsurf.blit(surface,(0,0),((x,y), (cl.width, cl.height)))
 		
 		
-		pg.transform.threshold(bwsurf, self.smallsurf,
-			(0,0,0,0),(20,20,20,0), (255,255,255,0), 1)	
+			pg.transform.threshold(bwsurf, self.smallsurf,
+				(0,0,0,0),(20,20,20,0), (255,255,255,0), 1)	
 		
 		screensurf = pg.Surface((w,h))
 		screensurf.fill((255,255,255))
 		screen.fill((255,255,255))
 		
-		## convert to array representation ##
-		self.sa = [0] * cl.width * cl.height
-		pxarray = pygame.PixelArray(self.smallsurf)
+		if self.mz.csv == True:
+			self.sa = self.mz.maze
+			cl.width = self.mz.width
+			cl.height = self.mz.height
+			
+		else:
+			## convert to array representation ##
+			self.sa = [0] * cl.width * cl.height
+			pxarray = pygame.PixelArray(self.smallsurf)
+		
 		for yy in range (0, cl.width):
 			for xx in range (0, cl.height):
-				p =  pxarray[xx,yy]
+				
+				
+				if self.mz.csv == True:
+					p = self.sa[(yy * cl.width ) + xx]
+				else:
+					p =  pxarray[xx,yy]
 
-				if p == 0 : p = self.mz.WALL
-				else : p = 0
-				self.sa[(yy * cl.width) + xx] = p
+					if p == 0 : p = self.mz.WALL
+					else : p = 0
+					self.sa[(yy * cl.width) + xx] = p
+					
 				if p == self.mz.WALL:
 					self.mz.wallout.append((yy * cl.width) + xx)
-					
+				
 					## print walls to screen ! ##
 					xxx = float(xx * ( self.fixscale)) 
 					yyy = float(yy * ( self.fixscale)) 
 					screensurf.blit(self.wallbox, 
 						(float(xxx * float (w  / cl.width))   ,
 						float(yyy * float (h  / cl.height))   ))
-		
+	
 		self.gui_state = 0
-		
+	
 		self.PLACE_START = 1
 		self.PLACE_END = 2
 		self.FIND_PATH = 3
 		self.HOLD_START = 4
 		self.HOLD_END = 5
-		
+	
 		self.running = 1
 		while self.running == 1 and self.quit == 0:
-			
+		
 			for event in pg.event.get():
 				if event.type == pg.QUIT:
 					self.running = 0
 					self.quit = 1	
-			
+		
 			screen.fill((white))
 			screen.blit(screensurf,(0,0))
 			self.gui_controls(screen, event, w,h)
 			pg.display.flip()
-		
 	
-		
-		self.mz.endx = self.endx
-		self.mz.endy = self.endy
-		
-		self.mz.startx = self.startx
-		self.mz.starty = self.starty
+
+		if self.mz.csv == False :
+			self.mz.endx = self.endx
+			self.mz.endy = self.endy
+	
+			self.mz.startx = self.startx
+			self.mz.starty = self.starty
+	
+		elif self.mz.csv == True :
+			self.startx = self.mz.startx
+			self.starty = self.mz.starty
+			self.endx = self.mz.endx
+			self.endy = self.mz.endy
+			self.quit = 0
 		
 		if self.quit != 1:
 			#print len(sa)
@@ -421,20 +443,24 @@ class Interface(object) :
 		self.running = 1
 		while self.running == 1 and self.quit == 0:
 			
+			
 			for event in pg.event.get():
 				if event.type == pg.QUIT:
 					self.running = 0
 					self.quit = 1	
 			
-				if event.type == pg.KEYUP:
-					if event.key == pg.K_RETURN:
-						self.running = 0
+				if self.mz.csv == False :
+					if event.type == pg.KEYUP:
+						if event.key == pg.K_RETURN:
+							self.running = 0
 			
-				if event.type == pg.MOUSEBUTTONDOWN:
+					if event.type == pg.MOUSEBUTTONDOWN:
 			
-					left , middle, right = pg.mouse.get_pressed() 
-					if left == True:
-						self.running = 0
+						left , middle, right = pg.mouse.get_pressed() 
+						if left == True:
+							self.running = 0
+				else: 
+					self.running = 0
 			
 			screen.fill((white))
 			screen.blit(screensurf,(0,0))

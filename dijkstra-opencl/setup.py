@@ -135,18 +135,6 @@ class SU(object):
 				self.maze[ (twothirds * self.width) + i] = self.WALL
 	
 
-		## this doesn't take into account walls. ##
-		def set_startvars(dist1, val):
-			test = (self.starty * self.width) + self.startx
-			if test >= 0 and test < self.width * self.height:
-				if test + 1 < self.width * self.height and get_y(test) == get_y(test + 1):
-					dist1[test + 1] = val
-				if test - 1 >= 0 and get_y(test) == get_y(test - 1):
-					dist1[test -1 ] = val
-				if test + self.width < self.width * self.height:
-					dist1 [test + self.width] = val
-				if test - self.width >= 0 :
-					dist1 [test - self.width] = val
-
+		
 		def get_y(ii):
 			return int (ii / self.width)
