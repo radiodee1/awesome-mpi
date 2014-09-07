@@ -75,9 +75,11 @@ class CL(object):
 		self.prev = numpy.array((startprev), dtype=numpy.int32)
 		self.mutex = numpy.array(([self.mz.FREE] * self.size), dtype=numpy.int32)
 		
-		prepdim = [0] * 3#self.size
+		prepdim = [0] * 4#self.size
 		prepdim[0] = self.width
 		prepdim[1] = self.height
+		if False : prepdim[3] = 0
+		else : prepdim[3] = 1
 		
 		self.dimension = numpy.array((prepdim), dtype=numpy.int32)
 			           
@@ -149,7 +151,7 @@ class CL(object):
 		'''
 			at some point may remove 'wait' on visited_buf and dist_buf!!
 		'''
-		print 'loop end'
+		print 'loop end', loop
 		#cl.enqueue_read_buffer(self.queue, self.visited_buf, visited).wait()
 		cl.enqueue_read_buffer(self.queue, self.dist_buf, dist).wait()
 		cl.enqueue_read_buffer(self.queue, self.prev_buf, prev).wait()        
