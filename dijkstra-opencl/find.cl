@@ -12,7 +12,7 @@
 #define PATH  5
 
 #define VISITED  1
-#define UNDEFINED  1600
+#define UNDEFINED  16000000
 		
 #define FALSE 0
 #define TRUE 1
@@ -92,25 +92,26 @@ void must_check(
 	int ii,
 	__global int* maze, 
 	__global int* visited, 
-	__global int* dist, 
+	__global float* dist, 
 	__global int* prev,
 	__global int* mutex,
 	int dim,
-	int  test) 
+	int  test,
+	float len) 
 {
         		           
-	int alt = 0;
+	float alt = 0;
         	
 	if   ((visited[test] !=   VISITED )
         	&& maze[test] != WALL && maze[ii] != WALL) {
         			
-		alt = dist[ii] + 1;
-		if (dist[ii] == UNDEFINED  ) alt = 0;
+		alt = dist[ii] + len;
+		//if (dist[test] == UNDEFINED  ) alt = 0;
 		if (maze[ii] == START) {
 			//alt = 0;
 		}
         		
-		if  (/*alt <= dist[ii] || */ dist[test] == UNDEFINED ){
+		if  (alt <= dist[test] ||  dist[test] == UNDEFINED ){
 					
 				GetSemaphor(&mutex[test]);
 
@@ -128,7 +129,7 @@ void must_check(
 void sub(
 	__global int* maze, 
 	__global int* visited, 
-	__global int* dist, 
+	__global float* dist, 
 	__global int* prev,
 	__global int* mutex,
 	__global int* dimension,
@@ -157,32 +158,32 @@ void sub(
        			
 		i ++;
 		if ((visited[ii] ==  FREE &&  maze[ii] !=  WALL) ) {
-			GetSemaphor(&mutex[ii]);
+			//GetSemaphor(&mutex[ii]);
 
 					
 			/////////////////////////////////////////////
 
 			if ( (ii + 1 < dim) && get_y(width,ii) == get_y(width,ii + 1)  
 				&& near_visited(ii, maze, visited, width, height)) {
-				must_check(ii,maze, visited, dist, prev, mutex,dim,ii + 1);
+				must_check(ii,maze, visited, dist, prev, mutex,dim,ii + 1, 1);
 			}
 					
 
 			if ( ii +  width < dim  && near_visited(ii, maze, visited, width, height)) {
-				must_check(ii,maze, visited, dist, prev, mutex,dim, ii +  width);
+				must_check(ii,maze, visited, dist, prev, mutex,dim, ii +  width, 1);
 			}
 							
            			
 			if (( ii >=  width)   && near_visited(ii, maze, visited, width, height)) {
-				must_check(ii,maze, visited, dist, prev, mutex,dim, ii -  width);
+				must_check(ii,maze, visited, dist, prev, mutex,dim, ii -  width, 1);
 			}
 					
 			if ( (ii >=1) && get_y(width,  ii) == get_y(width,  ii - 1)  
 				&& near_visited(ii, maze, visited, width, height)) {
-				must_check(ii,maze, visited, dist, prev, mutex,dim, ii - 1);
+				must_check(ii,maze, visited, dist, prev, mutex,dim, ii - 1, 1);
 			}
 
-			//barrier(CLK_LOCAL_MEM_FENCE);
+			
 			if  ( maze[ii] ==  START) {
 										
 			}
@@ -195,12 +196,12 @@ void sub(
 			////////////////////////////////////
 					
 					
-			ReleaseSemaphor(&mutex[ii]);
+			//ReleaseSemaphor(&mutex[ii]);
 		}
 				
 	}
        		
-	barrier(CLK_LOCAL_MEM_FENCE);
+	//barrier(CLK_LOCAL_MEM_FENCE);
            
 			
            
@@ -209,7 +210,7 @@ void sub(
 __kernel void part0(
 	__global int* maze, 
 	__global int* visited, 
-	__global int* dist, 
+	__global float* dist, 
 	__global int* prev,
 	__global int* mutex,
 	__global int* dimension)
@@ -237,7 +238,7 @@ __kernel void part0(
 __kernel void part1(
 	__global int* maze, 
 	__global int* visited, 
-	__global int* dist, 
+	__global float* dist, 
 	__global int* prev,
 	__global int* mutex,
 	__global int* dimension)
@@ -264,7 +265,7 @@ __kernel void part1(
 __kernel void find(
 	__global int* maze, 
 	__global int* visited, 
-	__global int* dist, 
+	__global float* dist, 
 	__global int* prev,
 	__global int* mutex,
 	__global int* dimension)

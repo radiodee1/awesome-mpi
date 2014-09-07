@@ -71,7 +71,7 @@ class CL(object):
 		
 		self.maze = numpy.array(self.maze, dtype=numpy.int32)
 		self.visited = numpy.array((startvisited), dtype=numpy.int32)
-		self.dist = numpy.array((startdist), dtype=numpy.uint32)
+		self.dist = numpy.array((startdist), dtype=numpy.float32)
 		self.prev = numpy.array((startprev), dtype=numpy.int32)
 		self.mutex = numpy.array(([self.mz.FREE] * self.size), dtype=numpy.int32)
 		
@@ -101,7 +101,7 @@ class CL(object):
 	def execute(self):
 	
 		visited = numpy.empty_like(self.maze)
-		dist = numpy.empty_like(self.maze)
+		dist = numpy.empty_like(self.dist)
 		prev = numpy.empty_like(self.maze)
 		dimension = numpy.empty_like(self.dimension)
 		loop = 0
@@ -150,13 +150,13 @@ class CL(object):
 			at some point may remove 'wait' on visited_buf and dist_buf!!
 		'''
 		print 'loop end'
-		cl.enqueue_read_buffer(self.queue, self.visited_buf, visited).wait()
+		#cl.enqueue_read_buffer(self.queue, self.visited_buf, visited).wait()
 		cl.enqueue_read_buffer(self.queue, self.dist_buf, dist).wait()
 		cl.enqueue_read_buffer(self.queue, self.prev_buf, prev).wait()        
 
 
 		self.prev = prev
-		self.visited = visited
+		#self.visited = visited
 		self.dist = dist
 		
 	
@@ -227,7 +227,18 @@ class Interface(object) :
 		self.mapname = 'map.png'
 		self.iconname = 'icon.png'
 		self.map  =[]
+		self.w = 480
+		self.h = 480
 		self.quit = 0	
+		
+	def choose_opts(self, cl):
+		print 'options: window/size/map'
+		print 'window size = 480 - 600 '
+		
+		print 'selection size = 10 - window size'
+		print 'map = choose map'
+		 
+		
 		
 	def solve_png(self , cl):
 	
@@ -238,8 +249,8 @@ class Interface(object) :
 		x = 0
 		y = 0
 		white = (64, 64, 64)
-		w = 480 
-		h = 480 
+		#self.w = 480 
+		#self.h = 480 
 		self.startx = -1
 		self.starty = -1
 		self.endx = -1
@@ -275,15 +286,15 @@ class Interface(object) :
 		self.box.blit(boxblue, (32 + self.boxborder, 0 + self.boxborder))
 		self.mousex = 0
 		self.mousey = 0
-		self.boundtop = h - (self.box.get_height() - self.boxborder)
-		self.boundbottom = h - self.boxborder
-		self.boundgreenleft = w - (self.box.get_width() -  self.boxborder)
-		self.boundgreenright = w - (self.box.get_width() -  self.boxborder) + 16
-		self.boundredleft = w - (self.box.get_width() -  self.boxborder) + 16
-		self.boundredright = w - (self.box.get_width() -  self.boxborder) + 32
-		self.boundblueleft = w - (self.box.get_width() -  self.boxborder) + 32
-		self.boundblueright = w - (self.box.get_width() -  self.boxborder) + 48
-		blocksize = (w /cl.width) -2
+		self.boundtop = self.h - (self.box.get_height() - self.boxborder)
+		self.boundbottom = self.h - self.boxborder
+		self.boundgreenleft = self.w - (self.box.get_width() -  self.boxborder)
+		self.boundgreenright = self.w - (self.box.get_width() -  self.boxborder) + 16
+		self.boundredleft = self.w - (self.box.get_width() -  self.boxborder) + 16
+		self.boundredright = self.w - (self.box.get_width() -  self.boxborder) + 32
+		self.boundblueleft = self.w - (self.box.get_width() -  self.boxborder) + 32
+		self.boundblueright = self.w - (self.box.get_width() -  self.boxborder) + 48
+		blocksize = (self.w /cl.width) -2
 		if blocksize <= 2 : blocksize = 4
 		self.startblock = pg.Surface((blocksize,blocksize))
 		self.startblock.fill(green)
@@ -293,15 +304,15 @@ class Interface(object) :
 		self.pathblock.fill(blue)
 		self.blockoffset = 0#blocksize / 2 
 		
-		self.fixscale = (float  ( w - (int ( w/ cl.width  ) * cl.width ))/w) + 1
-		print self.fixscale, 'fixme'
-		self.wallbox = pg.Surface( (  math.ceil((w/cl.width) * self.fixscale), 
-			math.ceil((h/cl.height ) * self.fixscale)))
+		self.fixscale = (float  ( self.w - (int ( self.w/ cl.width  ) * cl.width ))/ self.w) + 1
+		#print self.fixscale, 'fixme'
+		self.wallbox = pg.Surface( (  math.ceil((self.w/cl.width) * self.fixscale), 
+			math.ceil((self.h/cl.height ) * self.fixscale)))
 		self.wallbox.fill((0,0,0))
 		
 		
 		screensurf = surface
-		screen = pg.display.set_mode((w , h ))
+		screen = pg.display.set_mode((self.w , self.h ))
 		pg.display.set_caption('dijkstra-opencl', 'dijkstra-opencl')
 		screen.fill((white))
 		
@@ -353,7 +364,7 @@ class Interface(object) :
 			pg.transform.threshold(bwsurf, self.smallsurf,
 				(0,0,0,0),(20,20,20,0), (255,255,255,0), 1)	
 		
-		screensurf = pg.Surface((w,h))
+		screensurf = pg.Surface((self.w, self.h))
 		screensurf.fill((255,255,255))
 		screen.fill((255,255,255))
 		
@@ -387,8 +398,8 @@ class Interface(object) :
 					xxx = float(xx * ( self.fixscale)) 
 					yyy = float(yy * ( self.fixscale)) 
 					screensurf.blit(self.wallbox, 
-						(float(xxx * float (w  / cl.width))   ,
-						float(yyy * float (h  / cl.height))   ))
+						(float(xxx * float (self.w  / cl.width))   ,
+						float(yyy * float (self.h  / cl.height))   ))
 	
 		self.gui_state = 0
 	
@@ -412,7 +423,7 @@ class Interface(object) :
 		
 			screen.fill((white))
 			screen.blit(screensurf,(0,0))
-			self.gui_controls(screen, event, w,h)
+			self.gui_controls(screen, event, self.w, self.h)
 			pg.display.flip()
 	
 
@@ -485,9 +496,9 @@ class Interface(object) :
 					self.endy * (screen.get_width() / cl.width) * self.fixscale))
 			pg.display.flip()
 
-	def gui_controls(self, screen, event,w,h):
+	def gui_controls(self, screen, event, w , h):
 		# this helper function puts controls on the screen
-		screen.blit(self.box ,( w- (self.box.get_width()), 
+		screen.blit(self.box ,( w -  (self.box.get_width()), 
 			h - (self.box.get_height())) )
 		# detect mouse
 		self.mousex , self.mousey = pg.mouse.get_pos()
@@ -615,6 +626,8 @@ if __name__ == '__main__':
 	matrixd = CL(setup)
 	
 	iface = Interface(setup)
+
+	iface.choose_opts(matrixd)
 
 	if setup.gui == True:
 		while iface.quit == 0:
