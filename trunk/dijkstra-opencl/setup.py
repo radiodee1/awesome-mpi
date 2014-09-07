@@ -116,7 +116,7 @@ class SU(object):
 		self.FREE = 0
 
 		#enum for distance
-		self.UNDEFINED = 1600#-1
+		self.UNDEFINED = 16000000#-1
 
 
 		self.maze = [0] * (self.width * self.height) 
