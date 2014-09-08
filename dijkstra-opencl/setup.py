@@ -20,6 +20,7 @@ class SU(object):
 		self.output = False
 		self.dim_input = 0
 		self.single_kernel = False
+		self.use_diag = True
 
 		if len(sys.argv) > 1:
 			for j in range(0, len(sys.argv)):
@@ -38,6 +39,11 @@ class SU(object):
 				if sys.argv[j] == '-output':
 					self.output = True
 
+		if len(sys.argv) > 1:
+			for j in range(0, len(sys.argv)):
+				if sys.argv[j] == '-no-diagonal':
+					print 'no diagonals!'
+					self.use_diag = False
 
 		if len(sys.argv) > 1:
 			for j in range(0, len(sys.argv)):

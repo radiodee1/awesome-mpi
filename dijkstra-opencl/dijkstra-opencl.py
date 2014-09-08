@@ -25,6 +25,11 @@ class CL(object):
 		self.found = []
 		self.oo_ex = False
 		
+		self.DIM_WIDTH = 0
+		self.DIM_HEIGHT = 1
+		self.DIM_DONE = 2
+		self.DIM_USE_DIAG = 3
+		
 		#print cl.device_info.LOCAL_MEM_SIZE, 'local mem size'
 		print cl.device_info.MAX_WORK_GROUP_SIZE, 'max work group size'
 		#print cl.device_info.QUEUE_PROPERTIES, 'queue properties'
@@ -76,10 +81,11 @@ class CL(object):
 		self.mutex = numpy.array(([self.mz.FREE] * self.size), dtype=numpy.int32)
 		
 		prepdim = [0] * 4#self.size
-		prepdim[0] = self.width
-		prepdim[1] = self.height
-		if False : prepdim[3] = 0
-		else : prepdim[3] = 1
+		prepdim[self.DIM_WIDTH] = self.width
+		prepdim[self.DIM_HEIGHT] = self.height
+		
+		if self.mz.use_diag : prepdim[self.DIM_USE_DIAG] = 1
+		else : prepdim[self.DIM_USE_DIAG] = 0
 		
 		self.dimension = numpy.array((prepdim), dtype=numpy.int32)
 			           
@@ -108,8 +114,6 @@ class CL(object):
 		dimension = numpy.empty_like(self.dimension)
 		loop = 0
 		j = 0
-		
-		#print self.maze.shape, 'shape'
 		
 		#for i in range(0,42): #self.size*5 ):
 		while loop == 0 and j < self.size * 15:
@@ -145,21 +149,23 @@ class CL(object):
 			
 			
 			cl.enqueue_read_buffer(self.queue, self.dimension_buf, dimension).wait()        
-			#print dimension[2],
-			loop = dimension[2]
+			
+			loop = dimension[self.DIM_DONE]
 		
 		'''
 			at some point may remove 'wait' on visited_buf and dist_buf!!
 		'''
 		print 'loop end', loop
 		#cl.enqueue_read_buffer(self.queue, self.visited_buf, visited).wait()
-		cl.enqueue_read_buffer(self.queue, self.dist_buf, dist).wait()
-		cl.enqueue_read_buffer(self.queue, self.prev_buf, prev).wait()        
-
-
-		self.prev = prev
 		#self.visited = visited
+		
+		cl.enqueue_read_buffer(self.queue, self.dist_buf, dist).wait()
 		self.dist = dist
+		
+		cl.enqueue_read_buffer(self.queue, self.prev_buf, prev).wait()        
+		self.prev = prev
+		
+		
 		
 	
 	def follow_path(self) :
