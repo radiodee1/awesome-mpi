@@ -91,7 +91,6 @@ class CL(object):
 			           
 		self.maze_buf = cl.Buffer(self.ctx, mf.READ_WRITE | mf.COPY_HOST_PTR,
 					           hostbuf=self.maze)   
-					                               
 	
 		self.visited_buf = cl.Buffer(self.ctx, mf.READ_WRITE | mf.COPY_HOST_PTR, 
 								hostbuf=self.visited)
