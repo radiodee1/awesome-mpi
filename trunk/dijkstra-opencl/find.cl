@@ -230,8 +230,9 @@ void sub(
 
 					
 			/////////////////////////////////////////////
-			//LOWER RIGHT
+			
 			if (use_diag) {
+				//LOWER RIGHT
 				if (bounds_diag(ii, ii + width + 1 , width, dim, height, maze) 
 					&& near_visited(ii, maze, visited, width, height) ) {
 					must_check(ii, maze, visited, dist, prev, mutex, dim , ii + width + 1, LEN_DIAG);
