@@ -115,7 +115,6 @@ class CL(object):
 		loop = 0
 		j = 0
 		
-		#for i in range(0,42): #self.size*5 ):
 		while loop == 0 and j < self.size * 15:
 			j += 1
 			print j,
