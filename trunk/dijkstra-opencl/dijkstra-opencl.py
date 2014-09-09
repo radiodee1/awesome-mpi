@@ -230,7 +230,8 @@ class Interface(object) :
 
 	def __init__(self, array):
 		self.mz = array
-		self.mapname = 'map.png'
+		#self.mapname = 'map.png'
+		self.mapname = 'maze.png'
 		self.iconname = 'icon.png'
 		self.map  =[]
 		self.w = 480
@@ -238,13 +239,42 @@ class Interface(object) :
 		self.quit = 0	
 		
 	def choose_opts(self, cl):
-		print 'options: window/size/map'
-		print 'window size = 480 - 600 '
+		print '----------options: window/size/map----------'
 		
-		print 'selection size = 10 - window size'
-		print 'map = choose map'
-		 
+		i = 0
+		mapname = ['map.png','maze.png']
+		for line in mapname : 
+			i += 1
+			print '[', i, ']', line
+		mapmessage = str('map number ( 1 to '+str(i)+') :')
+		mapnum = raw_input(mapmessage)
+		if mapnum == '':
+			mapnum = 1
+		self.mapname = mapname[int(mapnum )-1]
 		
+		surface = pg.image.load(self.mapname)
+		h = surface.get_height()
+		w = surface.get_width()
+		if (h > w) : image_size = h
+		else : image_size = w
+		
+		win = raw_input('window size = 480 to 600 :')
+		if (win == '') :
+			print 'set window size default -', image_size
+			self.w = int(image_size)
+			self.h = int(image_size)
+		else:
+			print 'set window size selected -', win 
+			self.w = int (win)
+			self.h = int (win)
+		
+		size = raw_input( 'selection size = 10 to window-size :')
+		if size == '' :
+			sizeint = int(self.w)
+		else :
+			sizeint = int(size)
+		cl.width = sizeint
+		cl.height = sizeint
 		
 	def solve_png(self , cl):
 	
