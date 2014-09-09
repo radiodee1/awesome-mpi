@@ -3,7 +3,7 @@
 import pyopencl as cl
 import numpy
 import time, math
-
+from PIL import Image
 import fileinput
 import pygame as pg
 import pygame.gfxdraw as pgd
@@ -238,25 +238,35 @@ class Interface(object) :
 		self.h = 480
 		self.quit = 0	
 		
-	def choose_opts(self, cl):
+	def choose_opts(self):
 		print '----------options: window/size/map----------'
+		print '''
+The 'map.png' works best with a large window size and 
+a smaller selection size. That way the content is
+magnified.
 		
+The 'maze.png' works best if you select the defaults
+on all inputs. Just hit the return key for window
+size and selection size.
+		'''
 		i = 0
 		mapname = ['map.png','maze.png']
 		for line in mapname : 
 			i += 1
 			print '[', i, ']', line
-		mapmessage = str('map number ( 1 to '+str(i)+') :')
+		mapmessage = str('map number ( 1 to '+str(i)+' ) :')
 		mapnum = raw_input(mapmessage)
 		if mapnum == '':
 			mapnum = 1
 		self.mapname = mapname[int(mapnum )-1]
 		
-		surface = pg.image.load(self.mapname)
-		h = surface.get_height()
-		w = surface.get_width()
+		surface = Image.open(self.mapname)
+		w , h = surface.size
 		if (h > w) : image_size = h
 		else : image_size = w
+		
+		print 'image stats: ', self.mapname
+		print 'width x height', w,'x',h
 		
 		win = raw_input('window size = 480 to 600 :')
 		if (win == '') :
@@ -268,14 +278,15 @@ class Interface(object) :
 			self.w = int (win)
 			self.h = int (win)
 		
-		size = raw_input( 'selection size = 10 to window-size :')
+		size = raw_input( 'selection size = 100 to window-size :')
 		if size == '' :
 			sizeint = int(self.w)
 		else :
 			sizeint = int(size)
-		cl.width = sizeint
-		cl.height = sizeint
-		
+		self.mz.width = sizeint
+		self.mz.height = sizeint
+
+
 	def solve_png(self , cl):
 	
 		if self.mz.gui == False:
@@ -663,7 +674,7 @@ if __name__ == '__main__':
 	
 	iface = Interface(setup)
 
-	iface.choose_opts(matrixd)
+	iface.choose_opts()
 
 	if setup.gui == True:
 		while iface.quit == 0:
