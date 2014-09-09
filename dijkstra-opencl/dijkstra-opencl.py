@@ -3,7 +3,7 @@
 import pyopencl as cl
 import numpy
 import time, math
-from PIL import Image
+
 import fileinput
 import pygame as pg
 import pygame.gfxdraw as pgd
@@ -231,60 +231,13 @@ class Interface(object) :
 	def __init__(self, array):
 		self.mz = array
 		#self.mapname = 'map.png'
-		self.mapname = 'maze.png'
+		self.mapname = self.mz.mapname #'maze.png'
 		self.iconname = 'icon.png'
 		self.map  =[]
-		self.w = 480
-		self.h = 480
+		self.w = self.mz.window_w #480
+		self.h = self.mz.window_h #480
 		self.quit = 0	
 		
-	def choose_opts(self):
-		print '----------options: window/size/map----------'
-		print '''
-The 'map.png' works best with a large window size and 
-a smaller selection size. That way the content is
-magnified.
-		
-The 'maze.png' works best if you select the defaults
-on all inputs. Just hit the return key for window
-size and selection size.
-		'''
-		i = 0
-		mapname = ['map.png','maze.png']
-		for line in mapname : 
-			i += 1
-			print '[', i, ']', line
-		mapmessage = str('map number ( 1 to '+str(i)+' ) :')
-		mapnum = raw_input(mapmessage)
-		if mapnum == '':
-			mapnum = 1
-		self.mapname = mapname[int(mapnum )-1]
-		
-		surface = Image.open(self.mapname)
-		w , h = surface.size
-		if (h > w) : image_size = h
-		else : image_size = w
-		
-		print 'image stats: ', self.mapname
-		print 'width x height', w,'x',h
-		
-		win = raw_input('window size = 480 to 600 :')
-		if (win == '') :
-			print 'set window size default -', image_size
-			self.w = int(image_size)
-			self.h = int(image_size)
-		else:
-			print 'set window size selected -', win 
-			self.w = int (win)
-			self.h = int (win)
-		
-		size = raw_input( 'selection size = 100 to window-size :')
-		if size == '' :
-			sizeint = int(self.w)
-		else :
-			sizeint = int(size)
-		self.mz.width = sizeint
-		self.mz.height = sizeint
 
 
 	def solve_png(self , cl):
@@ -352,7 +305,7 @@ size and selection size.
 		self.blockoffset = 0#blocksize / 2 
 		
 		self.fixscale = (float  ( self.w - (int ( self.w/ cl.width  ) * cl.width ))/ self.w) + 1
-		#print self.fixscale, 'fixme'
+		print self.fixscale, 'fixme'
 		self.wallbox = pg.Surface( (  math.ceil((self.w/cl.width) * self.fixscale), 
 			math.ceil((self.h/cl.height ) * self.fixscale)))
 		self.wallbox.fill((0,0,0))
@@ -674,7 +627,7 @@ if __name__ == '__main__':
 	
 	iface = Interface(setup)
 
-	iface.choose_opts()
+	#iface.choose_opts(matrixd)
 
 	if setup.gui == True:
 		while iface.quit == 0:

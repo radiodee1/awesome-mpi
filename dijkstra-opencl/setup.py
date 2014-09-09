@@ -4,13 +4,18 @@
 import sys, math
 import fileinput
 import pyopencl as cl
-
+from PIL import Image
 
 class SU(object):
 
 	def __init__(self) :
+		self.mapname = ''
+
 		self.width = 8#30
 		self.height = 8#30
+
+		self.window_w = 480
+		self.window_h = 480
 
 		self.dim = []
 		self.wall = []
@@ -58,6 +63,8 @@ class SU(object):
 			if self.dim_input != 0 : self.dimension = self.dim_input
 			self.width = self.dimension
 			self.height = self.dimension
+			### choose map, etc.
+			self.choose_opts()
 
 		i = 0
 		k = 0
@@ -162,7 +169,55 @@ class SU(object):
 			for i in range (4, self.width) :
 				self.maze[ (twothirds * self.width) + i] = self.WALL
 	
-
+	def choose_opts(self):
+		print '----------options: window/size/map----------'
+		print '''
+The 'map.png' works best with a large window size and 
+a smaller selection size. That way the content is
+magnified.
 		
-		def get_y(ii):
-			return int (ii / self.width)
+The 'maze.png' works best if you select the defaults
+on all inputs. Just hit the return key for window
+size and selection size.
+		'''
+		i = 0
+		mapname = ['map.png','maze.png']
+		for line in mapname : 
+			i += 1
+			print '[', i, ']', line
+		mapmessage = str('map number ( 1 to '+str(i)+' ) :')
+		mapnum = raw_input(mapmessage)
+		if mapnum == '':
+			mapnum = 1
+		self.mapname = mapname[int(mapnum )-1]
+		
+		surface = Image.open(self.mapname)
+		w , h = surface.size
+		if (h > w) : image_size = h
+		else : image_size = w
+		
+		print 'image stats: ', self.mapname
+		print 'width x height', w,'x',h
+		
+		win = raw_input('window size = 480 to 600 :')
+		if (win == '') :
+			print 'set window size default -', image_size
+			self.window_w = int(image_size)
+			self.window_h = int(image_size)
+		else:
+			print 'set window size selected -', win 
+			self.window_w = int (win)
+			self.window_h = int (win)
+		
+		size = raw_input( 'selection size = 100 to window-size :')
+		if size == '' :
+			sizeint = int(self.window_w)
+		else :
+			sizeint = int(size)
+		self.width = sizeint
+		self.height = sizeint
+		#cl.width = sizeint
+		#cl.height = sizeint
+		
+	def get_y(ii):
+		return int (ii / self.width)
