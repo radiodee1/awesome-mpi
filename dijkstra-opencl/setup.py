@@ -181,7 +181,7 @@ on all inputs. Just hit the return key for window
 size and selection size.
 		'''
 		i = 0
-		mapname = ['map.png','maze.png']
+		mapname = ['map.png','maze.png', 'map2.png']
 		for line in mapname : 
 			i += 1
 			print '[', i, ']', line
