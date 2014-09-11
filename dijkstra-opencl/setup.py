@@ -179,9 +179,17 @@ magnified.
 The 'maze.png' works best if you select the defaults
 on all inputs. Just hit the return key for window
 size and selection size.
+
+The 'map2.png' image is based on 'map.png'. You can
+use it without magnification. Select it and then accept
+the defaults for all other inputs.
+
+The 'california.png' image is for experementing. It does 
+not work well because the lines in the image are not 
+connected for long enough stretches.
 		'''
 		i = 0
-		mapname = ['map.png','maze.png', 'map2.png']
+		mapname = ['map.png','maze.png', 'map2.png', 'california.png']
 		for line in mapname : 
 			i += 1
 			print '[', i, ']', line
