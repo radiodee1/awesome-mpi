@@ -317,8 +317,8 @@ __kernel void part0(
 		//dimension[DIM_DONE] = dist[ii];
 		//return;
 	}
-	unsigned int width = dimension[0];
-	unsigned int height = dimension[1];
+	unsigned int width = dimension[DIM_WIDTH];
+	unsigned int height = dimension[DIM_HEIGHT];
  			
 	//checkerboard
 	int evenrow = (get_y(width, ii) % 2) ;
@@ -345,8 +345,8 @@ __kernel void part1(
 		//dimension[DIM_DONE] = dist[ii];
 		//return;
     }
-	unsigned int width = dimension[0];
- 	unsigned int height = dimension[1];
+	unsigned int width = dimension[DIM_WIDTH];
+ 	unsigned int height = dimension[DIM_HEIGHT];
  			
  	//checkerboard
  	int evenrow = (get_y(width, ii) % 2) ;
@@ -369,3 +369,5 @@ __kernel void find(
 	unsigned int ii = get_global_id(0);
 	sub (maze, visited, dist, prev, mutex, dimension, ii);
 }
+
+
