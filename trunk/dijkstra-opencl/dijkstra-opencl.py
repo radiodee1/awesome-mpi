@@ -317,19 +317,21 @@ class Interface(object) :
 		screen.fill((white))
 		
 		self.quit = 0
-		running = 1
+		self.running = 1
+		
+		event = 0
 		
 		if self.mz.csv != True:
 			## display first screen ##
-			while running:
+			while self.running and  self.quit == 0:
 
 				for event in pg.event.get():
 					if event.type == pg.QUIT:
-						running = 0
+						self.running = 0
 						self.quit = 1	
 					if event.type == pg.KEYUP:
 						if event.key == pg.K_RETURN:
-							running = 0
+							self.running = 0
 						if event.key == pg.K_UP:
 							y -= 5
 							if y < 0 : 
@@ -347,13 +349,16 @@ class Interface(object) :
 							x += 5
 							if x + cl.width > screen.get_width() : 
 								x = screen.get_width() - cl.width 			
-			
+				
+				if self.mz.skip_sub_selection == True : self.running = 0
+				
 				screensurf = surface.copy()
 				screen.fill(white)
 				screen.blit(screensurf,(0,0))
 				pgd.rectangle(screen, ((x,y),(cl.width,cl.height)), (255,0,0))
 				pg.display.flip()
 			
+			self.running = 1
 			## display second screen ##
 			screen.fill((white))
 			self.smallsurf = pg.Surface((cl.width, cl.height))
@@ -411,7 +416,7 @@ class Interface(object) :
 	
 		self.running = 1
 		while self.running == 1 and self.quit == 0:
-		
+			
 			for event in pg.event.get():
 				if event.type == pg.QUIT:
 					self.running = 0
@@ -420,9 +425,12 @@ class Interface(object) :
 			# skip input if text file is used
 			if self.mz.csv == True: 
 				self.running = 0
-		
+	
 			screen.fill((white))
 			screen.blit(screensurf,(0,0))
+			#if event != None:
+			
+			
 			self.gui_controls(screen, event, self.w, self.h)
 			pg.display.flip()
 	
@@ -497,6 +505,7 @@ class Interface(object) :
 			pg.display.flip()
 
 	def gui_controls(self, screen, event, w , h):
+		if event == 0 : return
 		# this helper function puts controls on the screen
 		screen.blit(self.box ,( w -  (self.box.get_width()), 
 			h - (self.box.get_height())) )
@@ -627,7 +636,6 @@ if __name__ == '__main__':
 	
 	iface = Interface(setup)
 
-	#iface.choose_opts(matrixd)
 
 	if setup.gui == True:
 		while iface.quit == 0:

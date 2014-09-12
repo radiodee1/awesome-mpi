@@ -26,6 +26,7 @@ class SU(object):
 		self.dim_input = 0
 		self.single_kernel = False
 		self.use_diag = True
+		self.skip_sub_selection = False
 
 		if len(sys.argv) > 1:
 			for j in range(0, len(sys.argv)):
@@ -220,6 +221,7 @@ connected for long enough stretches.
 		size = raw_input( 'selection size = 100 to window-size :')
 		if size == '' :
 			sizeint = int(self.window_w)
+			self.skip_sub_selection = True
 		else :
 			sizeint = int(size)
 		self.width = sizeint
